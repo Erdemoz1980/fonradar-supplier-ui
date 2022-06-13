@@ -1,0 +1,13 @@
+version: '3.4'
+
+services:
+  ui:
+    image: smeui/ui:${TAG:-latest}
+    build:
+      context: .
+      args:
+        - environment=prod
+    ports:
+      - "5020:5020"
+    container_name: smeui
+    restart: always

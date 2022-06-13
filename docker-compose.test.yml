@@ -1,0 +1,16 @@
+version: '3.4'
+
+services:
+  ui-test:
+    image: smeui-test/ui:${TAG:-latest}
+    build:
+      context: .
+      dockerfile: DockerfileTest
+      args:
+        - environment=test
+    ports:
+      - "5021:5021"
+    container_name: smeui-test
+    restart: always
+    volumes:
+      - .:/app
