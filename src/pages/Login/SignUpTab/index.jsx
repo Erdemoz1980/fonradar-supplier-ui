@@ -31,8 +31,8 @@ function SignUpTab({ setActiveTabLogin }) {
     const dispatch = useDispatch();
     const [signUpForm] = Form.useForm();
     const [isVisible, setIsVisible] = useState(false);
-    const [isCodeValid, setIsCodeValid] = useState(false);
-    const [activeStep, setActiveStep] = useState(0);
+    const [isCodeValid, setIsCodeValid] = useState(true);
+    const [activeStep, setActiveStep] = useState(1);
     const { isSignUpLoading, createdUser, isGetCodeLoading, getCodeResponse } = useSelector(
         ({ user }) => user
     );

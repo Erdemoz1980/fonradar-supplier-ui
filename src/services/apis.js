@@ -1,16 +1,15 @@
 import HttpService from './HttpService';
 
 const v1ApiUrls = {
-    dev: 'http://176.53.96.62:7297/api/v1',
-    test: 'http://176.53.96.62:7297/api/v1',
-    prod: 'https://api.fonradar.com/api/v1',
+    dev: 'https://test-supplier-api.fonradar.com/api/v1',
+    test: 'https://test-supplier-api.fonradar.com/api/v1',
+    prod: 'https://test-supplier-api.fonradar.com/api/v1',
 };
 const v2ApiUrls = {
-    dev: 'http://176.53.96.62:5006/api/v2',
-    test: 'http://176.53.96.62:5006/api/v2',
-    prod: 'http://176.53.96.62:5006/api/v2',
+    dev: 'https://test-api.fonradar.com/api/v2',
+    test: 'https://test-api.fonradar.com/api/v2',
+    prod: 'https://api.fonradar.com/api/v2',
 };
-
 const v1ApiUrls1 = {
     dev: 'https://lookup-services-fonradar.azurewebsites.net/api/v1',
     test: 'https://lookup-services-fonradar.azurewebsites.net/api/v1',
@@ -19,8 +18,8 @@ const v1ApiUrls1 = {
 
 export const endpoints = {
     login: '/Supplier/login',
-    getCode: '/otp/send',
-    validateOTP: '/otp/validate',
+    getCode: 'sme-users/update/gsm-number',
+    validateOTP: '/sme-users/validate/gsm-number',
     signup: '/Supplier',
     provinces: '/provinces',
 
