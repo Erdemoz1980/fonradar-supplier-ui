@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
 import { Divider, Popover } from 'antd';
 import { Link } from 'react-router-dom';
@@ -9,17 +8,17 @@ import { logout } from '../../store/user/userActions';
 import Text from '../Text';
 import urls from '../../routes/urls';
 
-const AccountMenu = ({ setIsDropdownVisible }) => {
+const AccountMenu = () => {
     const dispatch = useDispatch();
 
-    const closeDropdown = () => {
-        setIsDropdownVisible(false);
-    };
+    // const closeDropdown = () => {
+    //     setIsDropdownVisible(false);
+    // };
     const onClickLogout = () => dispatch(logout());
 
     return (
         <>
-            <Link to={urls.accountSettings}>
+            {/* <Link to={urls.accountSettings}>
                 <AccountButton onClick={closeDropdown} block>
                     <Text className="m-0" type="label">
                         Hesap Bilgileri
@@ -80,7 +79,7 @@ const AccountMenu = ({ setIsDropdownVisible }) => {
                         Sorularınızı cevaplayalım.
                     </Text>
                 </AccountButton>
-            </Link>
+            </Link> */}
             <Divider className="m" />
 
             <Link to={urls.landing}>
@@ -119,8 +118,8 @@ function AccountDropdown() {
     );
 }
 
-AccountMenu.propTypes = {
-    setIsDropdownVisible: PropTypes.func.isRequired,
-};
+// AccountMenu.propTypes = {
+//     setIsDropdownVisible: PropTypes.func.isRequired,
+// };
 
 export default AccountDropdown;

@@ -2,7 +2,7 @@ import { notification } from 'antd';
 import { put } from 'redux-saga/effects';
 import moment from 'moment';
 // import firebase from '../../services/firebase';
-import { apiV1, endpoints } from '../../services/apis';
+import { apiV1, endpoints, apiV2 } from '../../services/apis';
 import LocalStorageService from '../../services/LocalStorageService';
 import {
     loginSuccess,
@@ -11,9 +11,9 @@ import {
     logoutFailure,
     resetPasswordSendCodeSuccess,
     resetPasswordSendCodeFailure,
-    signUpSuccess,
+    // signUpSuccess,
     signUpFailure,
-    signUpReset,
+    // signUpReset,
     fetchUserSuccess,
     fetchUserFailure,
     updateUserSuccess,
@@ -26,7 +26,6 @@ import {
     updateUserTaxIdProvinceFailure,
     updateUserTaxIdProvinceReset,
     preSignUpSuccess,
-    // preSignUpReset,
     preSignUpFailure,
     sendCodeSuccess,
     sendCodeFailure,
@@ -35,29 +34,16 @@ import {
 } from './userActions';
 import urls from '../../routes/urls';
 
-// const normalizeGsmNumber = (gsmNumber = '') => {
-//     const prefix1 = '+90';
-//     const prefix2 = '05';
-
-//     if (gsmNumber.startsWith(prefix1)) {
-//         return gsmNumber.slice(prefix1.length);
-//     }
-//     if (gsmNumber.startsWith(prefix2)) {
-//         return gsmNumber.slice(prefix2.length - 1); // include 5
-//     }
-//     return gsmNumber;
-// };
-
-export function* loginSaga({ payload, history }) {
+export function* loginSaga({ payload }, history) {
     try {
         const { email, password } = payload;
-
-        yield apiV1.post(endpoints.sessions, { email, password });
-
+        const { data } = yield apiV1.post(endpoints.login, { email, password });
+        if (data.token) {
+            LocalStorageService.setAuthToken(data.token);
+        }
         yield put(loginSuccess());
-
         if (history) {
-            history.push(urls.funds);
+            history.push(urls.landing);
         }
     } catch (error) {
         console.log(error);
@@ -68,9 +54,7 @@ export function* loginSaga({ payload, history }) {
 export function* logoutSaga() {
     try {
         LocalStorageService.removeAuthToken();
-
         yield put(logoutSuccess());
-
         // should be able to display financialData notification
         // yield put(fetchFinancialDataReset());
     } catch (error) {
@@ -163,19 +147,16 @@ export function* preSignUpSaga({ payload }) {
 
 export function* signUpSaga({ payload }) {
     try {
-        // const gsmNumber = `0${payload.gsmNumber}`;
         const newUser = yield apiV1.post(
-            endpoints.smeUsers,
+            endpoints.signup,
             { ...payload },
             { headers: { 'X-Platform': 'Web' } }
         );
+        console.log(newUser);
 
-        notification.success({ message: 'Kaydınız başarıyla tamamlandı.' });
-        yield put(signUpSuccess(newUser));
-        yield put(signUpReset());
-        // yield put(preSignUpReset());
-
-        // firebase.analytics().logEvent('register_success', { platform: 'web', email: payload.email });
+        // notification.success({ message: 'Kaydınız başarıyla tamamlandı.' });
+        // yield put(signUpSuccess(newUser));
+        // yield put(signUpReset());
     } catch (error) {
         console.log(error);
         yield put(signUpFailure());
@@ -184,10 +165,10 @@ export function* signUpSaga({ payload }) {
 
 export function* sendCodeSaga({ payload }) {
     try {
-        // const gsmNumber = `0${payload.gsmNumber}`;
-        const newUser = yield apiV1.post(
+        const gsmNumber = `0${payload.gsmNumber}`;
+        const newUser = yield apiV2.post(
             endpoints.validateOTP,
-            { code: payload },
+            { code: payload.code, gsmNumber },
             { headers: { 'X-Platform': 'Web' } }
         );
         if (newUser.data.isOtpValid) {
@@ -206,8 +187,8 @@ export function* sendCodeSaga({ payload }) {
 export function* getCodeSaga({ payload }) {
     try {
         const gsmNumber = `0${payload}`;
-        const newUser = yield apiV1.patch(
-            endpoints.updateGsmNumber,
+        const newUser = yield apiV2.post(
+            endpoints.getCode,
             { gsmNumber },
             { headers: { 'X-Platform': 'Web' } }
         );

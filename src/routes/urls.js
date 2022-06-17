@@ -1,5 +1,5 @@
 const urls = {
-    landing: '/anasayfa',
+    landing: '/',
     login: '/giris-yap',
     passwordReset: '/sifre-sifirla',
 };

@@ -1,17 +1,28 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { Input, Form, Divider, Checkbox, Popover } from 'antd';
+import { Form, Divider, Checkbox, Input, Steps } from 'antd';
 import moment from 'moment';
 import { useDispatch, useSelector } from 'react-redux';
 import { PDFDocument, StandardFonts } from 'pdf-lib';
 import Text from '../../../components/Text';
 import Button from '../../../components/Button';
-import { signUp } from '../../../store/user/userActions';
-import { getFormattedPhoneNumber } from '../../../utils';
+import { getCode, signUp } from '../../../store/user/userActions';
 import KullaniciSozlesmesi from '../../../assests/FonRadar-KullaniciSozlesmesi.pdf';
 import AcikRizaMetni from '../../../assests/FonRadar-AcikRizaMetni.pdf';
+import UserStepForm from './UserStepForm';
+import LegalDocsForm from './LegalDocsForm';
+import GsmCodeVerificationModal from './GsmCodeVerificationModal';
+import { fetchProvinces } from '../../../store/provinces/provinceActions';
+// import { getFormattedPhoneNumber } from '../../../utils';
 // import { downloadURI } from '../../../utils/file';
 
+const { Step } = Steps;
+
+const getStepTitle = (title) => (
+    <Text className="m-0" type="subtitle" bold>
+        {title}
+    </Text>
+);
 const requiredTrueValidator = {
     validator: (_, value) =>
         value ? Promise.resolve() : Promise.reject(new Error('Bu alanı onaylamalısınız!')),
@@ -19,8 +30,12 @@ const requiredTrueValidator = {
 function SignUpTab({ setActiveTabLogin }) {
     const dispatch = useDispatch();
     const [signUpForm] = Form.useForm();
-    const [gsmNumber, setGsmNumber] = useState('');
-    const { isSignUpLoading, createdUser } = useSelector(({ user }) => user);
+    const [isVisible, setIsVisible] = useState(false);
+    const [isCodeValid, setIsCodeValid] = useState(false);
+    const [activeStep, setActiveStep] = useState(0);
+    const { isSignUpLoading, createdUser, isGetCodeLoading, getCodeResponse } = useSelector(
+        ({ user }) => user
+    );
 
     useEffect(() => {
         if (createdUser) {
@@ -67,10 +82,6 @@ function SignUpTab({ setActiveTabLogin }) {
         }
     };
 
-    useEffect(() => {
-        LoadPdfAcik();
-    }, []);
-
     const LoadPdf = async () => {
         const formValues = signUpForm.getFieldsValue();
         LoadPdfAcik();
@@ -112,72 +123,139 @@ function SignUpTab({ setActiveTabLogin }) {
         dispatch(signUp(signUpForm.getFieldsValue()));
     };
 
+    const onCodeSuccess = () => {
+        setIsCodeValid(true);
+        setActiveStep(1);
+        // const userData = signUpForm.getFieldsValue();
+        // const titleData = userData?.title?.value ? userData?.title?.value : userData.title;
+        // const provinceData = userData?.province?.value ? userData?.province?.value : userData.province;
+        // const taxAdminData = userData?.taxAdministration?.value
+        //     ? userData?.taxAdministration?.value
+        //     : userData.taxAdministration;
+        // const districtData = userData?.district?.value ? userData?.district?.value : userData.district;
+    };
+
+    const getCodeNo = () => {
+        const form = signUpForm.getFieldsValue();
+        if (form.name && form.surname && form.email && form.password && form.gsmNumber) {
+            dispatch(getCode(form.gsmNumber));
+        }
+    };
+
+    useEffect(() => {
+        getCodeResponse && setIsVisible(true);
+    }, [getCodeResponse]);
+
+    useEffect(() => {
+        dispatch(fetchProvinces());
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
+    const handleSteps = (val) => {
+        setActiveStep(val);
+    };
+
     return (
         <>
-            <Text type="title" color="primaryDark">
-                Kayıt Ol
-            </Text>
+            <GsmCodeVerificationModal
+                onSuccess={onCodeSuccess}
+                isVisible={isVisible}
+                setIsVisible={setIsVisible}
+                gsmNumber={signUpForm.getFieldValue('gsmNumber')}
+            />
             <Form name="basic" form={signUpForm} onFinish={createUser} size="large">
-                <div id="recaptcha-contaier" />
-                <Popover
-                    content={
-                        <div>
-                            <Text color="smoke">Telefon Numaranız: </Text>
-                            <Text bold>{getFormattedPhoneNumber(gsmNumber)}</Text>
-                        </div>
-                    }
-                    placement="top"
-                    trigger="focus">
-                    <Form.Item
-                        name="gsmNumber"
-                        rules={[
-                            {
-                                required: true,
-                                validator: (_, value) => {
-                                    const patt = new RegExp('(5)[0-9][0-9][0-9]([0-9]){6}');
-                                    return patt.test(value) && value.length < 11
-                                        ? Promise.resolve()
-                                        : Promise.reject(
-                                              new Error('Lütfen geçerli bir telefon numaranızı giriniz!')
-                                          );
-                                },
-                            },
-                        ]}>
-                        <Input
-                            addonBefore="+90"
-                            placeholder="Telefon Numarası"
-                            onChange={(e) => setGsmNumber(e.target.value)}
-                        />
-                    </Form.Item>
-                </Popover>
+                <Steps direction="vertical" current={activeStep} onChange={handleSteps}>
+                    <Step
+                        title={getStepTitle('Temel Bilgiler')}
+                        description={
+                            <>
+                                <Form.Item
+                                    name="name"
+                                    rules={[
+                                        {
+                                            required: true,
+                                        },
+                                    ]}>
+                                    <Input placeholder="Ad" />
+                                </Form.Item>
+                                <Form.Item
+                                    name="surname"
+                                    rules={[
+                                        {
+                                            required: true,
+                                        },
+                                    ]}>
+                                    <Input placeholder="Soyad" />
+                                </Form.Item>
+                                <Form.Item
+                                    name="email"
+                                    rules={[
+                                        {
+                                            type: 'email',
+                                            message: 'Lütfen geçerli bir e-posta adresi giriniz!',
+                                        },
+                                        {
+                                            required: true,
+                                            message: 'Lütfen e-posta adresinizi giriniz!',
+                                        },
+                                    ]}>
+                                    <Input placeholder="E-posta adresi" />
+                                </Form.Item>
 
-                <Form.Item
-                    name="email"
-                    rules={[
-                        { type: 'email', message: 'Lütfen geçerli bir e-posta adresi giriniz!' },
-                        {
-                            required: true,
-                            message: 'Lütfen e-posta adresinizi giriniz!',
-                        },
-                    ]}>
-                    <Input placeholder="E-posta adresi" />
-                </Form.Item>
-
-                <Form.Item
-                    name="password"
-                    rules={[
-                        {
-                            required: true,
-                            message: 'Lütfen bir şifre giriniz!',
-                        },
-                    ]}>
-                    <Input.Password placeholder="Şifre" />
-                </Form.Item>
-
-                <Form.Item name="referenceCode">
-                    <Input placeholder="Referans Kodu (Opsiyonel)" />
-                </Form.Item>
-
+                                <Form.Item
+                                    name="password"
+                                    rules={[
+                                        {
+                                            required: true,
+                                            message: 'Lütfen bir şifre giriniz!',
+                                        },
+                                    ]}>
+                                    <Input.Password placeholder="Şifre" />
+                                </Form.Item>
+                                <Form.Item
+                                    name="gsmNumber"
+                                    rules={[
+                                        {
+                                            required: true,
+                                            validator: (_, value) => {
+                                                const patt = new RegExp('(5)[0-9][0-9][0-9]([0-9]){6}');
+                                                return patt.test(value) && value.length < 11
+                                                    ? Promise.resolve()
+                                                    : Promise.reject(
+                                                          new Error(
+                                                              'Lütfen geçerli bir telefon numaranızı giriniz!'
+                                                          )
+                                                      );
+                                            },
+                                        },
+                                    ]}>
+                                    <Input addonBefore="+90" placeholder="Telefon Numarası" />
+                                </Form.Item>
+                                {!isCodeValid && (
+                                    <Button
+                                        type="primary"
+                                        loading={isGetCodeLoading}
+                                        onClick={getCodeNo}
+                                        size="large">
+                                        Kaydet ve İlerle
+                                    </Button>
+                                )}
+                            </>
+                        }
+                    />
+                    <Step
+                        disabled={!isCodeValid}
+                        title={getStepTitle('Firma Bilgileri')}
+                        description={
+                            activeStep === 1 ? <UserStepForm formValues={signUpForm.getFieldsValue()} /> : ''
+                        }
+                    />
+                    <Step
+                        disabled={!isCodeValid}
+                        description={activeStep === 2 ? <LegalDocsForm /> : ''}
+                        title={getStepTitle('Legal Evraklar')}
+                    />
+                </Steps>
                 <Form.Item name="approveAccount" valuePropName="checked" rules={[requiredTrueValidator]}>
                     <Checkbox>
                         <a

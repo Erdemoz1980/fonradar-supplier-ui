@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Row, Col, Tabs } from 'antd';
 import { useLocation } from 'react-router';
 import LoginTab from './LoginTab';
+import SignUpTab from './SignUpTab';
 import { oneColLayout } from '../../utils';
 import { loginTabs } from './constants';
 
@@ -24,9 +25,9 @@ function Login() {
                         <LoginTab setActiveTabSignUp={() => setActiveTab(loginTabs.signUp)} />
                     </TabPane>
 
-                    {/* <TabPane tab="Kayıt Ol" key={loginTabs.signUp}>
+                    <TabPane tab="Kayıt Ol" key={loginTabs.signUp}>
                         <SignUpTab setActiveTabLogin={() => setActiveTab(loginTabs.login)} />
-                    </TabPane> */}
+                    </TabPane>
                 </Tabs>
             </Col>
         </Row>

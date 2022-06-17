@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { Modal, Form } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import Button from '../../../../components/Button';
@@ -6,27 +6,24 @@ import Text from '../../../../components/Text';
 import InputCode from '../../../../components/InputCode';
 import { sendCode } from '../../../../store/user/userActions';
 
-function GsmCodeVerificationModal({ isVisible, setIsVisible, onSuccess }) {
+function GsmCodeVerificationModal({ isVisible, setIsVisible, onSuccess, gsmNumber }) {
     const dispatch = useDispatch();
     const [codeForm] = Form.useForm();
-    const [isLoading, setIsLoading] = useState(false);
-    const { sendCodeResponse } = useSelector((state) => state.user);
+    const { sendCodeResponse, isSendCodeLoading } = useSelector((state) => state.user);
 
     useEffect(() => {
         if (sendCodeResponse.isOtpValid) {
-            setIsLoading(false);
             setIsVisible(false);
             onSuccess();
         } else if (sendCodeResponse && !sendCodeResponse.isOtpValid) {
-            setIsLoading(false);
             codeForm.resetFields();
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [sendCodeResponse]);
 
     const onSubmitOtpCode = ({ code }) => {
         if (code.length >= 6) {
-            setIsLoading(true);
-            dispatch(sendCode(code));
+            dispatch(sendCode({ code, gsmNumber }));
         }
     };
 
@@ -57,7 +54,7 @@ function GsmCodeVerificationModal({ isVisible, setIsVisible, onSuccess }) {
                     <Button
                         type="primary"
                         htmlType="submit"
-                        loading={isLoading}
+                        loading={isSendCodeLoading}
                         disabled={codeForm.getFieldValue(['code'].length > 6)}
                         block>
                         Onayla

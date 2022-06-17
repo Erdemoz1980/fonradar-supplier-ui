@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Col, Drawer, Row, Space, Tag } from 'antd';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { Link, useLocation } from 'react-router-dom';
 import LOGO from '../../../assests/logo-horizontal.svg';
 import Button from '../../Button';
@@ -8,9 +8,9 @@ import Icon, { CustomIcon } from '../../Icon';
 import StyledHeader, { DrawerButton } from './styles';
 import AccountDropdown from '../../AccountDropdown';
 import useResponsive from '../../../hooks/useResponsive';
-import Text from '../../Text';
+// import Text from '../../Text';
 import urls from '../../../routes/urls';
-import { logout } from '../../../store/user/userActions';
+// import { logout } from '../../../store/user/userActions';
 // import { createFundReset } from '../../../store/funds/fundActions';
 
 // TODO: TOO MANY CODE DUPLICATES
@@ -19,7 +19,7 @@ import { logout } from '../../../store/user/userActions';
 function Header() {
     const location = useLocation();
     const { xl, xxl } = useResponsive();
-    const dispatch = useDispatch();
+    // const dispatch = useDispatch();
     const [isDrawerVisible, setIsDrawerVisible] = useState(false);
     const { isLoggedIn } = useSelector((state) => state.user);
 
@@ -126,7 +126,7 @@ function Header() {
 
                             {isLoggedIn ? (
                                 <div className="mt-big">
-                                    <Link to={urls.accountSettings}>
+                                    {/* <Link to={urls.accountSettings}>
                                         <DrawerButton
                                             type="transparent"
                                             size={getButtonSize()}
@@ -169,7 +169,7 @@ function Header() {
                                         active={path === urls.help}
                                         block>
                                         <Text color="red">Çıkış</Text>
-                                    </DrawerButton>
+                                    </DrawerButton> */}
                                 </div>
                             ) : (
                                 <Link to={urls.login}>

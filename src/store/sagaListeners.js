@@ -13,6 +13,7 @@ import {
     sendCodeSaga,
     getCodeSaga,
 } from './user/userSagas';
+import { fetchDistrictsSaga, fetchProvincesSaga, fetchTaxOfficesSaga } from './provinces/provinceSagas';
 
 export default function* watchSagas() {
     // USER
@@ -28,4 +29,9 @@ export default function* watchSagas() {
     yield takeLatest(actionTypes.RESET_PASSWORD, resetPasswordSaga);
     yield takeLatest(actionTypes.SEND_CODE, sendCodeSaga);
     yield takeLatest(actionTypes.GET_CODE, getCodeSaga);
+
+    // PROVINCES
+    yield takeLatest(actionTypes.FETCH_PROVINCES, fetchProvincesSaga);
+    yield takeLatest(actionTypes.FETCH_DISTRICTS, fetchDistrictsSaga);
+    yield takeLatest(actionTypes.FETCH_TAX_OFFICES, fetchTaxOfficesSaga);
 }

@@ -1,16 +1,17 @@
 import React, { useEffect } from 'react';
 import { Redirect, Route, Switch, useLocation } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchUser } from '../store/user/userActions';
+// import { fetchUser } from '../store/user/userActions';
 import Landing from '../pages/Landing';
 import Login from '../pages/Login';
 import urls from './urls';
 
-// function ProtectedRoute({ ...props }) {
-//     const { isLoggedIn } = useSelector(({ user }) => user);
+function ProtectedRoute({ ...props }) {
+    const { isLoggedIn } = useSelector(({ user }) => user);
 
-//     return isLoggedIn ? <Route {...props} /> : <Redirect to={urls.login} />;
-// }
+    return isLoggedIn ? <Route {...props} /> : <Redirect to={urls.login} />;
+}
+
 function GuestRoute({ ...props }) {
     const { isLoggedIn } = useSelector(({ user }) => user);
 
@@ -23,7 +24,7 @@ function Routes() {
     const { isLoggedIn } = useSelector(({ user }) => user);
 
     useEffect(() => {
-        if (isLoggedIn) dispatch(fetchUser());
+        // if (isLoggedIn) dispatch(fetchUser());
     }, [isLoggedIn, dispatch]);
 
     useEffect(() => {
@@ -33,7 +34,7 @@ function Routes() {
     return (
         <Switch>
             <GuestRoute path={urls.login} exact component={Login} />
-            <Route path="/" component={Landing} />
+            <ProtectedRoute path="/" component={Landing} />
         </Switch>
     );
 }

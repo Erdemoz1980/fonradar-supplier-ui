@@ -1,15 +1,16 @@
 import HttpService from './HttpService';
 
 const v1ApiUrls = {
-    dev: 'https://test-api.fonradar.com/api/v1',
-    test: 'https://test-api.fonradar.com/api/v1',
+    dev: 'http://176.53.96.62:7297/api/v1',
+    test: 'http://176.53.96.62:7297/api/v1',
     prod: 'https://api.fonradar.com/api/v1',
 };
 const v2ApiUrls = {
-    dev: 'https://test-api.fonradar.com/api/v2',
-    test: 'https://test-api.fonradar.com/api/v2',
-    prod: 'https://api.fonradar.com/api/v2',
+    dev: 'http://176.53.96.62:5006/api/v2',
+    test: 'http://176.53.96.62:5006/api/v2',
+    prod: 'http://176.53.96.62:5006/api/v2',
 };
+
 const v1ApiUrls1 = {
     dev: 'https://lookup-services-fonradar.azurewebsites.net/api/v1',
     test: 'https://lookup-services-fonradar.azurewebsites.net/api/v1',
@@ -17,12 +18,20 @@ const v1ApiUrls1 = {
 };
 
 export const endpoints = {
+    login: '/Supplier/login',
+    getCode: '/otp/send',
+    validateOTP: '/otp/validate',
+    signup: '/Supplier',
+    provinces: '/provinces',
+
+    getDistrictsEndpoint: (provinceId) => `/provinces/${provinceId}/districts`,
+    getTaxOfficesEndpoint: (provinceId) => `/provinces/${provinceId}/tax-administrations`,
+
+    // extra
     fund: '/funds',
     corporations: '/corporations',
     smeUsers: '/sme-users',
     preSmeUserRegistiration: '/sme-users/pre-registration',
-    updateGsmNumber: 'sme-users/update/gsm-number',
-    validateOTP: '/sme-users/validate/gsm-number',
     sessions: '/sessions/sme-users',
     fundHistory: '/funds/sme-users',
     sendResetPasswordCode: '/sme-users/send-reset-password',
@@ -32,7 +41,6 @@ export const endpoints = {
     createSubscription: '/subscriptions/in-app/sme-users',
     uploadImage: '/funds/images',
     playerId: '/sme-users/player-id',
-    provinces: '/provinces',
     configurations: '/configurations',
     validateTaxId: '/validate-tax-id',
     banks: '/banks',
@@ -49,8 +57,6 @@ export const endpoints = {
 
     getFundDetailEndpoint: (fundId) => `/funds/${fundId}/sme-users`,
     getApproveFundEndpoint: (fundId) => `/funds/${fundId}/approves`,
-    getDistrictsEndpoint: (provinceId) => `/provinces/${provinceId}/districts`,
-    getTaxOfficesEndpoint: (provinceId) => `/provinces/${provinceId}/tax-administrations`,
     getFinancialDataDetailEndpoint: (financialDataId) => `/sme-users/financial-data/${financialDataId}`,
 
     zendeskRequest: '/requests',

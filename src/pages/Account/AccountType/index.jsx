@@ -1,20 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import { Col, Divider, Row, Spin } from 'antd';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import moment from 'moment';
 import Text from '../../../components/Text';
 import { oneColWideLayout } from '../../../utils';
-import { fetchUser } from '../../../store/user/userActions';
+// import { fetchUser } from '../../../store/user/userActions';
 import ProgressBar from './ProgressBar';
 
 function AccountType() {
-    const dispatch = useDispatch();
+    // const dispatch = useDispatch();
     const [isPremiumExpired, setIsPremiumExpired] = useState(false);
     const { user, isUserLoading } = useSelector((state) => state.user);
 
-    useEffect(() => {
-        dispatch(fetchUser());
-    }, [dispatch]);
+    // useEffect(() => {
+    //     dispatch(fetchUser());
+    // }, [dispatch]);
 
     useEffect(() => {
         if (user) {

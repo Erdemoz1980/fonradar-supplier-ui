@@ -146,9 +146,9 @@ export const updateUserTaxIdProvinceReset = () => ({
     type: userActionTypes.UPDATE_USER_TAXID_PROVINCE_RESET,
 });
 
-export const sendCode = (code) => ({
+export const sendCode = ({ code, gsmNumber }) => ({
     type: userActionTypes.SEND_CODE,
-    payload: code,
+    payload: { code, gsmNumber },
 });
 export const sendCodeSuccess = (code) => ({
     type: userActionTypes.SEND_CODE_SUCCESS,
