@@ -8,7 +8,7 @@ const v1ApiUrls = {
 const v2ApiUrls = {
     dev: 'https://test-api.fonradar.com/api/v2',
     test: 'https://test-api.fonradar.com/api/v2',
-    prod: 'https://api.fonradar.com/api/v2',
+    prod: 'https://test-api.fonradar.com/api/v2',
 };
 const v1ApiUrls1 = {
     dev: 'https://lookup-services-fonradar.azurewebsites.net/api/v1',
@@ -18,8 +18,8 @@ const v1ApiUrls1 = {
 
 export const endpoints = {
     login: '/Supplier/login',
-    getCode: 'sme-users/update/gsm-number',
-    validateOTP: '/sme-users/validate/gsm-number',
+    getCode: 'otp/send',
+    validateOTP: 'otp/validate',
     signup: '/Supplier',
     provinces: '/provinces',
 

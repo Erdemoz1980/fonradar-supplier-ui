@@ -46,9 +46,9 @@ class Interceptor {
             },
 
             ({ response: error }) => {
-                if (error.data && error.data.message) {
+                if (error && error.data && error.data.message) {
                     notification.error({ message: error.data.message });
-                } else if (error.status === 401) {
+                } else if (error && error.status === 401) {
                     LocalStorageService.removeAuthToken();
                     if (window.location.pathname !== urls.login) {
                         window.location = urls.login;

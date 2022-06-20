@@ -147,11 +147,7 @@ export function* preSignUpSaga({ payload }) {
 
 export function* signUpSaga({ payload }) {
     try {
-        const newUser = yield apiV1.post(
-            endpoints.signup,
-            { ...payload },
-            { headers: { 'X-Platform': 'Web' } }
-        );
+        const newUser = yield apiV1.post(endpoints.signup, { ...payload });
         console.log(newUser);
 
         // notification.success({ message: 'Kaydınız başarıyla tamamlandı.' });
