@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { Divider, Popover } from 'antd';
+import { Popover } from 'antd';
 import { Link } from 'react-router-dom';
 import Icon, { CustomIcon } from '../Icon';
 import AccountDropdownStyled, { AccountButton } from './styles';
@@ -80,7 +80,7 @@ const AccountMenu = () => {
                     </Text>
                 </AccountButton>
             </Link> */}
-            <Divider className="m" />
+            {/* <Divider className="m" /> */}
 
             <Link to={urls.landing}>
                 <AccountButton onClick={onClickLogout} block>

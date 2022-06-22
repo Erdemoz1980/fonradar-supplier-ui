@@ -51,6 +51,15 @@ export const userActionTypes = {
     GET_CODE: 'GET_CODE',
     GET_CODE_SUCCESS: 'GET_CODE_SUCCESS',
     GET_CODE_FAILURE: 'GET_CODE_FAILURE',
+
+    GET_DOCTYPE: 'GET_DOCTYPE',
+    GET_DOCTYPE_SUCCESS: 'GET_DOCTYPE_SUCCESS',
+    GET_DOCTYPE_FAILURE: 'GET_DOCTYPE_FAILURE',
+
+    UPLOAD_DOC: 'UPLOAD_DOC',
+    UPLOAD_DOC_SUCCESS: 'UPLOAD_DOC_SUCCESS',
+    UPLOAD_DOC_FAILURE: 'UPLOAD_DOC_FAILURE',
+    SET_LOGGEDIN: 'SET_LOGGEDIN',
 };
 
 // LOGIN
@@ -168,4 +177,32 @@ export const getCodeSuccess = (gsmNumber) => ({
 });
 export const getCodeFailure = () => ({
     type: userActionTypes.GET_CODE_FAILURE,
+});
+
+export const getDocType = () => ({
+    type: userActionTypes.GET_DOCTYPE,
+});
+export const getDocTypeSuccess = (data) => ({
+    type: userActionTypes.GET_DOCTYPE_SUCCESS,
+    payload: data,
+});
+export const getDocTypeFailure = () => ({
+    type: userActionTypes.GET_DOCTYPE_FAILURE,
+});
+
+export const uploadDoc = (data) => ({
+    type: userActionTypes.UPLOAD_DOC,
+    payload: data,
+});
+export const uploadDocSuccess = (data) => ({
+    type: userActionTypes.UPLOAD_DOC_SUCCESS,
+    payload: data,
+});
+export const uploadDocFailure = () => ({
+    type: userActionTypes.UPLOAD_DOC_FAILURE,
+});
+
+export const setLoggedIn = (data) => ({
+    type: userActionTypes.SET_LOGGEDIN,
+    payload: data,
 });

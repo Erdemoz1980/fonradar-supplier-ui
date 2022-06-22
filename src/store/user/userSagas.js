@@ -11,9 +11,9 @@ import {
     logoutFailure,
     resetPasswordSendCodeSuccess,
     resetPasswordSendCodeFailure,
-    // signUpSuccess,
+    signUpSuccess,
     signUpFailure,
-    // signUpReset,
+    signUpReset,
     fetchUserSuccess,
     fetchUserFailure,
     updateUserSuccess,
@@ -31,13 +31,17 @@ import {
     sendCodeFailure,
     getCodeSuccess,
     getCodeFailure,
+    getDocTypeSuccess,
+    getDocTypeFailure,
+    uploadDocFailure,
+    uploadDocSuccess,
 } from './userActions';
 import urls from '../../routes/urls';
 
 export function* loginSaga({ payload }, history) {
     try {
         const { email, password } = payload;
-        const { data } = yield apiV1.post(endpoints.login, { email, password });
+        const data = yield apiV1.post(endpoints.login, { email, password });
         if (data.token) {
             LocalStorageService.setAuthToken(data.token);
         }
@@ -148,13 +152,12 @@ export function* preSignUpSaga({ payload }) {
 export function* signUpSaga({ payload }) {
     try {
         const newUser = yield apiV1.post(endpoints.signup, { ...payload });
-        console.log(newUser);
-
-        // notification.success({ message: 'Kaydınız başarıyla tamamlandı.' });
-        // yield put(signUpSuccess(newUser));
-        // yield put(signUpReset());
+        notification.success({
+            message: `Kaydınız ${newUser.supplierId} numarası ile Başarılı Bir Şekilde Oluşturuldu. İskonto İşlemi Yapabilmeniz İçin Legal Evrakları da Yüklemenizi Rica Ederiz`,
+        });
+        yield put(signUpSuccess(newUser));
+        yield put(signUpReset());
     } catch (error) {
-        console.log(error);
         yield put(signUpFailure());
     }
 }
@@ -192,5 +195,31 @@ export function* getCodeSaga({ payload }) {
     } catch (error) {
         console.log(error);
         yield put(getCodeFailure());
+    }
+}
+
+export function* getDocTypeSaga() {
+    try {
+        const newUser = yield apiV1.get(endpoints.docType, { headers: { 'X-Platform': 'Web' } });
+        yield put(getDocTypeSuccess(newUser.documentTypes));
+    } catch (error) {
+        console.log(error);
+        yield put(getDocTypeFailure());
+    }
+}
+
+export function* uploadDocSaga({ payload }) {
+    try {
+        console.log(payload);
+        const { formData } = payload;
+        const newUser = yield apiV1.post(
+            `${endpoints.signup}/${payload.supplierId}/document/${payload.documentTypeId}/upload`,
+            formData,
+            { headers: { 'Content-Type': 'multipart/form-data' } }
+        );
+        yield put(uploadDocSuccess(newUser.data));
+    } catch (error) {
+        console.log(error);
+        yield put(uploadDocFailure());
     }
 }

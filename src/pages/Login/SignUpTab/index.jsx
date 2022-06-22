@@ -1,20 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { Form, Divider, Checkbox, Input, Steps } from 'antd';
-import moment from 'moment';
+import { Form, Divider, Input, Steps } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
-import { PDFDocument, StandardFonts } from 'pdf-lib';
 import Text from '../../../components/Text';
 import Button from '../../../components/Button';
-import { getCode, signUp } from '../../../store/user/userActions';
-import KullaniciSozlesmesi from '../../../assests/FonRadar-KullaniciSozlesmesi.pdf';
-import AcikRizaMetni from '../../../assests/FonRadar-AcikRizaMetni.pdf';
+import {
+    getCode,
+    signUp,
+    getDocType,
+    uploadDoc,
+    setLoggedIn,
+    // signUpSuccess,
+} from '../../../store/user/userActions';
 import UserStepForm from './UserStepForm';
 import LegalDocsForm from './LegalDocsForm';
 import GsmCodeVerificationModal from './GsmCodeVerificationModal';
 import { fetchProvinces } from '../../../store/provinces/provinceActions';
-// import { getFormattedPhoneNumber } from '../../../utils';
-// import { downloadURI } from '../../../utils/file';
 
 const { Step } = Steps;
 
@@ -23,17 +24,21 @@ const getStepTitle = (title) => (
         {title}
     </Text>
 );
-const requiredTrueValidator = {
-    validator: (_, value) =>
-        value ? Promise.resolve() : Promise.reject(new Error('Bu alanı onaylamalısınız!')),
-};
+
 function SignUpTab({ setActiveTabLogin }) {
     const dispatch = useDispatch();
     const [signUpForm] = Form.useForm();
+    const [provinceId, setProvinceId] = useState(0);
     const [isVisible, setIsVisible] = useState(false);
     const [isCodeValid, setIsCodeValid] = useState(false);
     const [activeStep, setActiveStep] = useState(0);
-    const { isSignUpLoading, createdUser, isGetCodeLoading, getCodeResponse } = useSelector(
+    const [legalDocs, setLegalDocs] = useState({
+        TaxBoard: undefined,
+        AuthorizedSignatures: undefined,
+        ActivityCertificate: undefined,
+    });
+
+    const { isSignUpLoading, createdUser, isGetCodeLoading, getCodeResponse, getDocTypeRes } = useSelector(
         ({ user }) => user
     );
 
@@ -44,101 +49,107 @@ function SignUpTab({ setActiveTabLogin }) {
         }
     }, [createdUser, signUpForm, setActiveTabLogin]);
 
-    const LoadPdfAcik = async () => {
-        const formValues = signUpForm.getFieldsValue();
-        const existingPdfBytes = await fetch(AcikRizaMetni)
-            .then((res) => res.arrayBuffer())
-            .then((arrayBufferData) => arrayBufferData);
-        if (existingPdfBytes) {
-            const pdfDoc = await PDFDocument.load(existingPdfBytes, {
-                updateMetadata: false,
-            });
-
-            // Embed the Helvetica font
-            const timeRomanFont = await pdfDoc.embedFont(StandardFonts.TimesRoman);
-
-            // Get the first page of the document
-            const pages = pdfDoc.getPages();
-            const firstPage = pages[0];
-
-            firstPage.moveTo(104, 560);
-            firstPage.drawText(moment().format('DD-MM-YYYY'), {
-                size: 10,
-                font: timeRomanFont,
-            });
-
-            firstPage.moveTo(107, 533);
-            firstPage.drawText(formValues.email || 'Farina', {
-                size: 10,
-                font: timeRomanFont,
-            });
-
-            // const pdfDataUri = await pdfDoc.saveAsBase64({ dataUri: true });
-            // downloadURI(pdfDataUri);
-
-            // Serialize the PDFDocument to bytes (a Uint8Array)
-            const updatedPdf = await pdfDoc.save();
-            console.log(updatedPdf, '----');
+    const uploadDocs = () => {
+        if (!legalDocs.TaxBoard && !legalDocs.AuthorizedSignatures && !legalDocs.ActivityCertificate) {
+            dispatch(setLoggedIn(true));
         }
-    };
-
-    const LoadPdf = async () => {
-        const formValues = signUpForm.getFieldsValue();
-        LoadPdfAcik();
-        const existingPdfBytes = await fetch(KullaniciSozlesmesi)
-            .then((res) => res.arrayBuffer())
-            .then((arrayBufferData) => arrayBufferData);
-        if (existingPdfBytes) {
-            const pdfDoc = await PDFDocument.load(existingPdfBytes, {
-                updateMetadata: false,
-            });
-
-            // Embed the Helvetica font
-            const timeRomanFont = await pdfDoc.embedFont(StandardFonts.TimesRoman);
-
-            // Get the first page of the document
-            const pages = pdfDoc.getPages();
-            const firstPage = pages[0];
-
-            firstPage.moveTo(254, 451);
-            firstPage.drawText(formValues.email, {
-                size: 11,
-                font: timeRomanFont,
-            });
-
-            firstPage.moveTo(254, 467);
-            firstPage.drawText(formValues.gsmNumber, {
-                size: 10,
-                font: timeRomanFont,
-            });
-
-            // Serialize the PDFDocument to bytes (a Uint8Array)
-            const updatedPdf = await pdfDoc.save();
-            console.log(updatedPdf, '----');
+        if (legalDocs.TaxBoard) {
+            const formData = new FormData();
+            formData.append('', legalDocs.TaxBoard);
+            const documentTypeId = getDocTypeRes.find((doc) => doc.name === 'Vergi Levhası');
+            if (documentTypeId) {
+                dispatch(
+                    uploadDoc({
+                        formData,
+                        supplierId: createdUser.supplierId,
+                        documentTypeId: documentTypeId.id,
+                    })
+                );
+            }
+            if (!legalDocs.AuthorizedSignatures && !legalDocs.ActivityCertificate) {
+                // dispatch(setLoggedIn(true));
+            }
+        }
+        if (legalDocs.AuthorizedSignatures) {
+            const formData = new FormData();
+            formData.append('', legalDocs.AuthorizedSignatures);
+            const documentTypeId = getDocTypeRes.find((doc) => doc.name === 'İmza Sirküleri');
+            if (documentTypeId) {
+                dispatch(
+                    uploadDoc({
+                        formData,
+                        supplierId: createdUser.supplierId,
+                        documentTypeId: documentTypeId.id,
+                    })
+                );
+            }
+            if (!legalDocs.ActivityCertificate) {
+                // dispatch(setLoggedIn(true));
+            }
+        }
+        if (legalDocs.ActivityCertificate) {
+            const formData = new FormData();
+            formData.append('ActivityCertificate', legalDocs.ActivityCertificate);
+            const documentTypeId = getDocTypeRes.find((doc) => doc.name === 'Faaliyet Belgesi');
+            if (documentTypeId) {
+                dispatch(
+                    uploadDoc({
+                        formData,
+                        supplierId: createdUser.supplierId,
+                        documentTypeId: documentTypeId.id,
+                    })
+                );
+            }
+            // dispatch(setLoggedIn(true));
         }
     };
 
     const createUser = () => {
-        LoadPdf();
-        dispatch(signUp(signUpForm.getFieldsValue()));
+        // dispatch(signUpSuccess({ supplierId: 'efec903c-8cf5-4fc9-b40f-397f84ce26c3' }));
+        const formValues = signUpForm.getFieldsValue();
+        if (
+            formValues.name &&
+            formValues.surname &&
+            formValues.email &&
+            formValues.password &&
+            formValues.gsmNumber &&
+            formValues.taxId &&
+            formValues.title &&
+            formValues.taxAdministration
+        ) {
+            dispatch(
+                signUp({
+                    name: formValues.name,
+                    surname: formValues.surname,
+                    email: formValues.email,
+                    password: formValues.password,
+                    phone: formValues.gsmNumber,
+                    taxNumber: `${formValues.taxId}`,
+                    title: formValues.title,
+                    taxAdministration: formValues.taxAdministration,
+                    province: provinceId,
+                })
+            );
+        }
     };
+
+    useEffect(() => {
+        if (createdUser) {
+            setActiveStep(2);
+            uploadDocs();
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [createdUser, legalDocs]);
 
     const onCodeSuccess = () => {
         setIsCodeValid(true);
         setActiveStep(1);
-        // const userData = signUpForm.getFieldsValue();
-        // const titleData = userData?.title?.value ? userData?.title?.value : userData.title;
-        // const provinceData = userData?.province?.value ? userData?.province?.value : userData.province;
-        // const taxAdminData = userData?.taxAdministration?.value
-        //     ? userData?.taxAdministration?.value
-        //     : userData.taxAdministration;
-        // const districtData = userData?.district?.value ? userData?.district?.value : userData.district;
     };
 
     const getCodeNo = () => {
-        const form = signUpForm.getFieldsValue();
-        if (form.name && form.surname && form.email && form.password && form.gsmNumber) {
-            dispatch(getCode(form.gsmNumber));
+        const form1 = signUpForm.getFieldsValue();
+        if (form1.name && form1.surname && form1.email && form1.password && form1.gsmNumber) {
+            dispatch(getCode(form1.gsmNumber));
         }
     };
 
@@ -148,6 +159,7 @@ function SignUpTab({ setActiveTabLogin }) {
 
     useEffect(() => {
         dispatch(fetchProvinces());
+        dispatch(getDocType());
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -247,52 +259,25 @@ function SignUpTab({ setActiveTabLogin }) {
                         disabled={!isCodeValid}
                         title={getStepTitle('Firma Bilgileri')}
                         description={
-                            activeStep === 1 ? <UserStepForm formValues={signUpForm.getFieldsValue()} /> : ''
+                            isCodeValid || activeStep === 1 ? (
+                                <UserStepForm form={signUpForm} setProvinceId={setProvinceId} />
+                            ) : (
+                                ''
+                            )
                         }
                     />
                     <Step
                         disabled={!isCodeValid}
-                        description={activeStep === 2 ? <LegalDocsForm /> : ''}
+                        description={
+                            isCodeValid || activeStep === 2 ? (
+                                <LegalDocsForm setLegalDocs={setLegalDocs} legalDocs={legalDocs} />
+                            ) : (
+                                ''
+                            )
+                        }
                         title={getStepTitle('Legal Evraklar')}
                     />
                 </Steps>
-                <Form.Item name="approveAccount" valuePropName="checked" rules={[requiredTrueValidator]}>
-                    <Checkbox>
-                        <a
-                            href="https://www.fonradar.com/kullanici-sozlesmesi/"
-                            target="_blank"
-                            rel="noopener noreferrer">
-                            <Text underlined bold>
-                                Üyelik koşulları
-                            </Text>
-                        </a>
-                        nı kabul ediyorum.
-                    </Checkbox>
-                </Form.Item>
-                <Form.Item name="approveKvkk" valuePropName="checked" rules={[requiredTrueValidator]}>
-                    <Checkbox>
-                        <a href="https://www.fonradar.com/kvkk/" target="_blank" rel="noopener noreferrer">
-                            <Text underlined bold>
-                                Kişisel verilerimin korunması
-                            </Text>
-                        </a>
-                        nı kabul ediyorum.
-                    </Checkbox>
-                </Form.Item>
-                <Form.Item name="approveText" valuePropName="checked" rules={[requiredTrueValidator]}>
-                    <Checkbox>
-                        <a
-                            href="https://www.fonradar.com/acik-riza-beyani/"
-                            target="_blank"
-                            rel="noopener noreferrer">
-                            <Text underlined bold>
-                                Açık Rıza Metni
-                            </Text>
-                        </a>
-                        ni kabul ediyorum.
-                    </Checkbox>
-                </Form.Item>
-
                 <Form.Item>
                     <Button type="primary" htmlType="submit" size="large" loading={isSignUpLoading} block>
                         Kayıt Ol

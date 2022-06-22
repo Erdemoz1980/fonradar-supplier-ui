@@ -22,6 +22,7 @@ export const endpoints = {
     validateOTP: 'otp/validate',
     signup: '/Supplier',
     provinces: '/provinces',
+    docType: '/lookup/document-types',
 
     getDistrictsEndpoint: (provinceId) => `/provinces/${provinceId}/districts`,
     getTaxOfficesEndpoint: (provinceId) => `/provinces/${provinceId}/tax-administrations`,

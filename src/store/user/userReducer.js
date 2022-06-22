@@ -28,6 +28,9 @@ const initialState = {
     sendCodeResponse: '',
     isGetCodeLoading: false,
     getCodeResponse: '',
+    getDocTypeRes: '',
+    isUploadDocLoading: false,
+    uploadDocResponse: '',
 };
 
 export default (state = initialState, action) => {
@@ -92,7 +95,7 @@ export default (state = initialState, action) => {
         case userActionTypes.SIGN_UP:
             return { ...state, isSignUpLoading: true };
         case userActionTypes.SIGN_UP_SUCCESS:
-            return { ...state, isSignUpLoading: false, createdUser: action.payload, isLoggedIn: true };
+            return { ...state, isSignUpLoading: false, createdUser: action.payload };
         case userActionTypes.SIGN_UP_FAILURE:
             return { ...state, isSignUpLoading: false };
         case userActionTypes.SIGN_UP_RESET:
@@ -145,6 +148,32 @@ export default (state = initialState, action) => {
         case userActionTypes.GET_CODE_FAILURE:
             return { ...state, isGetCodeLoading: false };
 
+        case userActionTypes.GET_DOCTYPE:
+            return { ...state };
+        case userActionTypes.GET_DOCTYPE_SUCCESS:
+            return {
+                ...state,
+                getDocTypeRes: action.payload,
+            };
+        case userActionTypes.GET_DOCTYPE_FAILURE:
+            return { ...state };
+
+        case userActionTypes.UPLOAD_DOC:
+            return { ...state, isUploadDocLoading: true };
+        case userActionTypes.UPLOAD_DOC_SUCCESS:
+            return {
+                ...state,
+                isUploadDocLoading: false,
+                uploadDocResponse: action.payload,
+            };
+        case userActionTypes.UPLOAD_DOC_FAILURE:
+            return { ...state, isUploadDocLoading: false };
+
+        case userActionTypes.SET_LOGGEDIN:
+            return {
+                ...state,
+                isLoggedIn: action.payload,
+            };
         default:
             return state;
     }
