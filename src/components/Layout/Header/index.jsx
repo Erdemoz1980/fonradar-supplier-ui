@@ -39,14 +39,14 @@ function Header() {
 
     const headerItems = [
         // { text: 'Elime Ne Geçer', url: urls.chequeCalculator, icon: 'hand' },
-        // { text: 'Fatura İşlemleri', url: urls.supplierFinancing, icon: 'supplierFinancing', isNew: true },
+        { text: 'Fatura İşlemleri', url: urls.supplierFinancing, icon: 'supplierFinancing', isNew: true },
         // {
         //     text: 'Çek/Senet İşlemleri',
         //     url: urls.seekFund,
         //     icon: 'search',
         //     onClick: () => dispatch(createFundReset()),
         // },
-        // { text: 'Başvurularım', url: urls.funds, icon: 'fund' },
+        { text: 'Başvurularım', url: urls.funds, icon: 'fund' },
     ];
 
     return (
@@ -61,7 +61,7 @@ function Header() {
                 <Col xs={0} xl={16}>
                     <Row>
                         <Space>
-                            {/* {headerItems.map(({ text, icon, url, isNew, onClick }) => (
+                            {headerItems.map(({ text, icon, url, isNew, onClick }) => (
                                 <Link key={`header-link-${url}`} to={url}>
                                     <Button
                                         type="transparent"
@@ -77,7 +77,7 @@ function Header() {
                                         )}
                                     </Button>
                                 </Link>
-                            ))} */}
+                            ))}
                         </Space>
                     </Row>
                 </Col>

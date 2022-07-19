@@ -153,7 +153,7 @@ export function* signUpSaga({ payload }) {
     try {
         const newUser = yield apiV1.post(endpoints.signup, { ...payload });
         notification.success({
-            message: `Kaydınız ${newUser.supplierId} numarası ile Başarılı Bir Şekilde Oluşturuldu. İskonto İşlemi Yapabilmeniz İçin Legal Evrakları da Yüklemenizi Rica Ederiz`,
+            message: `Kaydınız başarılı bir şekilde oluşturuldu. Alıcılarınızın yüklediği faturalardan iskonto ettirmek istediklerinizi seçebilirsiniz.`,
         });
         yield put(signUpSuccess(newUser));
         yield put(signUpReset());

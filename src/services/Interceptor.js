@@ -35,7 +35,11 @@ class Interceptor {
     setResponseInterceptor() {
         this.responseInterceptor = this.axiosInstance.interceptors.response.use(
             (response) => {
-                if (response.data && response.data.message) {
+                if (
+                    response.data &&
+                    response.data.message &&
+                    !response.data.message.includes('ile Başarılı Bir Şekilde Oluşturuldu')
+                ) {
                     notification.info({ message: response.data.message });
                 }
                 if (response.headers && response.headers && response.headers['x-token']) {

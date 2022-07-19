@@ -89,7 +89,7 @@ function SignUpTab({ setActiveTabLogin }) {
         }
         if (legalDocs.ActivityCertificate) {
             const formData = new FormData();
-            formData.append('ActivityCertificate', legalDocs.ActivityCertificate);
+            formData.append('', legalDocs.ActivityCertificate);
             const documentTypeId = getDocTypeRes.find((doc) => doc.name === 'Faaliyet Belgesi');
             if (documentTypeId) {
                 dispatch(
