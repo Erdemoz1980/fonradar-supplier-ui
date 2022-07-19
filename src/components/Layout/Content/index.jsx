@@ -15,7 +15,7 @@ function Content({ children, ...props }) {
 
     return (
         <StyledContent {...props}>
-            {breadcrumbs[pathname] && (
+            {breadcrumbs[pathname] && breadcrumbs[pathname].length > 0 && (
                 <>
                     <Breadcrumb className="mb-big" separator=">">
                         {breadcrumbs[pathname].map(({ name, url }) => (

@@ -3,25 +3,31 @@ import { Form, Row, InputNumber, Select } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import { companyDp } from '../../../../utils';
 import { validateVkn } from '../../../../utils/validators';
-import { fetchDistrictsSuccess, fetchTaxOffices } from '../../../../store/provinces/provinceActions';
+import { fetchTaxOffices } from '../../../../apiServices/commonApi';
+import { setDistricts, setTaxOffices } from '../../../../store/reducers/commonSlice';
 
 const { Option } = Select;
 
 function UserStepForm({ setProvinceId, form }) {
     const dispatch = useDispatch();
+    const [loading, setloading] = useState(false);
     const [showTaxOffice, setShowTaxOffice] = useState(false);
-    const { districts, isDistrictsLoading, provinces, isProvincesLoading, taxOffices, isTaxOfficesLoading } =
-        useSelector((state) => state.provinces);
+    const { districts, provinces, taxOffices } = useSelector(({ common }) => common);
 
-    const onChangeProvince = (value) => {
+    const onChangeProvince = async (value) => {
         setShowTaxOffice(true);
         form.resetFields(['district']);
         form.resetFields(['taxAdministration']);
         const _province = provinces.length > 0 && provinces.find((province) => province.name === value);
         if (_province) {
+            setloading(true);
             setProvinceId(_province.provinceId);
-            dispatch(fetchDistrictsSuccess(_province.districts));
-            dispatch(fetchTaxOffices(_province.provinceId));
+            dispatch(setDistricts(_province.districts));
+            const response = await fetchTaxOffices(_province.provinceId);
+            if (response) {
+                dispatch(setTaxOffices(response));
+                setloading(false);
+            }
         }
     };
 
@@ -61,7 +67,6 @@ function UserStepForm({ setProvinceId, form }) {
                     <Select
                         style={{ width: '300px', marginRight: '20px' }}
                         placeholder="İl"
-                        loading={isProvincesLoading}
                         onChange={onChangeProvince}
                         optionFilterProp="children"
                         showSearch>
@@ -84,14 +89,15 @@ function UserStepForm({ setProvinceId, form }) {
                         <Select
                             style={{ width: '300px' }}
                             placeholder="İlçe"
-                            loading={isDistrictsLoading}
+                            loading={loading}
                             optionFilterProp="children"
                             showSearch>
-                            {districts.map((district, index) => (
-                                <Option key={`district-${index}`} value={district}>
-                                    {district}
-                                </Option>
-                            ))}
+                            {districts.length > 0 &&
+                                districts.map((district, index) => (
+                                    <Option key={`district-${index}`} value={district}>
+                                        {district}
+                                    </Option>
+                                ))}
                         </Select>
                     </Form.Item>
                 )}
@@ -109,14 +115,15 @@ function UserStepForm({ setProvinceId, form }) {
                         <Select
                             style={{ width: '300px' }}
                             placeholder="Vergi Dairesi"
-                            loading={isTaxOfficesLoading}
+                            loading={loading}
                             optionFilterProp="children"
                             showSearch>
-                            {taxOffices.map((taxOfc, id) => (
-                                <Option key={`tax-Administration-${id}`} value={taxOfc.name}>
-                                    {taxOfc.name}
-                                </Option>
-                            ))}
+                            {taxOffices.length > 0 &&
+                                taxOffices.map((taxOfc, id) => (
+                                    <Option key={`tax-Administration-${id}`} value={taxOfc.name}>
+                                        {taxOfc.name}
+                                    </Option>
+                                ))}
                         </Select>
                     </Form.Item>
                 )}

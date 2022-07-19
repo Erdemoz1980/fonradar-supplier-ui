@@ -8,20 +8,13 @@ import Icon, { CustomIcon } from '../../Icon';
 import StyledHeader, { DrawerButton } from './styles';
 import AccountDropdown from '../../AccountDropdown';
 import useResponsive from '../../../hooks/useResponsive';
-// import Text from '../../Text';
 import urls from '../../../routes/urls';
-// import { logout } from '../../../store/user/userActions';
-// import { createFundReset } from '../../../store/funds/fundActions';
-
-// TODO: TOO MANY CODE DUPLICATES
-// TODO: GET URLS FROM URLS FILE
 
 function Header() {
     const location = useLocation();
     const { xl, xxl } = useResponsive();
-    // const dispatch = useDispatch();
     const [isDrawerVisible, setIsDrawerVisible] = useState(false);
-    const { isLoggedIn } = useSelector((state) => state.user);
+    const { isLoggedIn } = useSelector(({ user }) => user);
 
     const path = location.pathname;
     const getButtonSize = () => {
@@ -50,10 +43,10 @@ function Header() {
     ];
 
     return (
-        <StyledHeader className={`${path !== urls.landing ? 'light' : ''}`}>
+        <StyledHeader className="light">
             <Row className="h-100" justify="space-between" align="middle">
                 <Col xs={15} md={8} lg={4}>
-                    <Link to={urls.landing}>
+                    <Link to={urls.supplierFinancing}>
                         <img className="header-logo" src={LOGO} alt="header-logo" />
                     </Link>
                 </Col>

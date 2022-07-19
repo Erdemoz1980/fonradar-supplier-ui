@@ -1,29 +1,26 @@
-import React, { useEffect } from 'react';
+import React, { useState } from 'react';
 import { Modal, Form } from 'antd';
-import { useDispatch, useSelector } from 'react-redux';
 import Button from '../../../../components/Button';
 import Text from '../../../../components/Text';
 import InputCode from '../../../../components/InputCode';
-import { sendCode } from '../../../../store/user/userActions';
+import { sendCode } from '../../../../apiServices/userApi';
 
 function GsmCodeVerificationModal({ isVisible, setIsVisible, onSuccess, gsmNumber }) {
-    const dispatch = useDispatch();
     const [codeForm] = Form.useForm();
-    const { sendCodeResponse, isSendCodeLoading } = useSelector((state) => state.user);
+    const [loading, setLoading] = useState(false);
 
-    useEffect(() => {
-        if (sendCodeResponse.isOtpValid) {
-            setIsVisible(false);
-            onSuccess();
-        } else if (sendCodeResponse && !sendCodeResponse.isOtpValid) {
-            codeForm.resetFields();
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [sendCodeResponse]);
-
-    const onSubmitOtpCode = ({ code }) => {
+    const onSubmitOtpCode = async ({ code }) => {
         if (code.length >= 6) {
-            dispatch(sendCode({ code, gsmNumber }));
+            setLoading(true);
+            const response = await sendCode({ code, gsmNumber });
+            if (response && response.isOtpValid) {
+                setLoading(false);
+                setIsVisible(false);
+                onSuccess();
+            } else if (response && !response.isOtpValid) {
+                setLoading(false);
+                codeForm.resetFields();
+            }
         }
     };
 
@@ -54,7 +51,7 @@ function GsmCodeVerificationModal({ isVisible, setIsVisible, onSuccess, gsmNumbe
                     <Button
                         type="primary"
                         htmlType="submit"
-                        loading={isSendCodeLoading}
+                        loading={loading}
                         disabled={codeForm.getFieldValue(['code'].length > 6)}
                         block>
                         Onayla

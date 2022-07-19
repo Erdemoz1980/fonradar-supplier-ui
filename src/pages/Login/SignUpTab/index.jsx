@@ -4,18 +4,13 @@ import { Form, Divider, Input, Steps } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import Text from '../../../components/Text';
 import Button from '../../../components/Button';
-import {
-    getCode,
-    signUp,
-    getDocType,
-    uploadDoc,
-    setLoggedIn,
-    // signUpSuccess,
-} from '../../../store/user/userActions';
 import UserStepForm from './UserStepForm';
 import LegalDocsForm from './LegalDocsForm';
 import GsmCodeVerificationModal from './GsmCodeVerificationModal';
-import { fetchProvinces } from '../../../store/provinces/provinceActions';
+import { fetchProvinces } from '../../../apiServices/commonApi';
+import { getDocType, getCode, uploadDoc, signUp } from '../../../apiServices/userApi';
+import { setProvinces } from '../../../store/reducers/commonSlice';
+import { setDocType, setLoggedIn, setCreatedUser } from '../../../store/reducers/userSlice';
 
 const { Step } = Steps;
 
@@ -28,6 +23,8 @@ const getStepTitle = (title) => (
 function SignUpTab({ setActiveTabLogin }) {
     const dispatch = useDispatch();
     const [signUpForm] = Form.useForm();
+    const [codeLoading, setCodeLoading] = useState(false);
+    const [loading, setloading] = useState(false);
     const [provinceId, setProvinceId] = useState(0);
     const [isVisible, setIsVisible] = useState(false);
     const [isCodeValid, setIsCodeValid] = useState(false);
@@ -38,74 +35,60 @@ function SignUpTab({ setActiveTabLogin }) {
         ActivityCertificate: undefined,
     });
 
-    const { isSignUpLoading, createdUser, isGetCodeLoading, getCodeResponse, getDocTypeRes } = useSelector(
-        ({ user }) => user
-    );
+    const { createdUser, docTypes } = useSelector(({ user }) => user);
 
-    useEffect(() => {
-        if (createdUser) {
-            signUpForm.resetFields();
-            setActiveTabLogin();
-        }
-    }, [createdUser, signUpForm, setActiveTabLogin]);
-
-    const uploadDocs = () => {
+    const uploadDocs = async () => {
         if (!legalDocs.TaxBoard && !legalDocs.AuthorizedSignatures && !legalDocs.ActivityCertificate) {
             dispatch(setLoggedIn(true));
         }
         if (legalDocs.TaxBoard) {
             const formData = new FormData();
             formData.append('', legalDocs.TaxBoard);
-            const documentTypeId = getDocTypeRes.find((doc) => doc.name === 'Vergi Levhası');
+            const documentTypeId = docTypes.find((doc) => doc.name === 'Vergi Levhası');
             if (documentTypeId) {
-                dispatch(
-                    uploadDoc({
-                        formData,
-                        supplierId: createdUser.supplierId,
-                        documentTypeId: documentTypeId.id,
-                    })
-                );
+                await uploadDoc({
+                    formData,
+                    supplierId: createdUser.supplierId,
+                    documentTypeId: documentTypeId.id,
+                });
             }
             if (!legalDocs.AuthorizedSignatures && !legalDocs.ActivityCertificate) {
-                // dispatch(setLoggedIn(true));
+                dispatch(setLoggedIn(true));
             }
         }
         if (legalDocs.AuthorizedSignatures) {
             const formData = new FormData();
             formData.append('', legalDocs.AuthorizedSignatures);
-            const documentTypeId = getDocTypeRes.find((doc) => doc.name === 'İmza Sirküleri');
+            const documentTypeId = docTypes.find((doc) => doc.name === 'İmza Sirküleri');
             if (documentTypeId) {
-                dispatch(
-                    uploadDoc({
-                        formData,
-                        supplierId: createdUser.supplierId,
-                        documentTypeId: documentTypeId.id,
-                    })
-                );
+                await uploadDoc({
+                    formData,
+                    supplierId: createdUser.supplierId,
+                    documentTypeId: documentTypeId.id,
+                });
             }
             if (!legalDocs.ActivityCertificate) {
-                // dispatch(setLoggedIn(true));
+                dispatch(setLoggedIn(true));
             }
         }
         if (legalDocs.ActivityCertificate) {
             const formData = new FormData();
             formData.append('', legalDocs.ActivityCertificate);
-            const documentTypeId = getDocTypeRes.find((doc) => doc.name === 'Faaliyet Belgesi');
+            const documentTypeId = docTypes.find((doc) => doc.name === 'Faaliyet Belgesi');
             if (documentTypeId) {
-                dispatch(
-                    uploadDoc({
-                        formData,
-                        supplierId: createdUser.supplierId,
-                        documentTypeId: documentTypeId.id,
-                    })
-                );
+                await uploadDoc({
+                    formData,
+                    supplierId: createdUser.supplierId,
+                    documentTypeId: documentTypeId.id,
+                });
             }
-            // dispatch(setLoggedIn(true));
+            dispatch(setLoggedIn(true));
         }
     };
 
-    const createUser = () => {
+    const createUser = async () => {
         // dispatch(signUpSuccess({ supplierId: 'efec903c-8cf5-4fc9-b40f-397f84ce26c3' }));
+        setloading(true);
         const formValues = signUpForm.getFieldsValue();
         if (
             formValues.name &&
@@ -117,19 +100,23 @@ function SignUpTab({ setActiveTabLogin }) {
             formValues.title &&
             formValues.taxAdministration
         ) {
-            dispatch(
-                signUp({
-                    name: formValues.name,
-                    surname: formValues.surname,
-                    email: formValues.email,
-                    password: formValues.password,
-                    phone: formValues.gsmNumber,
-                    taxNumber: `${formValues.taxId}`,
-                    title: formValues.title,
-                    taxAdministration: formValues.taxAdministration,
-                    province: provinceId,
-                })
-            );
+            const response = await signUp({
+                name: formValues.name,
+                surname: formValues.surname,
+                email: formValues.email,
+                password: formValues.password,
+                phone: formValues.gsmNumber,
+                taxNumber: `${formValues.taxId}`,
+                title: formValues.title,
+                taxAdministration: formValues.taxAdministration,
+                province: provinceId,
+            });
+            if (response) {
+                signUpForm.resetFields();
+                setActiveTabLogin();
+                setloading(false);
+                dispatch(setCreatedUser(response));
+            }
         }
     };
 
@@ -146,20 +133,35 @@ function SignUpTab({ setActiveTabLogin }) {
         setActiveStep(1);
     };
 
-    const getCodeNo = () => {
+    const getCodeNo = async () => {
+        setCodeLoading(true);
         const form1 = signUpForm.getFieldsValue();
         if (form1.name && form1.surname && form1.email && form1.password && form1.gsmNumber) {
-            dispatch(getCode(form1.gsmNumber));
+            const response = await getCode(form1.gsmNumber);
+            if (response) {
+                setIsVisible(true);
+                setCodeLoading(false);
+            }
+        }
+    };
+
+    const getProvinces = async () => {
+        const response = await fetchProvinces();
+        if (response) {
+            dispatch(setProvinces(response));
+        }
+    };
+
+    const getDocTypeData = async () => {
+        const response = await getDocType();
+        if (response) {
+            dispatch(setDocType(response));
         }
     };
 
     useEffect(() => {
-        getCodeResponse && setIsVisible(true);
-    }, [getCodeResponse]);
-
-    useEffect(() => {
-        dispatch(fetchProvinces());
-        dispatch(getDocType());
+        getProvinces();
+        getDocTypeData();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -246,7 +248,7 @@ function SignUpTab({ setActiveTabLogin }) {
                                 {!isCodeValid && (
                                     <Button
                                         type="primary"
-                                        loading={isGetCodeLoading}
+                                        loading={codeLoading}
                                         onClick={getCodeNo}
                                         size="large">
                                         Kaydet ve İlerle
@@ -279,7 +281,7 @@ function SignUpTab({ setActiveTabLogin }) {
                     />
                 </Steps>
                 <Form.Item>
-                    <Button type="primary" htmlType="submit" size="large" loading={isSignUpLoading} block>
+                    <Button type="primary" htmlType="submit" size="large" loading={loading} block>
                         Kayıt Ol
                     </Button>
                 </Form.Item>
@@ -288,7 +290,7 @@ function SignUpTab({ setActiveTabLogin }) {
             <Divider>
                 <Text color="smoke">Hesabım Var</Text>
             </Divider>
-            <Button type="outline" size="large" onClick={setActiveTabLogin} loading={isSignUpLoading} block>
+            <Button type="outline" size="large" onClick={setActiveTabLogin} loading={loading} block>
                 Giriş Yap
             </Button>
         </>

@@ -50,7 +50,7 @@ class Interceptor {
             },
 
             ({ response: error }) => {
-                if (error && error.data && error.data.errors.length > 0) {
+                if (error && error.data && error.data.errors && error.data.errors.length > 0) {
                     notification.error({ message: 'Aynı email ile ilgili bir hesap bulunmuştur' });
                 } else if (error && error.data && error.data.message) {
                     notification.error({ message: error.data.message });

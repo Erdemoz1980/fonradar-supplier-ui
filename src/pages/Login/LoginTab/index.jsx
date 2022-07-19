@@ -5,16 +5,21 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Link, useHistory } from 'react-router-dom';
 import Text from '../../../components/Text';
 import Button from '../../../components/Button';
-import { login } from '../../../store/user/userActions';
+import { login } from '../../../apiServices/userApi';
 import urls from '../../../routes/urls';
+import { setLoggedIn } from '../../../store/reducers/userSlice';
 
-function LoginTab({ setActiveTabSignUp }) {
+const LoginTab = ({ setActiveTabSignUp }) => {
     const dispatch = useDispatch();
     const history = useHistory();
     const { isLoginLoading } = useSelector(({ user }) => user);
 
-    const onLogin = (userCredentials) => {
-        dispatch(login(userCredentials, history));
+    const onLogin = async (userCredentials) => {
+        const response = await login(userCredentials);
+        if (response) {
+            history.push(urls.supplierFinancing);
+            dispatch(setLoggedIn(response.token));
+        }
     };
 
     return (
@@ -68,7 +73,7 @@ function LoginTab({ setActiveTabSignUp }) {
             </Button>
         </>
     );
-}
+};
 
 LoginTab.propTypes = {
     setActiveTabSignUp: PropTypes.func.isRequired,
