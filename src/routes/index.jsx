@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux';
 import Login from '../pages/Login';
 import urls from './urls';
 import SupplierFinancingList from '../pages/SupplierFinancing/SupplierFinancingList';
+import FundList from '../pages/FundList';
 
 function ProtectedRoute({ ...props }) {
     const { isLoggedIn } = useSelector(({ user }) => user);
@@ -14,7 +15,7 @@ function ProtectedRoute({ ...props }) {
 function GuestRoute({ ...props }) {
     const { isLoggedIn } = useSelector(({ user }) => user);
 
-    return !isLoggedIn ? <Route {...props} /> : <Redirect to="/" />;
+    return !isLoggedIn ? <Route {...props} /> : <Redirect to={urls.supplierFinancing} />;
 }
 
 function Routes() {
@@ -27,8 +28,8 @@ function Routes() {
     return (
         <Switch>
             <GuestRoute path={urls.login} exact component={Login} />
-            <ProtectedRoute path={urls.supplierFinancing} component={SupplierFinancingList} />
-            <ProtectedRoute path={urls.funds} component={SupplierFinancingList} />
+            <ProtectedRoute exact path={urls.supplierFinancing} component={SupplierFinancingList} />
+            <ProtectedRoute path={urls.funds} component={FundList} />
         </Switch>
     );
 }
