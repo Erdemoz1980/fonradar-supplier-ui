@@ -5,6 +5,8 @@ import Login from '../pages/Login';
 import urls from './urls';
 import SupplierFinancingList from '../pages/SupplierFinancing/SupplierFinancingList';
 import FundList from '../pages/FundList';
+import GeneralInfo from '../pages/Account/GeneralInfo';
+import CompanyInfo from '../pages/Account/CompanyInfo';
 
 function ProtectedRoute({ ...props }) {
     const { isLoggedIn } = useSelector(({ user }) => user);
@@ -30,6 +32,8 @@ function Routes() {
             <GuestRoute path={urls.login} exact component={Login} />
             <ProtectedRoute exact path={urls.supplierFinancing} component={SupplierFinancingList} />
             <ProtectedRoute path={urls.funds} component={FundList} />
+            <ProtectedRoute path={urls.generalInfo} exact component={GeneralInfo} />
+            <ProtectedRoute path={urls.companyInfo} exact component={CompanyInfo} />
         </Switch>
     );
 }

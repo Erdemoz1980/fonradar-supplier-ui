@@ -3,6 +3,8 @@ const urls = {
     passwordReset: '/sifre-sifirla',
     funds: '/fonlar',
     fundDetail: '/fonlar/:id',
+    generalInfo: '/temel-bilgiler',
+    companyInfo: '/firma-bilgiler',
     supplierFinancing: '/tedarikci-finansmani',
     help: '/yardım',
 };
@@ -17,6 +19,8 @@ const breadcrumbItems = {
     [urls.funds]: { name: 'Başvurularım', url: urls.funds },
     [urls.fundDetail]: { name: 'Başvuru Detay', url: urls.fundDetail },
     [urls.supplierFinancing]: { name: 'Fatura İşlemleri', url: urls.supplierFinancing },
+    [urls.generalInfo]: { name: 'Temel Bilgileri', url: urls.generalInfo },
+    [urls.companyInfo]: { name: 'Firma Bilgileri', url: urls.companyInfo },
 };
 
 // use breadcrumbItems to create breadcrumbs
@@ -28,4 +32,6 @@ export const breadcrumbs = {
     [urls.funds]: breadcrumbItems[urls.funds],
     [urls.fundDetail]: [breadcrumbItems[urls.funds], breadcrumbItems[urls.fundDetail]],
     [urls.supplierFinancing]: breadcrumbItems[urls.supplierFinancing],
+    [urls.generalInfo]: breadcrumbItems[urls.generalInfo],
+    [urls.companyInfo]: breadcrumbItems[urls.companyInfo],
 };

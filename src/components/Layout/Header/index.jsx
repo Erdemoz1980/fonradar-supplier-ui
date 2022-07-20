@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Col, Drawer, Row, Space, Tag } from 'antd';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link, useLocation } from 'react-router-dom';
 import LOGO from '../../../assests/logo-horizontal.svg';
 import Button from '../../Button';
@@ -9,8 +9,11 @@ import StyledHeader, { DrawerButton } from './styles';
 import AccountDropdown from '../../AccountDropdown';
 import useResponsive from '../../../hooks/useResponsive';
 import urls from '../../../routes/urls';
+import { fetchUser } from '../../../apiServices/userApi';
+import { setUser } from '../../../store/reducers/userSlice';
 
 function Header() {
+    const dispatch = useDispatch();
     const location = useLocation();
     const { xl, xxl } = useResponsive();
     const [isDrawerVisible, setIsDrawerVisible] = useState(false);
@@ -31,16 +34,21 @@ function Header() {
     };
 
     const headerItems = [
-        // { text: 'Elime Ne Geçer', url: urls.chequeCalculator, icon: 'hand' },
         { text: 'Fatura İşlemleri', url: urls.supplierFinancing, icon: 'supplierFinancing', isNew: true },
-        // {
-        //     text: 'Çek/Senet İşlemleri',
-        //     url: urls.seekFund,
-        //     icon: 'search',
-        //     onClick: () => dispatch(createFundReset()),
-        // },
         { text: 'Başvurularım', url: urls.funds, icon: 'fund' },
     ];
+
+    const getUserData = async () => {
+        const response = await fetchUser();
+        if (response) {
+            dispatch(setUser(response));
+        }
+    };
+
+    useEffect(() => {
+        getUserData();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     return (
         <StyledHeader className="light">
@@ -118,52 +126,7 @@ function Header() {
                             ))}
 
                             {isLoggedIn ? (
-                                <div className="mt-big">
-                                    {/* <Link to={urls.accountSettings}>
-                                        <DrawerButton
-                                            type="transparent"
-                                            size={getButtonSize()}
-                                            onClick={closeDrawer}
-                                            active={path === urls.accountSettings}
-                                            block>
-                                            Hesap Bilgilerim
-                                        </DrawerButton>
-                                    </Link>
-
-                                    <Link to={urls.accountType}>
-                                        <DrawerButton
-                                            type="transparent"
-                                            size={getButtonSize()}
-                                            onClick={closeDrawer}
-                                            active={path === urls.accountType}
-                                            block>
-                                            Hesap Tipi
-                                        </DrawerButton>
-                                    </Link>
-
-                                    <Link to={urls.help}>
-                                        <DrawerButton
-                                            type="transparent"
-                                            size={getButtonSize()}
-                                            onClick={closeDrawer}
-                                            active={path === urls.help}
-                                            block>
-                                            Yardım
-                                        </DrawerButton>
-                                    </Link>
-
-                                    <DrawerButton
-                                        type="transparent"
-                                        size={getButtonSize()}
-                                        onClick={() => {
-                                            dispatch(logout());
-                                            closeDrawer();
-                                        }}
-                                        active={path === urls.help}
-                                        block>
-                                        <Text color="red">Çıkış</Text>
-                                    </DrawerButton> */}
-                                </div>
+                                <div className="mt-big" />
                             ) : (
                                 <Link to={urls.login}>
                                     <Button

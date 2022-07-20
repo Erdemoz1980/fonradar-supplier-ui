@@ -1,43 +1,29 @@
 import React, { useEffect, useState } from 'react';
-import { Col, Form, Input, Row, Select } from 'antd';
+import { Col, Form, Row, Select, Input } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import Button from '../../../components/Button';
 import Text from '../../../components/Text';
 import { oneColLayout, companyDp } from '../../../utils';
-import { updateUser } from '../../../store/user/userActions';
-import { fetchDistricts, fetchProvinces, fetchTaxOffices } from '../../../store/provinces/provinceActions';
-import { validateGsmNumber } from '../../SupplierFinancingNew/SupplierFinancingForm/validators';
+import { updateUser } from '../../../apiServices/userApi';
+import { fetchTaxOffices, fetchProvinces } from '../../../apiServices/commonApi';
+import { setDistricts, setTaxOffices, setProvinces } from '../../../store/reducers/commonSlice';
 
 const { Option } = Select;
 
-function AccountSettings() {
+function CompanyInfo() {
     const dispatch = useDispatch();
     const [form] = Form.useForm();
     const [showTaxOffice, setShowTaxOffice] = useState(false);
-    // const [phoneNumber, setPhoneNumber] = useState('');
-    const { user, updatedUser, isUpdateUserLoading } = useSelector((state) => state.user);
-    const { districts, isDistrictsLoading, provinces, isProvincesLoading, taxOffices, isTaxOfficesLoading } =
-        useSelector((state) => state.provinces);
-
-    useEffect(() => {
-        if (updatedUser) form.resetFields();
-    }, [updatedUser, form]);
-
-    const validateGSMNo = (gsmNumber) =>
-        gsmNumber?.charAt(0) === '0' ? gsmNumber?.replace('0', '') : gsmNumber;
+    const [loading, setLoading] = useState(false);
+    const [loadingData, setLoadingData] = useState(false);
+    const { user } = useSelector((state) => state.user);
+    const { districts, provinces, taxOffices } = useSelector((state) => state.common);
 
     useEffect(() => {
         if (user) {
             const _company =
                 companyDp.length > 0 && companyDp.find((company) => company.name === user.companyTitle);
             form.setFields([
-                { name: 'email', value: user?.email },
-                { name: 'name', value: user.name },
-                { name: 'surname', value: user.surname },
-                {
-                    name: 'gsmNumber',
-                    value: validateGSMNo(user?.gsmNumber),
-                },
                 {
                     name: 'title',
                     value: _company
@@ -46,20 +32,28 @@ function AccountSettings() {
                 },
                 { name: 'taxId', value: user.taxId },
             ]);
-            // setPhoneNumber(user.normalizedGsmNumber);
         }
     }, [user, form]);
 
-    const onSubmit = (vals) => {
-        dispatch(updateUser(vals));
+    const onSubmit = async (vals) => {
+        setLoading(true);
+        const response = await updateUser(vals);
+        if (response) {
+            form.resetFields();
+            setLoading(false);
+        }
     };
 
-    const onChangeProvince = () => {
+    const onChangeProvince = async () => {
         const _province = provinces?.find((province) => province.name === user?.province);
         if (_province) {
-            dispatch(fetchDistricts(_province.provinceId));
-            dispatch(fetchTaxOffices(_province.provinceId));
+            dispatch(setDistricts(_province.districts));
+            const response = await fetchTaxOffices(_province.provinceId);
+            if (response) {
+                dispatch(setTaxOffices(response));
+            }
             form.setFields([
+                { name: 'taxId', value: user.taxId },
                 {
                     name: 'province',
                     value: _province
@@ -96,8 +90,17 @@ function AccountSettings() {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [user, districts, taxOffices]);
 
+    const getProvinces = async () => {
+        setLoadingData(true);
+        const response = await fetchProvinces();
+        if (response) {
+            dispatch(setProvinces(response));
+            setLoadingData(false);
+        }
+    };
+
     useEffect(() => {
-        dispatch(fetchProvinces());
+        getProvinces();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -114,50 +117,15 @@ function AccountSettings() {
             <Col {...oneColLayout}>
                 <div className="mb">
                     <Text type="title" bold>
-                        Hesap Bilgileri
+                        Firma Bilgileri
                     </Text>
-                    <Text>E-posta ve şifre bilgilerini değiştir.</Text>
+                    <Text>Firmanıza ait bilgileri güncelleyin.</Text>
                 </div>
 
                 <Form form={form} name="accountSettings" onFinish={onSubmit}>
-                    <Text className="mt-big" type="subtitle">
-                        Telefon Numarası:{' '}
-                        <Text className="d-inline" type="subtitle" bold>
-                            {user && user.gsmNumber}
-                        </Text>
-                    </Text>
-
-                    <Form.Item name="name">
-                        <Input placeholder="Ad" />
-                    </Form.Item>
-
-                    <Form.Item name="surname">
-                        <Input placeholder="Soyad" />
-                    </Form.Item>
-
-                    <Form.Item
-                        name="email"
-                        rules={[{ type: 'email', message: 'Lütfen geçerli bir email giriniz!' }]}>
-                        <Input placeholder="E-posta adresi" />
-                    </Form.Item>
-
-                    <Form.Item name="password">
-                        <Input.Password placeholder="Şifre" autoComplete="new-password" />
-                    </Form.Item>
-
-                    <Form.Item
-                        name="gsmNumber"
-                        rules={[
-                            {
-                                validator: (_, value) => validateGsmNumber(value),
-                            },
-                        ]}>
-                        <Input placeholder="Cep Telefonu" />
-                    </Form.Item>
                     <Form.Item name="taxId">
                         <Input placeholder="VKN/TCKN" />
                     </Form.Item>
-
                     <Form.Item name="title" rules={[{ required: true }]}>
                         <Select placeholder="Şirket Türü">
                             {companyDp.map((company) => (
@@ -178,7 +146,7 @@ function AccountSettings() {
                         ]}>
                         <Select
                             placeholder="İl"
-                            loading={isProvincesLoading}
+                            loading={loadingData}
                             onChange={onChangeProvince}
                             optionFilterProp="children"
                             showSearch>
@@ -198,11 +166,7 @@ function AccountSettings() {
                                     message: 'Lütfen bir il seçiniz!',
                                 },
                             ]}>
-                            <Select
-                                placeholder="İlçe"
-                                loading={isDistrictsLoading}
-                                optionFilterProp="children"
-                                showSearch>
+                            <Select placeholder="İlçe" optionFilterProp="children" showSearch>
                                 {districts.map((district, id) => (
                                     <Option key={`district-${id}`} value={district.name}>
                                         {districts.name}
@@ -220,11 +184,7 @@ function AccountSettings() {
                                     message: 'Lütfen bir il seçiniz!',
                                 },
                             ]}>
-                            <Select
-                                placeholder="Vergi Dairesi"
-                                loading={isTaxOfficesLoading}
-                                optionFilterProp="children"
-                                showSearch>
+                            <Select placeholder="Vergi Dairesi" optionFilterProp="children" showSearch>
                                 {taxOffices.map((taxOfc, id) => (
                                     <Option key={`tax-Administration-${id}`} value={taxOfc.name}>
                                         {taxOfc.name}
@@ -235,12 +195,7 @@ function AccountSettings() {
                     )}
 
                     <Form.Item>
-                        <Button
-                            type="primary"
-                            htmlType="submit"
-                            size="large"
-                            loading={isUpdateUserLoading}
-                            block>
+                        <Button type="primary" htmlType="submit" size="large" loading={loading} block>
                             Kaydet
                         </Button>
                     </Form.Item>
@@ -249,4 +204,4 @@ function AccountSettings() {
         </Row>
     );
 }
-export default AccountSettings;
+export default CompanyInfo;

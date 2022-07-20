@@ -1,7 +1,7 @@
 import React from 'react';
 import { Col, Row } from 'antd';
 import { Link } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+// import { useDispatch } from 'react-redux';
 import useResponsive from '../../../hooks/useResponsive';
 import Text from '../../Text';
 import StyledFooter from './styles';
@@ -16,10 +16,10 @@ import IYZICO from '../../../assests/companies/iyzico.svg';
 import MASTERCARD from '../../../assests/companies/mastercard.svg';
 import VISA from '../../../assests/companies/visa.svg';
 import urls from '../../../routes/urls';
-import { createFundReset } from '../../../store/funds/fundActions';
+// import { createFundReset } from '../../../store/funds/fundActions';
 
 function Footer() {
-    const dispatch = useDispatch();
+    // const dispatch = useDispatch();
     const { xs } = useResponsive();
 
     return (
@@ -94,11 +94,11 @@ function Footer() {
                             </Text>
                         </Link>
 
-                        <Link to={urls.seekFund} onClick={() => dispatch(createFundReset())}>
+                        {/* <Link to={urls.seekFund} onClick={() => dispatch(createFundReset())}>
                             <Text type="mini-title" color="lightTextColor" align="right">
                                 Çek/Senet İşlemleri
                             </Text>
-                        </Link>
+                        </Link> */}
 
                         <Link to={urls.funds}>
                             <Text type="mini-title" color="lightTextColor" align="right">
@@ -106,7 +106,7 @@ function Footer() {
                             </Text>
                         </Link>
 
-                        <Link to={urls.accountSettings}>
+                        <Link to={urls.generalInfo}>
                             <Text type="mini-title" color="lightTextColor" align="right">
                                 Hesabım
                             </Text>

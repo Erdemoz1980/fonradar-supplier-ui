@@ -103,7 +103,6 @@ const getDocType = async () => {
 
 const uploadDoc = async (payload) => {
     try {
-        console.log(payload);
         const { formData } = payload;
         const newUser = await apiV1.post(
             `${endpoints.signup}/${payload.supplierId}/document/${payload.documentTypeId}/upload`,
@@ -112,6 +111,21 @@ const uploadDoc = async (payload) => {
         );
         return newUser.data;
     } catch (e) {}
+};
+
+const updateUser = async ({ payload }) => {
+    try {
+        let userData = { ...payload };
+        if (payload.gsmNumber) {
+            const gsmNumber = `0${payload.gsmNumber}`;
+            userData = { ...payload, gsmNumber };
+        }
+        if (userData !== {}) {
+            const { data } = await apiV1.patch(endpoints.smeUsers, userData);
+            notification.success({ message: 'Hesabınız başarıyla güncellendi.' });
+            return data;
+        }
+    } catch (error) {}
 };
 
 export {
@@ -126,4 +140,5 @@ export {
     getCode,
     getDocType,
     uploadDoc,
+    updateUser,
 };

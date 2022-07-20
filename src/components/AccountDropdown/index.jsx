@@ -23,13 +23,26 @@ const AccountMenu = ({ setIsDropdownVisible }) => {
 
     return (
         <>
-            <Link to={urls.accountSettings}>
+            <Link to={urls.generalInfo}>
                 <AccountButton onClick={closeDropdown} block>
                     <Text className="m-0" type="label">
-                        Hesap Bilgileri
+                        Temel Bilgiler
                     </Text>
                     <Text type="small" color="smoke">
                         E-posta, telefon ve şifre bilgilerini değiştir.
+                    </Text>
+                </AccountButton>
+            </Link>
+
+            <Divider className="m" />
+
+            <Link to={urls.companyInfo}>
+                <AccountButton onClick={closeDropdown} block>
+                    <Text className="m-0" type="label">
+                        Firma Bilgileri
+                    </Text>
+                    <Text type="small" color="smoke">
+                        Firmanıza ait bilgileri güncelleyin.
                     </Text>
                 </AccountButton>
             </Link>
@@ -42,7 +55,7 @@ const AccountMenu = ({ setIsDropdownVisible }) => {
                         Legal Evraklar
                     </Text>
                     <Text type="small" color="smoke">
-                        Şirketinize ait legal evrakları ekleyin veya güncelleyin.
+                        Firmanıza ait legal evrakları ekleyin veya güncelleyin.
                     </Text>
                 </AccountButton>
             </Link>
