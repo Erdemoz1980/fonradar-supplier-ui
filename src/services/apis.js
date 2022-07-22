@@ -23,6 +23,7 @@ export const endpoints = {
     signup: '/Supplier',
     provinces: '/provinces',
     docType: '/lookup/document-types',
+    invoices: '/invoice',
 
     getDistrictsEndpoint: (provinceId) => `/provinces/${provinceId}/districts`,
     getTaxOfficesEndpoint: (provinceId) => `/provinces/${provinceId}/tax-administrations`,

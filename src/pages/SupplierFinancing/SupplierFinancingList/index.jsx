@@ -1,17 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import moment from 'moment';
 import { Col, Row } from 'antd';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import Table from '../../../components/Table';
 import { convertFloatDotSeperated } from '../../../utils';
+import { fetchInvoices } from '../../../apiServices/supplierFinanceApi';
+import { setInvoices } from '../../../store/reducers/supplierFinanceSlice';
 
 const SupplierFinancingList = () => {
-    const [selectedInvoices, setSelectedInvoices] = useState();
-
-    const { invoiceDiscounts, isinvoiceDiscountsLoading, invoiceCalculate, invoiceDiscountsUpload } =
-        useSelector((state) => state.user);
-
-    console.log(invoiceCalculate, invoiceDiscountsUpload, selectedInvoices);
+    const dispatch = useDispatch();
+    const [loading, setLoading] = useState(false);
+    const { invoices } = useSelector((state) => state.supplierFinance);
 
     const columns = [
         {
@@ -51,18 +50,31 @@ const SupplierFinancingList = () => {
 
     const rowSelection = {
         onChange: (selectedRowKeys) => {
-            setSelectedInvoices(selectedRowKeys);
             if (selectedRowKeys.length > 0) {
+                dispatch(setInvoices(selectedRowKeys));
                 // dispatch(fetchInvoiceCalculate(selectedRowKeys));
             } else {
                 // dispatch(fetchInvoiceCalculateSuccess({}));
             }
-            // console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
         },
         getCheckboxProps: (record) => ({
             index: record.index,
         }),
     };
+
+    const getInvoice = async () => {
+        setLoading(true);
+        const response = await fetchInvoices();
+        if (response) {
+            setLoading(false);
+            dispatch(setInvoices(response));
+        }
+    };
+
+    useEffect(() => {
+        getInvoice();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     return (
         <>
@@ -74,10 +86,10 @@ const SupplierFinancingList = () => {
                             ...rowSelection,
                         }}
                         rowKey="id"
-                        dataSource={invoiceDiscounts}
+                        dataSource={invoices}
                         columns={columns}
                         pagination={false}
-                        loading={isinvoiceDiscountsLoading}
+                        loading={loading}
                         cursorPointer
                     />
                 </Col>
