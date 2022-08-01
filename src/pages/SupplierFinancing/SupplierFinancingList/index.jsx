@@ -11,6 +11,7 @@ const SupplierFinancingList = () => {
     const dispatch = useDispatch();
     const [loading, setLoading] = useState(false);
     const { invoices } = useSelector((state) => state.supplierFinance);
+    const { user } = useSelector((state) => state.user);
 
     const columns = [
         {
@@ -65,10 +66,10 @@ const SupplierFinancingList = () => {
     const getInvoice = async () => {
         try {
             setLoading(true);
-            const response = await fetchInvoices();
+            const response = await fetchInvoices(user.taxNumber);
             if (response) {
                 setLoading(false);
-                dispatch(setInvoices([]));
+                dispatch(setInvoices(response.invoiceDtos));
             } else {
                 setLoading(false);
             }
@@ -78,9 +79,11 @@ const SupplierFinancingList = () => {
     };
 
     useEffect(() => {
-        getInvoice();
+        if (user && user.taxNumber) {
+            getInvoice();
+        }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [user]);
 
     return (
         <>

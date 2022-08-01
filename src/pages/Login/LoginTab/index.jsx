@@ -5,9 +5,9 @@ import { useDispatch } from 'react-redux';
 import { Link, useHistory } from 'react-router-dom';
 import Text from '../../../components/Text';
 import Button from '../../../components/Button';
-import { login } from '../../../apiServices/userApi';
+import { login, fetchUser } from '../../../apiServices/userApi';
 import urls from '../../../routes/urls';
-import { setLoggedIn } from '../../../store/reducers/userSlice';
+import { setLoggedIn, setUser } from '../../../store/reducers/userSlice';
 
 const LoginTab = ({ setActiveTabSignUp }) => {
     const dispatch = useDispatch();
@@ -18,8 +18,12 @@ const LoginTab = ({ setActiveTabSignUp }) => {
         setLoading(true);
         const response = await login(userCredentials);
         if (response) {
-            history.push(urls.supplierFinancing);
             dispatch(setLoggedIn(response.token));
+            const user = await fetchUser();
+            if (user) {
+                dispatch(setUser(user));
+            }
+            history.push(urls.supplierFinancing);
             setLoading(false);
         } else {
             setLoading(false);

@@ -24,6 +24,7 @@ export const endpoints = {
     provinces: '/provinces',
     docType: '/lookup/document-types',
     invoices: '/invoice',
+    fetchUser: '/supplier/authenticated',
 
     getDistrictsEndpoint: (provinceId) => `/provinces/${provinceId}/districts`,
     getTaxOfficesEndpoint: (provinceId) => `/provinces/${provinceId}/tax-administrations`,

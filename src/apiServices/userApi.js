@@ -1,6 +1,5 @@
 /* eslint-disable no-empty */
 import { notification } from 'antd';
-import moment from 'moment';
 import { apiV1, endpoints, apiV2 } from '../services/apis';
 import LocalStorageService from '../services/LocalStorageService';
 
@@ -23,9 +22,14 @@ const logout = () => {
 
 const fetchUser = async () => {
     try {
-        const { data } = await apiV1.get(endpoints.smeUsers);
-        data.userProfile.isPremium = moment() < moment(data.userProfile.premiumExpirationDate);
-        return data.userProfile;
+        const token = LocalStorageService.getAuthToken();
+        const response = await apiV1.get(endpoints.fetchUser, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+                accept: 'application/json',
+            },
+        });
+        return response;
     } catch (e) {}
 };
 

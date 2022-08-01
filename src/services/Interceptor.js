@@ -1,5 +1,5 @@
 import { notification } from 'antd';
-// import urls from '../routes/urls';
+import urls from '../routes/urls';
 import LocalStorageService from './LocalStorageService';
 
 class Interceptor {
@@ -50,15 +50,17 @@ class Interceptor {
             },
 
             ({ response: error }) => {
-                if (error && error.data && error.data.errors && error.data.errors.length > 0) {
+                if (error && error.data && error.data.detail) {
+                    notification.error({ message: error.data.detail });
+                } else if (error && error.data && error.data.errors && error.data.errors.length > 0) {
                     notification.error({ message: 'Aynı email ile ilgili bir hesap bulunmuştur' });
                 } else if (error && error.data && error.data.message) {
                     notification.error({ message: error.data.message });
                 } else if (error && error.status === 401) {
-                    // LocalStorageService.removeAuthToken();
-                    // if (window.location.pathname !== urls.login) {
-                    //     window.location = urls.login;
-                    // }
+                    LocalStorageService.removeAuthToken();
+                    if (window.location.pathname !== urls.login) {
+                        window.location = urls.login;
+                    }
                 } else {
                     notification.error({ message: 'Beklenmedik bir hata oluştu!' });
                 }
