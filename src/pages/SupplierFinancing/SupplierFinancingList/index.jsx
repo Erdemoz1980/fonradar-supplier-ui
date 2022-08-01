@@ -63,11 +63,17 @@ const SupplierFinancingList = () => {
     };
 
     const getInvoice = async () => {
-        setLoading(true);
-        const response = await fetchInvoices();
-        if (response) {
+        try {
+            setLoading(true);
+            const response = await fetchInvoices();
+            if (response) {
+                setLoading(false);
+                dispatch(setInvoices([]));
+            } else {
+                setLoading(false);
+            }
+        } catch (e) {
             setLoading(false);
-            dispatch(setInvoices(response));
         }
     };
 

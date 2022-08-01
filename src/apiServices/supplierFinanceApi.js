@@ -5,7 +5,9 @@ const fetchInvoices = async () => {
     try {
         const { data } = await apiV1.get(endpoints.invoices);
         return data;
-    } catch (error) {}
+    } catch (error) {
+        console.log(error);
+    }
 };
 
 export { fetchInvoices };

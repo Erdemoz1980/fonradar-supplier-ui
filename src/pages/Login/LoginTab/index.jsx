@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Input, Form, Divider } from 'antd';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { Link, useHistory } from 'react-router-dom';
 import Text from '../../../components/Text';
 import Button from '../../../components/Button';
@@ -12,13 +12,17 @@ import { setLoggedIn } from '../../../store/reducers/userSlice';
 const LoginTab = ({ setActiveTabSignUp }) => {
     const dispatch = useDispatch();
     const history = useHistory();
-    const { isLoginLoading } = useSelector(({ user }) => user);
+    const [loading, setLoading] = useState(false);
 
     const onLogin = async (userCredentials) => {
+        setLoading(true);
         const response = await login(userCredentials);
         if (response) {
             history.push(urls.supplierFinancing);
             dispatch(setLoggedIn(response.token));
+            setLoading(false);
+        } else {
+            setLoading(false);
         }
     };
 
@@ -27,7 +31,10 @@ const LoginTab = ({ setActiveTabSignUp }) => {
             <Text type="title" color="primaryDark">
                 Üye Girişi
             </Text>
-            <Form name="login" onFinish={onLogin}>
+            <Form
+                name="login"
+                initialValues={{ email: 'farina@yahoo.com', password: '_f0N|R@d4r-._' }}
+                onFinish={onLogin}>
                 <Form.Item
                     name="email"
                     rules={[
@@ -52,13 +59,13 @@ const LoginTab = ({ setActiveTabSignUp }) => {
                 </Form.Item>
 
                 <Form.Item>
-                    <Button type="primary" htmlType="submit" size="large" loading={isLoginLoading} block>
+                    <Button type="primary" htmlType="submit" size="large" loading={loading} block>
                         Giriş Yap
                     </Button>
                 </Form.Item>
                 <Form.Item>
                     <Link to={urls.passwordReset}>
-                        <Button type="link" disabled={isLoginLoading}>
+                        <Button type="link" disabled={loading}>
                             Parolamı unuttum
                         </Button>
                     </Link>
@@ -68,7 +75,7 @@ const LoginTab = ({ setActiveTabSignUp }) => {
             <Divider>
                 <Text color="smoke">Henüz Hesabım Yok</Text>
             </Divider>
-            <Button type="outline" size="large" onClick={setActiveTabSignUp} loading={isLoginLoading} block>
+            <Button type="outline" size="large" onClick={setActiveTabSignUp} loading={loading} block>
                 Ücretsiz Üye Ol
             </Button>
         </>

@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Col, Drawer, Row, Space, Tag } from 'antd';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { Link, useLocation } from 'react-router-dom';
 import LOGO from '../../../assests/logo-horizontal.svg';
 import Button from '../../Button';
@@ -9,11 +9,11 @@ import StyledHeader, { DrawerButton } from './styles';
 import AccountDropdown from '../../AccountDropdown';
 import useResponsive from '../../../hooks/useResponsive';
 import urls from '../../../routes/urls';
-import { fetchUser } from '../../../apiServices/userApi';
-import { setUser } from '../../../store/reducers/userSlice';
+// import { fetchUser } from '../../../apiServices/userApi';
+// import { setUser } from '../../../store/reducers/userSlice';
 
 function Header() {
-    const dispatch = useDispatch();
+    // const dispatch = useDispatch();
     const location = useLocation();
     const { xl, xxl } = useResponsive();
     const [isDrawerVisible, setIsDrawerVisible] = useState(false);
@@ -38,17 +38,17 @@ function Header() {
         { text: 'Başvurularım', url: urls.funds, icon: 'fund' },
     ];
 
-    const getUserData = async () => {
-        const response = await fetchUser();
-        if (response) {
-            dispatch(setUser(response));
-        }
-    };
+    // const getUserData = async () => {
+    //     const response = await fetchUser();
+    //     if (response) {
+    //         dispatch(setUser(response));
+    //     }
+    // };
 
-    useEffect(() => {
-        getUserData();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    // useEffect(() => {
+    //     getUserData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // }, []);
 
     return (
         <StyledHeader className="light">

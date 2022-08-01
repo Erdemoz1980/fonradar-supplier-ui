@@ -1,42 +1,40 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Col, Row, Form, Input } from 'antd';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router';
 import { oneColLayout } from '../../../utils';
 import Icon from '../../../components/Icon';
 import Text from '../../../components/Text';
 import Button from '../../../components/Button';
 import { Tabs } from '../styles';
-import { resetPasswordSendCode, resetPassword } from '../../../store/user/userActions';
 import urls from '../../../routes/urls';
 import { resetPasswordTabs } from '../constants';
+import { resetPasswordSendCode, resetPassword } from '../../../apiServices/userApi';
 
 const { TabPane } = Tabs;
 
 function PasswordReset() {
-    const dispatch = useDispatch();
     const history = useHistory();
-    const {
-        isResetPasswordSendCodeLoading,
-        passwordResettingEmail,
-        isResetPasswordLoading,
-        passwordResettedEmail,
-    } = useSelector(({ user }) => user);
+    const { isResetPasswordSendCodeLoading, passwordResettingEmail, isResetPasswordLoading } = useSelector(
+        ({ user }) => user
+    );
     const [activeTabKey, setActiveTabKey] = useState(
         passwordResettingEmail ? resetPasswordTabs.resetPassword : resetPasswordTabs.sendCode
     );
 
-    const sendCode = ({ email }) => {
-        dispatch(resetPasswordSendCode(email));
-    };
-    const handleResetPassword = (vals) => {
-        dispatch(resetPassword(vals));
+    const sendCode = async ({ email }) => {
+        const response = await resetPasswordSendCode(email);
+        if (response) {
+            setActiveTabKey(resetPasswordTabs.resetPassword);
+        }
     };
 
-    useEffect(() => {
-        if (passwordResettingEmail) setActiveTabKey(resetPasswordTabs.resetPassword);
-        if (passwordResettedEmail) history.push(urls.login);
-    }, [passwordResettingEmail, passwordResettedEmail, history]);
+    const handleResetPassword = async (vals) => {
+        const response = await resetPassword(vals);
+        if (response) {
+            history.push(urls.login);
+        }
+    };
 
     return (
         <Row>

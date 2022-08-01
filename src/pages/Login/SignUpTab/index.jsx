@@ -87,36 +87,41 @@ function SignUpTab({ setActiveTabLogin }) {
     };
 
     const createUser = async () => {
-        // dispatch(signUpSuccess({ supplierId: 'efec903c-8cf5-4fc9-b40f-397f84ce26c3' }));
         setloading(true);
         const formValues = signUpForm.getFieldsValue();
-        if (
-            formValues.name &&
-            formValues.surname &&
-            formValues.email &&
-            formValues.password &&
-            formValues.gsmNumber &&
-            formValues.taxId &&
-            formValues.title &&
-            formValues.taxAdministration
-        ) {
-            const response = await signUp({
-                name: formValues.name,
-                surname: formValues.surname,
-                email: formValues.email,
-                password: formValues.password,
-                phone: formValues.gsmNumber,
-                taxNumber: `${formValues.taxId}`,
-                title: formValues.title,
-                taxAdministration: formValues.taxAdministration,
-                province: provinceId,
-            });
-            if (response) {
-                signUpForm.resetFields();
-                setActiveTabLogin();
-                setloading(false);
-                dispatch(setCreatedUser(response));
+        try {
+            if (
+                formValues.name &&
+                formValues.surname &&
+                formValues.email &&
+                formValues.password &&
+                formValues.gsmNumber &&
+                formValues.taxId &&
+                formValues.title &&
+                formValues.taxAdministration
+            ) {
+                const response = await signUp({
+                    name: formValues.name,
+                    surname: formValues.surname,
+                    email: formValues.email,
+                    password: formValues.password,
+                    phone: formValues.gsmNumber,
+                    taxNumber: `${formValues.taxId}`,
+                    title: formValues.title,
+                    taxAdministration: formValues.taxAdministration,
+                    province: provinceId,
+                });
+                if (response) {
+                    signUpForm.resetFields();
+                    setActiveTabLogin();
+                    setloading(false);
+                    dispatch(setCreatedUser(response));
+                } else {
+                    setloading(false);
+                }
             }
+        } catch (e) {
+            setloading(false);
         }
     };
 
