@@ -22,7 +22,7 @@ const InvoicesDiscountSummary = ({ invoiceCalculate }) => (
                     <b>Ortalama Vade:</b> {invoiceCalculate?.supplierAverageCreditDay}
                 </InvoiceText>
                 <InvoiceText type="mini-title">
-                    <b>Elinize geçek tutar aralığı : </b>
+                    <b>Elinize Geçecek Tutar Aralığı: </b>
                     {convertFloatDotSeperated(invoiceCalculate?.minPrice)} TL
                     {' - '}
                     {convertFloatDotSeperated(invoiceCalculate?.maxPrice)} TL

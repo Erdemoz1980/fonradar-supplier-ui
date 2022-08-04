@@ -17,6 +17,7 @@ const SupplierFinancingList = () => {
         total: 0,
         maxPrice: 0,
         minPrice: 0,
+        SupplierAverageCreditDay: 0,
     });
     const { invoices } = useSelector((state) => state.supplierFinance);
     const { user, isLoggedIn } = useSelector((state) => state.user);
@@ -25,7 +26,6 @@ const SupplierFinancingList = () => {
         SpreadLast: 40,
         Interest: 18,
         CommissionRate: 1,
-        SupplierAverageCreditDay: 10,
     };
     const columns = [
         {
@@ -52,11 +52,17 @@ const SupplierFinancingList = () => {
         },
         {
             title: 'Fatura Vadesi',
-            dataIndex: 'invoiceDueDate',
-            key: 'invoiceDueDate',
+            dataIndex: 'invoiceTerm',
+            key: 'invoiceTerm',
             render: (value) => moment(value).format('DD-MM-YYYY'),
         },
     ];
+
+    const totalDaysCal = (date1, date2) => {
+        const difference = date1.getTime() - date2.getTime();
+        const TotalDays = Math.ceil(difference / (1000 * 3600 * 24));
+        return TotalDays;
+    };
 
     const getTotal = (data) => {
         let totalAmount = 0;
@@ -64,25 +70,38 @@ const SupplierFinancingList = () => {
         return totalAmount;
     };
 
-    const getTotalCal = (data) => {
-        const { SpreadFirst, SpreadLast, Interest, CommissionRate, SupplierAverageCreditDay } = invoiceCal;
+    const getSupplierAvgDate = (data) => {
+        let totalDays = 0;
         data.length &&
             data.map((val) => {
-                const ChequeAmount = getTotal(data);
-                const remainingDate =
-                    SupplierAverageCreditDay ?? new Date(val.invoiceTerm - new Date()).getTime();
+                const totalDaysInvoice = totalDaysCal(new Date(val.invoiceTerm), new Date());
+                if (totalDaysInvoice > 0) {
+                    totalDays += totalDaysInvoice * val.invoiceTotal;
+                }
+                return val;
+            });
+        return totalDays;
+    };
+
+    const getTotalCal = (data) => {
+        const { SpreadFirst, SpreadLast, Interest, CommissionRate } = invoiceCal;
+        data.length &&
+            data.map(async (val) => {
+                const ChequeAmount = await getTotal(data);
+                const SupplierAverageCreditDay = parseInt(getSupplierAvgDate(data) / ChequeAmount);
                 const commissionAmount = (ChequeAmount * CommissionRate) / 100;
-                const maxInterest = SpreadFirst + Interest;
-                const minInterest = SpreadLast + Interest;
-                const maxPrice =
-                    ChequeAmount - ((ChequeAmount * maxInterest * remainingDate) / 3600 + commissionAmount);
-                const minPrice =
-                    ChequeAmount - ((ChequeAmount * minInterest * remainingDate) / 3600 + commissionAmount);
+                const maxInterest =
+                    ((SpreadFirst + Interest) * ChequeAmount * SupplierAverageCreditDay) / 36000;
+                const minInterest =
+                    ((SpreadLast + Interest) * ChequeAmount * SupplierAverageCreditDay) / 36000;
+                const maxPrice = ChequeAmount - maxInterest - commissionAmount;
+                const minPrice = ChequeAmount - minInterest - commissionAmount;
                 setCal({
                     ...calculation,
                     total: ChequeAmount,
                     maxPrice: maxPrice.toFixed(4),
                     minPrice: minPrice.toFixed(4),
+                    supplierAverageCreditDay: SupplierAverageCreditDay,
                 });
                 return val;
             });
@@ -155,7 +174,7 @@ const SupplierFinancingList = () => {
                         invoiceCalculate={{
                             invoiceCount: (selectInvoice && selectInvoice.length) || 0,
                             invoiceTotal: calculation.total,
-                            supplierAverageCreditDay: invoiceCal.SupplierAverageCreditDay,
+                            supplierAverageCreditDay: calculation.supplierAverageCreditDay || 0,
                             maxPrice: calculation.maxPrice,
                             minPrice: calculation.minPrice,
                         }}
