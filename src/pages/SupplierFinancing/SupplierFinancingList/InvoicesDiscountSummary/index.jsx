@@ -23,9 +23,9 @@ const InvoicesDiscountSummary = ({ invoiceCalculate }) => (
                 </InvoiceText>
                 <InvoiceText type="mini-title">
                     <b>Elinize geçek tutar aralığı : </b>
-                    {convertFloatDotSeperated(invoiceCalculate?.priceRange?.minPrice)} TL
+                    {convertFloatDotSeperated(invoiceCalculate?.minPrice)} TL
                     {' - '}
-                    {convertFloatDotSeperated(invoiceCalculate?.priceRange?.maxPrice)} TL
+                    {convertFloatDotSeperated(invoiceCalculate?.maxPrice)} TL
                 </InvoiceText>
             </InvoiceCol>
         </InvoiceRow>

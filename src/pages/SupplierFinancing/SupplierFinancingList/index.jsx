@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import moment from 'moment';
-import { Col, Row, Typography } from 'antd';
+import { Col, Row } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import Table from '../../../components/Table';
 import { convertFloatDotSeperated } from '../../../utils';
@@ -9,31 +9,25 @@ import { setInvoices } from '../../../store/reducers/supplierFinanceSlice';
 import InvoicesDiscountSummary from './InvoicesDiscountSummary';
 import Button from '../../../components/Button';
 
-const { Text } = Typography;
-
-const EllipsisMiddle = ({ suffixCount, children }) => {
-    const start = children.slice(0, children.length - suffixCount - 12).trim();
-    const suffix = children.slice(-suffixCount).trim();
-    return (
-        <Text style={{ maxWidth: '100%' }} ellipsis={{ suffix }}>
-            {start}...
-        </Text>
-    );
-};
-
 const SupplierFinancingList = () => {
     const dispatch = useDispatch();
     const [loading, setLoading] = useState(false);
+    const [selectInvoice, setSelectInvoice] = useState({});
+    const [calculation, setCal] = useState({
+        total: 0,
+        maxPrice: 0,
+        minPrice: 0,
+    });
     const { invoices } = useSelector((state) => state.supplierFinance);
     const { user, isLoggedIn } = useSelector((state) => state.user);
-
+    const invoiceCal = {
+        SpreadFirst: 12,
+        SpreadLast: 40,
+        Interest: 18,
+        CommissionRate: 1,
+        SupplierAverageCreditDay: 10,
+    };
     const columns = [
-        {
-            title: '',
-            dataIndex: 'id',
-            key: 'id',
-            render: (value) => <EllipsisMiddle suffixCount={6}>{value}</EllipsisMiddle>,
-        },
         {
             title: 'Fatura No',
             dataIndex: 'invoiceNumber',
@@ -64,13 +58,48 @@ const SupplierFinancingList = () => {
         },
     ];
 
+    const getTotal = (data) => {
+        let totalAmount = 0;
+        data.length && data.map((val) => (totalAmount += val.invoiceTotal));
+        return totalAmount;
+    };
+
+    const getTotalCal = (data) => {
+        const { SpreadFirst, SpreadLast, Interest, CommissionRate, SupplierAverageCreditDay } = invoiceCal;
+        data.length &&
+            data.map((val) => {
+                const ChequeAmount = getTotal(data);
+                const remainingDate =
+                    SupplierAverageCreditDay ?? new Date(val.invoiceTerm - new Date()).getTime();
+                const commissionAmount = (ChequeAmount * CommissionRate) / 100;
+                const maxInterest = SpreadFirst + Interest;
+                const minInterest = SpreadLast + Interest;
+                const maxPrice =
+                    ChequeAmount - ((ChequeAmount * maxInterest * remainingDate) / 3600 + commissionAmount);
+                const minPrice =
+                    ChequeAmount - ((ChequeAmount * minInterest * remainingDate) / 3600 + commissionAmount);
+                setCal({
+                    ...calculation,
+                    total: ChequeAmount,
+                    maxPrice: maxPrice.toFixed(4),
+                    minPrice: minPrice.toFixed(4),
+                });
+                return val;
+            });
+    };
+
     const rowSelection = {
-        onChange: (selectedRowKeys) => {
+        onChange: (selectedRowKeys, selectedRows) => {
             if (selectedRowKeys.length > 0) {
-                dispatch(setInvoices(selectedRowKeys));
-                // dispatch(fetchInvoiceCalculate(selectedRowKeys));
+                setSelectInvoice(selectedRows);
+                getTotalCal(selectedRows);
             } else {
-                // dispatch(fetchInvoiceCalculateSuccess({}));
+                setSelectInvoice({});
+                setCal({
+                    total: 0,
+                    max: 0,
+                    min: 0,
+                });
             }
         },
         getCheckboxProps: (record) => ({
@@ -122,7 +151,15 @@ const SupplierFinancingList = () => {
                     />
                 </Col>
                 <Col span={20} className="mt">
-                    <InvoicesDiscountSummary invoiceCalculate={{}} />
+                    <InvoicesDiscountSummary
+                        invoiceCalculate={{
+                            invoiceCount: (selectInvoice && selectInvoice.length) || 0,
+                            invoiceTotal: calculation.total,
+                            supplierAverageCreditDay: invoiceCal.SupplierAverageCreditDay,
+                            maxPrice: calculation.maxPrice,
+                            minPrice: calculation.minPrice,
+                        }}
+                    />
                 </Col>
                 <Col span={20} offset={13} className="mt">
                     <Button
