@@ -39,7 +39,7 @@ function Header() {
     ];
 
     const getUserData = async () => {
-        const response = await fetchUser();
+        const response = await fetchUser(isLoggedIn);
         if (response) {
             dispatch(setUser(response));
         }

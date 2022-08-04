@@ -20,9 +20,8 @@ const logout = () => {
     LocalStorageService.removeAuthToken();
 };
 
-const fetchUser = async () => {
+const fetchUser = async (token) => {
     try {
-        const token = LocalStorageService.getAuthToken();
         const response = await apiV1.get(endpoints.fetchUser, {
             headers: {
                 Authorization: `Bearer ${token}`,

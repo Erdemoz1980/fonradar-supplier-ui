@@ -11,7 +11,7 @@ const SupplierFinancingList = () => {
     const dispatch = useDispatch();
     const [loading, setLoading] = useState(false);
     const { invoices } = useSelector((state) => state.supplierFinance);
-    const { user } = useSelector((state) => state.user);
+    const { user, isLoggedIn } = useSelector((state) => state.user);
 
     const columns = [
         {
@@ -21,8 +21,8 @@ const SupplierFinancingList = () => {
         },
         {
             title: 'Fatura No',
-            dataIndex: 'invoiceNo',
-            key: 'invoiceNo',
+            dataIndex: 'invoiceNumber',
+            key: 'invoiceNumber',
         },
         {
             title: 'Fatura Tarihi',
@@ -32,13 +32,13 @@ const SupplierFinancingList = () => {
         },
         {
             title: 'Borçlu VKN',
-            dataIndex: 'buyerTaxId',
-            key: 'buyerTaxId',
+            dataIndex: 'invoiceOwnerTaxNumber',
+            key: 'invoiceOwnerTaxNumber',
         },
         {
             title: 'Fatura Tutarı',
-            dataIndex: 'invoiceAmount',
-            key: 'invoiceAmount',
+            dataIndex: 'invoiceTotal',
+            key: 'invoiceTotal',
             render: convertFloatDotSeperated,
         },
         {
@@ -66,7 +66,7 @@ const SupplierFinancingList = () => {
     const getInvoice = async () => {
         try {
             setLoading(true);
-            const response = await fetchInvoices(user.taxNumber);
+            const response = await fetchInvoices(user.taxNumber, isLoggedIn);
             if (response) {
                 setLoading(false);
                 dispatch(setInvoices(response.invoiceDtos));
@@ -88,7 +88,7 @@ const SupplierFinancingList = () => {
     return (
         <>
             <Row>
-                <Col span={18}>
+                <Col>
                     <Table
                         rowSelection={{
                             type: 'checkbox',

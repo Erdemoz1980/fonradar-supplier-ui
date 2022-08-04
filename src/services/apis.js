@@ -10,6 +10,11 @@ const v2ApiUrls = {
     test: 'https://test-api.fonradar.com/api/v2',
     prod: 'https://test-api.fonradar.com/api/v2',
 };
+const v1BuyerApiUrls = {
+    dev: 'https://test-buyer-api.fonradar.com/api/v1/',
+    test: 'https://test-buyer-api.fonradar.com/api/v1/',
+    prod: 'https://test-buyer-api.fonradar.com/api/v1/',
+};
 const v1ApiUrls1 = {
     dev: 'https://lookup-services-fonradar.azurewebsites.net/api/v1',
     test: 'https://lookup-services-fonradar.azurewebsites.net/api/v1',
@@ -23,7 +28,7 @@ export const endpoints = {
     signup: '/Supplier',
     provinces: '/provinces',
     docType: '/lookup/document-types',
-    invoices: '/invoice',
+    invoices: '/buyer/get-invoices',
     fetchUser: '/supplier/authenticated',
 
     getDistrictsEndpoint: (provinceId) => `/provinces/${provinceId}/districts`,
@@ -69,6 +74,7 @@ const enviroment = process?.env?.REACT_APP_NODE_ENV || 'dev';
 export const apiV1 = new HttpService({ baseURL: `${v1ApiUrls[enviroment]}` });
 export const apiV2 = new HttpService({ baseURL: `${v2ApiUrls[enviroment]}` });
 export const apiV3 = new HttpService({ baseURL: `${v1ApiUrls1[enviroment]}` });
+export const apiBuyerV3 = new HttpService({ baseURL: `${v1BuyerApiUrls[enviroment]}` });
 
 export const zendeskApi = new HttpService({
     baseURL: 'https://fonradar.zendesk.com/api/v2',

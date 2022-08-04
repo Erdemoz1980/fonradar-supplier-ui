@@ -19,7 +19,7 @@ const LoginTab = ({ setActiveTabSignUp }) => {
         const response = await login(userCredentials);
         if (response) {
             dispatch(setLoggedIn(response.token));
-            const user = await fetchUser();
+            const user = await fetchUser(response.token);
             if (user) {
                 dispatch(setUser(user));
             }
