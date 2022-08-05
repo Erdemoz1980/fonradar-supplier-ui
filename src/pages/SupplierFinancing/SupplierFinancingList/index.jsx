@@ -2,15 +2,18 @@ import React, { useState, useEffect } from 'react';
 import moment from 'moment';
 import { Col, Row } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
+import { useHistory } from 'react-router';
 import Table from '../../../components/Table';
 import { convertFloatDotSeperated } from '../../../utils';
 import { fetchInvoices, uploadInvoices } from '../../../apiServices/supplierFinanceApi';
 import { setInvoices } from '../../../store/reducers/supplierFinanceSlice';
 import InvoicesDiscountSummary from './InvoicesDiscountSummary';
 import Button from '../../../components/Button';
+import urls from '../../../routes/urls';
 
 const SupplierFinancingList = () => {
     const dispatch = useDispatch();
+    const history = useHistory();
     const [loading, setLoading] = useState(false);
     const [selectInvoice, setSelectInvoice] = useState({});
     const [calculation, setCal] = useState({
@@ -157,16 +160,16 @@ const SupplierFinancingList = () => {
     const handleUploadInvoice = async () => {
         try {
             setLoading(true);
-            const response = await uploadInvoices({
-                supplierId: user.id,
-                invoices: selectInvoice,
-                financialCorparationIds: ['a0cca5b1-a716-4703-b9ca-450a4d228026'],
-            });
-            if (response) {
-                setLoading(false);
-            } else {
-                setLoading(false);
-            }
+            await uploadInvoices(
+                {
+                    supplierId: user.id,
+                    invoices: selectInvoice,
+                    financialCorparationIds: ['a0cca5b1-a716-4703-b9ca-450a4d228026'],
+                },
+                isLoggedIn
+            );
+            setLoading(false);
+            history.push(urls.getCreatedInvoiceResultPath(user.id));
         } catch (e) {
             setLoading(false);
         }

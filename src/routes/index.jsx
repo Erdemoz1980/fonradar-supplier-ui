@@ -7,6 +7,7 @@ import SupplierFinancingList from '../pages/SupplierFinancing/SupplierFinancingL
 import FundList from '../pages/FundList';
 import GeneralInfo from '../pages/Account/GeneralInfo';
 import CompanyInfo from '../pages/Account/CompanyInfo';
+import InvoiceResult from '../pages/SupplierFinancing/InvoiceResult';
 
 function ProtectedRoute({ ...props }) {
     const { isLoggedIn } = useSelector(({ user }) => user);
@@ -34,6 +35,7 @@ function Routes() {
             <ProtectedRoute path={urls.funds} component={FundList} />
             <ProtectedRoute path={urls.generalInfo} exact component={GeneralInfo} />
             <ProtectedRoute path={urls.companyInfo} exact component={CompanyInfo} />
+            <ProtectedRoute path={urls.createdInvoiceResult} exact component={InvoiceResult} />
         </Switch>
     );
 }

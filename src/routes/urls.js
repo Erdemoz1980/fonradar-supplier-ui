@@ -7,6 +7,9 @@ const urls = {
     companyInfo: '/firma-bilgiler',
     supplierFinancing: '/tedarikci-finansmani',
     help: '/yardım',
+    createdInvoiceResult: '/yeni-fon/:id',
+
+    getCreatedInvoiceResultPath: (fundId) => `/yeni-fon/${fundId}`,
 };
 
 export default urls;

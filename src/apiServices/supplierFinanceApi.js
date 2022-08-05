@@ -1,13 +1,13 @@
 /* eslint-disable no-empty */
 import { notification } from 'antd';
-import { endpoints, apiBuyerV3, apiV1 } from '../services/apis';
+import { endpoints, apiV1 } from '../services/apis';
 import LocalStorageService from '../services/LocalStorageService';
 
 const token = LocalStorageService.getAuthToken();
 
 const fetchInvoices = async (taxNumber, _token) => {
     try {
-        const data = await apiBuyerV3.get(`${endpoints.invoices}?taxId=3881591970`, {
+        const data = await apiV1.get(`${endpoints.invoices}?taxNumber=3881591970`, {
             headers: {
                 Authorization: `Bearer ${_token}`,
                 accept: 'application/json',
@@ -19,7 +19,7 @@ const fetchInvoices = async (taxNumber, _token) => {
     }
 };
 
-const uploadInvoices = async (payload) => {
+const uploadInvoices = async (payload, _token) => {
     try {
         const data = await apiV1.post(
             endpoints.uploadInvoices,
@@ -30,7 +30,7 @@ const uploadInvoices = async (payload) => {
             },
             {
                 headers: {
-                    Authorization: `Bearer ${token}`,
+                    Authorization: `Bearer ${token || _token}`,
                     accept: 'application/json',
                 },
             }
