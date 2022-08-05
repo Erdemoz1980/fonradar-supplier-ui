@@ -1,14 +1,15 @@
 /* eslint-disable no-empty */
-import { endpoints, apiBuyerV3 } from '../services/apis';
-// import LocalStorageService from '../services/LocalStorageService';
+import { notification } from 'antd';
+import { endpoints, apiBuyerV3, apiV1 } from '../services/apis';
+import LocalStorageService from '../services/LocalStorageService';
 
-// const token = LocalStorageService.getAuthToken();
+const token = LocalStorageService.getAuthToken();
 
-const fetchInvoices = async (taxNumber, token) => {
+const fetchInvoices = async (taxNumber, _token) => {
     try {
         const data = await apiBuyerV3.get(`${endpoints.invoices}?taxId=3881591970`, {
             headers: {
-                Authorization: `Bearer ${token}`,
+                Authorization: `Bearer ${_token}`,
                 accept: 'application/json',
             },
         });
@@ -18,4 +19,29 @@ const fetchInvoices = async (taxNumber, token) => {
     }
 };
 
-export { fetchInvoices };
+const uploadInvoices = async (payload) => {
+    try {
+        const data = await apiV1.post(
+            endpoints.uploadInvoices,
+            {
+                supplierId: payload.supplierId,
+                invoices: payload.invoices,
+                financialCorparationIds: payload.financialCorparationIds,
+            },
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    accept: 'application/json',
+                },
+            }
+        );
+        notification.success({
+            message: 'Başvurunuz oluşturuldu.Gelen tekliflere Başvurularım sayfasından ulaşabilirsiniz.',
+        });
+        return data;
+    } catch (error) {
+        // console.log(error);
+    }
+};
+
+export { fetchInvoices, uploadInvoices };

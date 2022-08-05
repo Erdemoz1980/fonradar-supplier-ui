@@ -4,7 +4,7 @@ import { Col, Row } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import Table from '../../../components/Table';
 import { convertFloatDotSeperated } from '../../../utils';
-import { fetchInvoices } from '../../../apiServices/supplierFinanceApi';
+import { fetchInvoices, uploadInvoices } from '../../../apiServices/supplierFinanceApi';
 import { setInvoices } from '../../../store/reducers/supplierFinanceSlice';
 import InvoicesDiscountSummary from './InvoicesDiscountSummary';
 import Button from '../../../components/Button';
@@ -110,7 +110,20 @@ const SupplierFinancingList = () => {
     const rowSelection = {
         onChange: (selectedRowKeys, selectedRows) => {
             if (selectedRowKeys.length > 0) {
-                setSelectInvoice(selectedRows);
+                const filterRows = selectedRows.reduce((newData, row) => {
+                    newData.push({
+                        invoiceDate: row.invoiceDate,
+                        fileName: row.fileName,
+                        invoiceNumber: row.invoiceNumber,
+                        invoiceTotal: row.invoiceTotal,
+                        currency: row.currency,
+                        invoiceTerm: row.invoiceTerm,
+                        isApproved: row.isApproved,
+                        createdDate: row.createdDate,
+                    });
+                    return newData;
+                }, []);
+                setSelectInvoice(filterRows);
                 getTotalCal(selectedRows);
             } else {
                 setSelectInvoice({});
@@ -141,8 +154,22 @@ const SupplierFinancingList = () => {
         }
     };
 
-    const handleUploadInvoice = () => {
-        // setCorporationShow(true);
+    const handleUploadInvoice = async () => {
+        try {
+            setLoading(true);
+            const response = await uploadInvoices({
+                supplierId: user.id,
+                invoices: selectInvoice,
+                financialCorparationIds: ['a0cca5b1-a716-4703-b9ca-450a4d228026'],
+            });
+            if (response) {
+                setLoading(false);
+            } else {
+                setLoading(false);
+            }
+        } catch (e) {
+            setLoading(false);
+        }
     };
 
     useEffect(() => {
