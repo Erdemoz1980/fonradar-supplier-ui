@@ -3,6 +3,7 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
     invoices: [],
+    invoiceResId: 0,
 };
 
 const supplierFinanceSlice = createSlice({
@@ -12,8 +13,11 @@ const supplierFinanceSlice = createSlice({
         setInvoices(state, action) {
             state.invoices = action.payload;
         },
+        setInvoiceResId(state, action) {
+            state.invoiceResId = action.payload;
+        },
     },
 });
 
-export const { setInvoices } = supplierFinanceSlice.actions;
+export const { setInvoices, setInvoiceResId } = supplierFinanceSlice.actions;
 export default supplierFinanceSlice.reducer;

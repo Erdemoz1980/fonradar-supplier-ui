@@ -6,7 +6,7 @@ import { useHistory } from 'react-router';
 import Table from '../../../components/Table';
 import { convertFloatDotSeperated } from '../../../utils';
 import { fetchInvoices, uploadInvoices } from '../../../apiServices/supplierFinanceApi';
-import { setInvoices } from '../../../store/reducers/supplierFinanceSlice';
+import { setInvoices, setInvoiceResId } from '../../../store/reducers/supplierFinanceSlice';
 import InvoicesDiscountSummary from './InvoicesDiscountSummary';
 import Button from '../../../components/Button';
 import urls from '../../../routes/urls';
@@ -160,7 +160,7 @@ const SupplierFinancingList = () => {
     const handleUploadInvoice = async () => {
         try {
             setLoading(true);
-            await uploadInvoices(
+            const response = await uploadInvoices(
                 {
                     supplierId: user.id,
                     invoices: selectInvoice,
@@ -168,8 +168,13 @@ const SupplierFinancingList = () => {
                 },
                 isLoggedIn
             );
-            setLoading(false);
-            history.push(urls.getCreatedInvoiceResultPath(user.id));
+            if (response) {
+                setLoading(false);
+                dispatch(setInvoiceResId(response.discountApplicaationNumber));
+                history.push(urls.getCreatedInvoiceResultPath(user.id));
+            } else {
+                setLoading(false);
+            }
         } catch (e) {
             setLoading(false);
         }

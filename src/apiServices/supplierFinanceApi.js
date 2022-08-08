@@ -1,5 +1,4 @@
 /* eslint-disable no-empty */
-import { notification } from 'antd';
 import { endpoints, apiV1 } from '../services/apis';
 import LocalStorageService from '../services/LocalStorageService';
 
@@ -35,9 +34,6 @@ const uploadInvoices = async (payload, _token) => {
                 },
             }
         );
-        notification.success({
-            message: 'Başvurunuz oluşturuldu.Gelen tekliflere Başvurularım sayfasından ulaşabilirsiniz.',
-        });
         return data;
     } catch (error) {
         // console.log(error);
