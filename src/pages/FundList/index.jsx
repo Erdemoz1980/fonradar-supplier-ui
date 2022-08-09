@@ -1,33 +1,62 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import moment from 'moment';
 import { Table } from 'antd';
+import { useDispatch, useSelector } from 'react-redux';
 import { useTheme } from 'styled-components';
 import Text from '../../components/Text';
-import { chequeStatusMapById } from '../../constants';
+import { chequeStatusMapByValue } from '../../constants';
+import { fetchDiscountInvoices } from '../../apiServices/fundApi';
+import { setDiscountInvoices } from '../../store/reducers/fundSlice';
+import { convertFloatDotSeperated } from '../../utils';
 
-function FundList({ invoices }) {
+function FundList() {
+    const dispatch = useDispatch();
+    const [loading, setLoading] = useState(false);
+    const { isLoggedIn } = useSelector((state) => state.user);
+    const { discountInvoices } = useSelector((state) => state.fund);
+
+    const getDiscountInvoice = async () => {
+        try {
+            setLoading(true);
+            const response = await fetchDiscountInvoices(isLoggedIn);
+            if (response) {
+                setLoading(false);
+                dispatch(setDiscountInvoices(response));
+            } else {
+                setLoading(false);
+            }
+        } catch (e) {
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        getDiscountInvoice();
+    }, [isLoggedIn]);
+
     const theme = useTheme();
     const tableCols = [
         {
             title: 'Başvuru No',
-            dataIndex: 'id',
-            key: 'id',
+            dataIndex: 'number',
+            key: 'number',
         },
         {
             title: 'Başvuru Tarihi',
-            dataIndex: 'invoiceDate',
+            dataIndex: 'date',
             render: (date) => moment(date).format('DD-MM-YYYY'),
-            key: 'invoiceDate',
+            key: 'date',
         },
         {
             title: 'Fatura Toplamı',
-            dataIndex: 'invoiceNo',
-            key: 'invoiceNo',
+            dataIndex: 'invoicesTotal',
+            key: 'invoicesTotal',
+            render: convertFloatDotSeperated,
         },
         {
             title: 'Fatura Adedi',
-            dataIndex: 'invoiceNo',
-            key: 'invoiceNo',
+            dataIndex: 'invoicesCount',
+            key: 'invoicesCount',
         },
         {
             title: 'Alıcı',
@@ -37,9 +66,9 @@ function FundList({ invoices }) {
         {
             title: 'Durumu',
             dataIndex: 'status',
-            render: ({ id }) => (
-                <Text color={theme?.getThemedColor(chequeStatusMapById[id]?.color)} bold>
-                    {chequeStatusMapById[id]?.text}
+            render: (value) => (
+                <Text color={theme?.getThemedColor(chequeStatusMapByValue[value]?.color)} bold>
+                    {chequeStatusMapByValue[value].text}
                 </Text>
             ),
             key: 'status',
@@ -51,7 +80,8 @@ function FundList({ invoices }) {
             <Table
                 className="limited-width"
                 rowKey="invoiceNo"
-                dataSource={invoices}
+                loading={loading}
+                dataSource={discountInvoices}
                 columns={tableCols}
                 pagination={false}
                 size="small"

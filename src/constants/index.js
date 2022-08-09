@@ -9,44 +9,34 @@ export const FUND_TYPES = [
 export const SUPPLIER_FINANCING_TYPES = [
     { value: 1, text: 'Fatura Yükle' },
 ];
-
+// WaitingOffer = new ("TEKLIF_BEKLIYOR","Teklif Bekliyor");
+// OnProcess = new ("ISLEME_ALINDI","İşleme Alındı");
+// Answered = new ("CEVAP_GELDI","Cevap Geldi");
+// Approved = new ("ONAYLADIM","Onayladım");
+// Expired = new ("SURESI_DOLDU","Süresi Doldu");
 export const chequeStatuses = [
     {
         id: 1,
-        value: 'pending',
+        value: 'TEKLIF_BEKLIYOR',
         color: '#e7792b',
-        text: 'Yeni Talep',
+        text: 'Teklif Bekliyor',
         desc: 'basvurunuz yeni talep olarak alinmistir.',
     },
-    { id: 2, value: 'availableOffer', color: '#5ad363', text: 'Cevap Geldi' },
+    { id: 2, value: 'CEVAP_GELDI', color: '#5ad363', text: 'Cevap Geldi' },
     {
         id: 3,
-        value: 'expired',
+        value: 'SURESI_DOLDU',
         color: '#ff0000',
         text: 'Süresi Doldu',
         desc: 'Başvurunuzun süresi doldu. Yeni bir işlem yapabilirsiniz.',
     },
-    { id: 4, value: 'approved', text: 'Onayladım', color: 'primaryColor' },
+    { id: 4, value: 'ONAYLADIM', text: 'Onayladım', color: 'primaryColor' },
     {
         id: 5,
-        value: 'waitingForOffer',
+        value: 'ISLEME_ALINDI',
         color: 'purple',
         text: 'İşleme Alındı',
         desc: 'Başvurunuz finansal kurumlar tarafından incelenmeye başlandı.',
-    },
-    {
-        id: 6,
-        value: 'rejectForOffer',
-        color: 'red',
-        text: 'Alıcı Tarafindan Reddedildi',
-        desc: 'basvurunuz alıcı tarafindan reddedildi.',
-    },
-    {
-        id: 7,
-        value: 'applied',
-        color: '#e7792b',
-        text: 'Teklif Bekliyor',
-        desc: 'Başvurunuza henüz finansal kurumlardan teklif gelmedi, gelen teklif detaylarını anında ileteceğiz.',
     },
 ];
 export const chequeStatusMapById = mapArray(chequeStatuses, 'id');
