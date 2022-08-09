@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import moment from 'moment';
 import { Col, Row } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
-import { useHistory } from 'react-router';
+import { useHistory, useLocation } from 'react-router';
 import Table from '../../../components/Table';
 import { convertFloatDotSeperated } from '../../../utils';
 import { fetchInvoices, uploadInvoices } from '../../../apiServices/supplierFinanceApi';
@@ -14,8 +14,11 @@ import urls from '../../../routes/urls';
 const SupplierFinancingList = () => {
     const dispatch = useDispatch();
     const history = useHistory();
+    const { search } = useLocation();
+    const taxNumber = new URLSearchParams(search).get('taxNumber');
     const [loading, setLoading] = useState(false);
     const [selectInvoice, setSelectInvoice] = useState({});
+    const [selectbuyer, setSelectBuyer] = useState({});
     const [calculation, setCal] = useState({
         total: 0,
         maxPrice: 0,
@@ -44,8 +47,13 @@ const SupplierFinancingList = () => {
         },
         {
             title: 'Borçlu VKN',
-            dataIndex: 'invoiceOwnerTaxNumber',
-            key: 'invoiceOwnerTaxNumber',
+            dataIndex: 'buyerTaxNumber',
+            key: 'buyerTaxNumber',
+        },
+        {
+            title: 'Borçlu Ünvanı',
+            dataIndex: 'buyerTitle',
+            key: 'buyerTitle',
         },
         {
             title: 'Fatura Tutarı',
@@ -114,7 +122,9 @@ const SupplierFinancingList = () => {
         onChange: (selectedRowKeys, selectedRows) => {
             if (selectedRowKeys.length > 0) {
                 const filterRows = selectedRows.reduce((newData, row) => {
+                    setSelectBuyer({ buyerTitle: row.buyerTitle, buyerTaxNumber: row.buyerTaxNumber });
                     newData.push({
+                        id: row.id,
                         invoiceDate: row.invoiceDate,
                         fileName: row.fileName,
                         invoiceNumber: row.invoiceNumber,
@@ -145,10 +155,10 @@ const SupplierFinancingList = () => {
     const getInvoice = async () => {
         try {
             setLoading(true);
-            const response = await fetchInvoices(user.taxNumber, isLoggedIn);
+            const response = await fetchInvoices(taxNumber, isLoggedIn);
             if (response) {
                 setLoading(false);
-                dispatch(setInvoices(response.invoiceDtos));
+                dispatch(setInvoices(response.invoices));
             } else {
                 setLoading(false);
             }
@@ -162,9 +172,11 @@ const SupplierFinancingList = () => {
             setLoading(true);
             const response = await uploadInvoices(
                 {
+                    buyerTitle: selectbuyer.buyerTitle,
+                    buyerTaxNumber: selectbuyer.buyerTaxNumber,
                     supplierId: user.id,
                     invoices: selectInvoice,
-                    financialCorparationIds: ['a0cca5b1-a716-4703-b9ca-450a4d228026'],
+                    financialInstitutionIds: ['a0cca5b1-a716-4703-b9ca-450a4d228026'],
                 },
                 isLoggedIn
             );

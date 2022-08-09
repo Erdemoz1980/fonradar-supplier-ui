@@ -28,7 +28,7 @@ export const endpoints = {
     signup: '/Supplier',
     provinces: '/provinces',
     docType: '/lookup/document-types',
-    invoices: '/invoice',
+    invoices: '/buyer/get-invoices',
     uploadInvoices: '/discountapplication',
     fetchUser: '/supplier/authenticated',
 
