@@ -32,6 +32,7 @@ function FundList() {
 
     useEffect(() => {
         getDiscountInvoice();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [isLoggedIn]);
 
     const theme = useTheme();
@@ -60,8 +61,8 @@ function FundList() {
         },
         {
             title: 'Alıcı',
-            dataIndex: 'debtTaxId',
-            key: 'debtTaxId',
+            dataIndex: 'buyerTitle',
+            key: 'buyerTitle',
         },
         {
             title: 'Durumu',
