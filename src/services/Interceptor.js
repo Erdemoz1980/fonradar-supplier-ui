@@ -20,6 +20,7 @@ class Interceptor {
                 if (config.isFonRadarApi) {
                     if (authToken) {
                         config.headers['x-token'] = authToken;
+                        config.headers.Authorization = `Bearer ${authToken}`;
                     }
 
                     config.headers.common.withCredentials = false;

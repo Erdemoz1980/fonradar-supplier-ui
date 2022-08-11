@@ -196,4 +196,20 @@ export default createGlobalStyle`
   .google-btn {
     width: 100%;
   }
+
+  .status-title {
+    display: block;
+    font-weight: 500;
+    font-size: 20px;
+  }
+
+  .item-title {
+    display: block;
+    font-weight: 400;
+    font-size: 18px;
+  }
+
+  .font-18 {
+    font-size: 18px !important;
+  }
 `;

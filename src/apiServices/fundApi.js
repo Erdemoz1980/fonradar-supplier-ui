@@ -1,34 +1,31 @@
 /* eslint-disable no-empty */
 import { endpoints, apiV1 } from '../services/apis';
-import LocalStorageService from '../services/LocalStorageService';
 
-const token = LocalStorageService.getAuthToken();
-
-const fetchDiscountInvoices = async (_token) => {
+const fetchDiscountInvoices = async () => {
     try {
-        const data = await apiV1.get(endpoints.uploadInvoices, {
-            headers: {
-                Authorization: `Bearer ${_token}`,
-                accept: 'application/json',
-            },
-        });
+        const data = await apiV1.get(endpoints.uploadInvoices);
         return data;
     } catch (error) {
         // console.log(error);
     }
 };
 
-const getDiscountBuyerInvoices = async (id, _token) => {
+const getDiscountBuyerInvoices = async (id) => {
     try {
-        const data = await apiV1.get(`supplier/${id}/discountapplication`, {
-            headers: {
-                Authorization: `Bearer ${token || _token}`,
-                accept: 'application/json',
-            },
-        });
+        const data = await apiV1.get(`supplier/${id}/discountapplication`);
         return data;
     } catch (error) {
         // console.log(error);
     }
 };
-export { fetchDiscountInvoices, getDiscountBuyerInvoices };
+
+const fetchDiscountInvoiceById = async (id, invoiceId) => {
+    try {
+        const data = await apiV1.get(`discountapplication/${invoiceId}`);
+        return data;
+    } catch {
+        return [];
+    }
+};
+
+export { fetchDiscountInvoices, getDiscountBuyerInvoices, fetchDiscountInvoiceById };

@@ -10,6 +10,7 @@ const urls = {
     createdInvoiceResult: '/yeni-fon/:id',
 
     getCreatedInvoiceResultPath: (fundId) => `/yeni-fon/${fundId}`,
+    getfundDetail: (fundId) => `/fonlar/${fundId}`,
 };
 
 export default urls;

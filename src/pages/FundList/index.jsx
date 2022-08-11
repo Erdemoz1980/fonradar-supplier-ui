@@ -3,22 +3,26 @@ import moment from 'moment';
 import { Table } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import { useTheme } from 'styled-components';
+import { useHistory } from 'react-router';
 import Text from '../../components/Text';
 import { chequeStatusMapByValue } from '../../constants';
-import { fetchDiscountInvoices } from '../../apiServices/fundApi';
+import { getDiscountBuyerInvoices } from '../../apiServices/fundApi';
 import { setDiscountInvoices } from '../../store/reducers/fundSlice';
 import { convertFloatDotSeperated } from '../../utils';
+import urls from '../../routes/urls';
 
 function FundList() {
+    const history = useHistory();
+    const theme = useTheme();
     const dispatch = useDispatch();
     const [loading, setLoading] = useState(false);
-    const { isLoggedIn } = useSelector((state) => state.user);
+    const { user } = useSelector((state) => state.user);
     const { discountInvoices } = useSelector((state) => state.fund);
 
     const getDiscountInvoice = async () => {
         try {
             setLoading(true);
-            const response = await fetchDiscountInvoices(isLoggedIn);
+            const response = await getDiscountBuyerInvoices(user.id);
             if (response) {
                 setLoading(false);
                 dispatch(setDiscountInvoices(response));
@@ -31,11 +35,14 @@ function FundList() {
     };
 
     useEffect(() => {
-        getDiscountInvoice();
+        user && user.id && getDiscountInvoice();
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [isLoggedIn]);
+    }, [user]);
 
-    const theme = useTheme();
+    const onClickFund = (fund) => {
+        history.push(urls.getfundDetail(fund.id));
+    };
+
     const tableCols = [
         {
             title: 'Başvuru No',
@@ -85,6 +92,9 @@ function FundList() {
                 dataSource={discountInvoices}
                 columns={tableCols}
                 pagination={false}
+                onRow={(fund) => ({
+                    onClick: () => onClickFund(fund),
+                })}
                 size="small"
             />
         </>
