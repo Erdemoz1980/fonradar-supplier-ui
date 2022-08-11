@@ -69,7 +69,7 @@ function FundList() {
             dataIndex: 'status',
             render: (value) => (
                 <Text color={theme?.getThemedColor(chequeStatusMapByValue[value]?.color)} bold>
-                    {chequeStatusMapByValue[value].text}
+                    {chequeStatusMapByValue[value] && chequeStatusMapByValue[value].text}
                 </Text>
             ),
             key: 'status',

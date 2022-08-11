@@ -38,6 +38,13 @@ export const chequeStatuses = [
         text: 'İşleme Alındı',
         desc: 'Başvurunuz finansal kurumlar tarafından incelenmeye başlandı.',
     },
+    {
+      id: 6,
+      value: 'KURUMLAR_INCELIYOR',
+      color: 'purple',
+      text: 'Kurumlar İnceliyor',
+      desc: 'Başvurunuz finansal kurumlar tarafından incelenmeye başlandı.',
+    },
 ];
 export const chequeStatusMapById = mapArray(chequeStatuses, 'id');
 export const chequeStatusMapByValue = mapArray(chequeStatuses, 'value');
