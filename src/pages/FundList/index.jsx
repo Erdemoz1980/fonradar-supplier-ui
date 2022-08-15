@@ -25,7 +25,7 @@ function FundList() {
             const response = await getDiscountBuyerInvoices(user.id);
             if (response) {
                 setLoading(false);
-                dispatch(setDiscountInvoices(response));
+                dispatch(setDiscountInvoices(response.sort((a, b) => b.number - a.number)));
             } else {
                 setLoading(false);
             }

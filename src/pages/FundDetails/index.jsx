@@ -206,9 +206,7 @@ const FundDetail = () => {
                                     </Col>
                                     <Col xs={24} lg={12} xl={6}>
                                         <Text style={{ display: 'block' }}>Koşul:</Text>
-                                        <Text>
-                                            {ofer.offerCondition ? 'Lütfen mizanınızı gönderiniz.' : '-'}
-                                        </Text>
+                                        <Text>{ofer.offerCondition ? ofer.offerCondition : '-'}</Text>
                                     </Col>
                                 </Row>
                                 <Button

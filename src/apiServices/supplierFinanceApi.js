@@ -6,7 +6,7 @@ const token = LocalStorageService.getAuthToken();
 
 const fetchInvoices = async (taxNumber, _token) => {
     try {
-        const data = await apiBuyerV3.get(`${endpoints.invoices}?taxId=${taxNumber || 42013047078}`, {
+        const data = await apiBuyerV3.get(`${endpoints.invoices}?taxId=${taxNumber}`, {
             headers: {
                 Authorization: `Bearer ${_token}`,
                 accept: 'application/json',

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import moment from 'moment';
 import { Col, Row } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
-import { useHistory, useLocation } from 'react-router';
+import { useHistory } from 'react-router';
 import Table from '../../../components/Table';
 import { convertFloatDotSeperated } from '../../../utils';
 import { fetchInvoices, uploadInvoices } from '../../../apiServices/supplierFinanceApi';
@@ -14,8 +14,8 @@ import urls from '../../../routes/urls';
 const SupplierFinancingList = () => {
     const dispatch = useDispatch();
     const history = useHistory();
-    const { search } = useLocation();
-    const taxNumber = new URLSearchParams(search).get('taxNumber');
+    // const { search } = useLocation();
+    // const taxNumber = new URLSearchParams(search).get('taxNumber');
     const [loading, setLoading] = useState(false);
     const [selectInvoice, setSelectInvoice] = useState({});
     const [selectbuyer, setSelectBuyer] = useState({});
@@ -155,7 +155,7 @@ const SupplierFinancingList = () => {
     const getInvoice = async () => {
         try {
             setLoading(true);
-            const response = await fetchInvoices(taxNumber, isLoggedIn);
+            const response = await fetchInvoices(user.taxNumber, isLoggedIn);
             if (response) {
                 setLoading(false);
                 dispatch(setInvoices(response.invoices));
@@ -179,8 +179,8 @@ const SupplierFinancingList = () => {
                     averageMaturity: calculation.supplierAverageCreditDay || 0,
                     financialInstitutions: [
                         {
-                            item1: 'a0cca5b1-a716-4703-b9ca-450a4d228026',
-                            item2: 'string',
+                            id: 'a0cca5b1-a716-4703-b9ca-450a4d228026',
+                            name: 'DenizBank',
                         },
                     ],
                 },

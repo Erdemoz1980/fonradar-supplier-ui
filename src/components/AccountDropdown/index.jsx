@@ -19,6 +19,7 @@ const AccountMenu = ({ setIsDropdownVisible }) => {
     const onClickLogout = () => {
         logout();
         dispatch(setLoggedIn(''));
+        window.location.reload();
     };
 
     return (
