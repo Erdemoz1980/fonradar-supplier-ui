@@ -1,4 +1,5 @@
 /* eslint-disable no-empty */
+import { notification } from 'antd';
 import { endpoints, apiV1 } from '../services/apis';
 
 const fetchDiscountInvoices = async () => {
@@ -19,7 +20,7 @@ const getDiscountBuyerInvoices = async (id) => {
     }
 };
 
-const fetchDiscountInvoiceById = async (id, invoiceId) => {
+const fetchDiscountInvoiceById = async (invoiceId) => {
     try {
         const data = await apiV1.get(`discountapplication/${invoiceId}`);
         return data;
@@ -28,4 +29,35 @@ const fetchDiscountInvoiceById = async (id, invoiceId) => {
     }
 };
 
-export { fetchDiscountInvoices, getDiscountBuyerInvoices, fetchDiscountInvoiceById };
+const fetchInvoiceOffer = async (id) => {
+    try {
+        const data = await apiV1.get(`discountapplication/${id}/offer`);
+        return data;
+    } catch {
+        return [];
+    }
+};
+
+const acceptInvoiceOffer = async (supplierId, disId, financeId, payload) => {
+    try {
+        const data = await apiV1.patch(
+            `supplier/${supplierId}/discountapplication/${disId}/financialinstitution/${financeId}/accept`,
+            payload
+        );
+        notification.success({
+            message:
+                'Onayınız finans kurumuna bildirildi. İşlemi tamamlamak için sizin için ürettiğimiz temliknameyi bastırıp kaşeli ve imzalı olarak en yakın şubeye götürebilirsiniz',
+        });
+        return data;
+    } catch {
+        return [];
+    }
+};
+
+export {
+    fetchDiscountInvoices,
+    getDiscountBuyerInvoices,
+    fetchDiscountInvoiceById,
+    fetchInvoiceOffer,
+    acceptInvoiceOffer,
+};

@@ -30,7 +30,7 @@ export const chequeStatuses = [
         text: 'Süresi Doldu',
         desc: 'Başvurunuzun süresi doldu. Yeni bir işlem yapabilirsiniz.',
     },
-    { id: 4, value: 'ONAYLADIM', text: 'Onayladım', color: 'primaryColor' },
+    { id: 4, value: 'ONAYLADIM', text: 'Onayladım', color: '#1a73e8' },
     {
         id: 5,
         value: 'ISLEME_ALINDI',

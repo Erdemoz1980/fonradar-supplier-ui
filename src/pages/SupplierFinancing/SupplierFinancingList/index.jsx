@@ -177,7 +177,12 @@ const SupplierFinancingList = () => {
                     supplierId: user.id,
                     invoices: selectInvoice,
                     averageMaturity: calculation.supplierAverageCreditDay || 0,
-                    financialInstitutionIds: ['a0cca5b1-a716-4703-b9ca-450a4d228026'],
+                    financialInstitutions: [
+                        {
+                            item1: 'a0cca5b1-a716-4703-b9ca-450a4d228026',
+                            item2: 'string',
+                        },
+                    ],
                 },
                 isLoggedIn
             );
