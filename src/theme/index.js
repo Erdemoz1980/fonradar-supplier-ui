@@ -17,8 +17,8 @@ const magenta = '#eb2f96';
 const light = '#fff';
 const dark = '#000';
 
-const primaryColor = '#1a73e8'; // craco.config
-const primaryLight = '#44c0ff';
+const primaryColor = '#0d0f7b'; // craco.config
+const primaryLight = '#eeeeff';
 const primaryDark = '#032b5e'; // craco.config
 const primaryFaded = '#F5F8FE';
 

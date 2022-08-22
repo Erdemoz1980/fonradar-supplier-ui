@@ -2,10 +2,7 @@
 import { convertObjectToArray, mapArray } from '../utils';
 
 export const fileTypes = { pdf: 'pdf', jpeg: 'jpeg', png: 'png' };
-export const FUND_TYPES = [
-    { value: 1, text: 'Çek Başvurularım' },
-    { value: 2, text: 'Fatura İşlemleri', isNew: true },
-];
+
 export const SUPPLIER_FINANCING_TYPES = [
     { value: 1, text: 'Fatura Yükle' },
 ];

@@ -4,12 +4,14 @@ import { Col, Row } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router';
 import Table from '../../../components/Table';
+import Text from '../../../components/Text';
 import { convertFloatDotSeperated } from '../../../utils';
 import { fetchInvoices, uploadInvoices } from '../../../apiServices/supplierFinanceApi';
 import { setInvoices, setInvoiceResId } from '../../../store/reducers/supplierFinanceSlice';
 import InvoicesDiscountSummary from './InvoicesDiscountSummary';
-import Button from '../../../components/Button';
 import urls from '../../../routes/urls';
+import { FaturaButton } from './styles';
+import Icon from '../../../components/Icon';
 
 const SupplierFinancingList = () => {
     const dispatch = useDispatch();
@@ -205,25 +207,62 @@ const SupplierFinancingList = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [user]);
 
+    const showTotal = (total) => (
+        <Row>
+            <Col lg={12} style={{ width: '400px', color: '#727272', fontSize: 15 }}>
+                <Text style={{ fontSize: 20, fontWeight: 'bold' }}>Yüklenen Faturalarım</Text>
+            </Col>
+            <Col lg={12} style={{ textAlign: 'right', color: '#727272', fontSize: 15 }}>
+                Toplam {total}
+            </Col>
+        </Row>
+    );
+
     return (
         <>
-            <Row>
-                <Col span={20}>
-                    <Table
-                        rowSelection={{
-                            type: 'checkbox',
-                            ...rowSelection,
-                        }}
-                        rowKey="id"
-                        dataSource={invoices}
-                        columns={columns}
-                        pagination={false}
-                        loading={loading}
-                        cursorPointer
-                    />
-                </Col>
-                <Col span={20} className="mt">
+            {!loading && invoices && invoices.length === 0 ? (
+                <Row style={{ width: '68%', margin: '40px auto 0px' }}>
+                    <Col style={{ margin: '0px auto', textAlign: 'center', display: 'grid' }}>
+                        <Text style={{ fontSize: 18, fontWeight: 800, marginBottom: 20 }}>
+                            Yüklenen faturalarınız bulunmamaktadır.
+                        </Text>
+                        <Text>Bu fatura türünü görmeniz için alıcının fatura yüklemesi gerekmektedir.</Text>
+                        <Text>
+                            Alıcı bu faturaları yükledikten sonra sistemimizde yüklenen faturalarınızı
+                            görebilirsiniz.
+                        </Text>
+                        <FaturaButton type="primary" loading={false}>
+                            <Icon icon="bell" size="lg" />
+                            Fatura Yüklenince Haber Ver
+                        </FaturaButton>
+                    </Col>
+                </Row>
+            ) : (
+                <>
+                    <Row>
+                        <Col span={20} style={{ margin: '0px auto' }}>
+                            <Table
+                                className="invoiceTable"
+                                pagination={{
+                                    position: ['topleft', 'none'],
+                                    showLessItems: true,
+                                    showTotal,
+                                    showSizeChanger: true,
+                                }}
+                                rowSelection={{
+                                    type: 'checkbox',
+                                    ...rowSelection,
+                                }}
+                                rowKey="id"
+                                dataSource={invoices}
+                                columns={columns}
+                                loading={loading}
+                                cursorPointer
+                            />
+                        </Col>
+                    </Row>
                     <InvoicesDiscountSummary
+                        onSubmit={handleUploadInvoice}
                         invoiceCalculate={{
                             invoiceCount: (selectInvoice && selectInvoice.length) || 0,
                             invoiceTotal: calculation.total,
@@ -232,18 +271,8 @@ const SupplierFinancingList = () => {
                             minPrice: calculation.minPrice,
                         }}
                     />
-                </Col>
-                <Col span={20} offset={13} className="mt">
-                    <Button
-                        style={{ paddingLeft: '27px', paddingRight: '27px' }}
-                        key="invoice-discount-button"
-                        type="primary"
-                        onClick={handleUploadInvoice}
-                        loading={false}>
-                        Kayıtlı Kurumlara Başvur
-                    </Button>
-                </Col>
-            </Row>
+                </>
+            )}
         </>
     );
 };

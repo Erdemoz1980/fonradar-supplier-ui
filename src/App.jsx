@@ -1,4 +1,7 @@
+/* eslint-disable camelcase */
 import React from 'react';
+import tr_TR from 'antd/es/locale/tr_TR';
+import { ConfigProvider } from 'antd';
 import Layout from './components/Layout';
 import Content from './components/Layout/Content';
 import Header from './components/Layout/Header';
@@ -16,15 +19,17 @@ function App() {
 
     return (
         <ThemeProvider>
-            <GlobalStyles />
+            <ConfigProvider locale={tr_TR}>
+                <GlobalStyles />
 
-            <Layout>
-                <Header />
-                <Content>
-                    <Routes />
-                </Content>
-                {/* <Footer /> */}
-            </Layout>
+                <Layout>
+                    <Header />
+                    <Content>
+                        <Routes />
+                    </Content>
+                    {/* <Footer /> */}
+                </Layout>
+            </ConfigProvider>
         </ThemeProvider>
     );
 }

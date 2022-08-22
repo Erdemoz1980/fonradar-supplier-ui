@@ -34,7 +34,12 @@ function Header() {
     };
 
     const headerItems = [
-        { text: 'Fatura İşlemleri', url: urls.supplierFinancing, icon: 'supplierFinancing', isNew: true },
+        {
+            text: 'Yüklenen Faturalarım',
+            url: urls.supplierFinancing,
+            icon: 'supplierFinancing',
+            isNew: false,
+        },
         { text: 'Başvurularım', url: urls.funds, icon: 'fund' },
     ];
 
@@ -59,17 +64,17 @@ function Header() {
                     </Link>
                 </Col>
 
-                <Col xs={0} xl={16}>
+                <Col xs={0} xl={16} style={{ paddingLeft: '4em' }}>
                     <Row>
                         <Space>
-                            {headerItems.map(({ text, icon, url, isNew, onClick }) => (
+                            {headerItems.map(({ text, url, isNew, onClick }) => (
                                 <Link key={`header-link-${url}`} to={url}>
                                     <Button
+                                        className={`header-btn ${path === url && 'active-line'}`}
                                         type="transparent"
                                         size={getButtonSize()}
                                         active={path === url}
                                         onClick={onClick}>
-                                        <CustomIcon icon={icon} />
                                         {text}
                                         {isNew && (
                                             <Tag className="ml" color="green">

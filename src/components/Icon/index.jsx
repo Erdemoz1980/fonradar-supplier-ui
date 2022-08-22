@@ -14,7 +14,7 @@ import {
     faChevronLeft,
     faChevronRight,
 } from '@fortawesome/free-solid-svg-icons';
-import { faCheckCircle, faTrashAlt } from '@fortawesome/free-regular-svg-icons';
+import { faCheckCircle, faTrashAlt, faBell } from '@fortawesome/free-regular-svg-icons';
 
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -44,7 +44,8 @@ library.add(
     faTimesCircle,
     faChevronLeft,
     faChevronRight,
-    faTrashAlt
+    faTrashAlt,
+    faBell
 );
 const customIcons = {
     hand,

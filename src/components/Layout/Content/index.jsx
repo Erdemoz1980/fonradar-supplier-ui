@@ -3,11 +3,11 @@ import PropTypes from 'prop-types';
 import { useLocation } from 'react-router';
 import { Breadcrumb } from 'antd';
 import { Link } from 'react-router-dom';
-import StyledContent, { HelpLink } from './styles';
-import Button from '../../Button';
-import Text from '../../Text';
-import { CustomIcon } from '../../Icon';
-import urls, { breadcrumbs } from '../../../routes/urls';
+import StyledContent from './styles';
+// import Button from '../../Button';
+// import Text from '../../Text';
+// import { CustomIcon } from '../../Icon';
+import { breadcrumbs } from '../../../routes/urls';
 
 function Content({ children, ...props }) {
     const location = useLocation();
@@ -29,12 +29,12 @@ function Content({ children, ...props }) {
 
             {children}
 
-            <HelpLink to={urls.help}>
+            {/* <HelpLink to={urls.help}>
                 <Button type="default-secondary" size="large">
                     <CustomIcon icon="helpSecondary" />
                     <Text bold>Yardım</Text>
                 </Button>
-            </HelpLink>
+            </HelpLink> */}
         </StyledContent>
     );
 }

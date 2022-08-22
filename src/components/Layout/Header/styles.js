@@ -30,6 +30,25 @@ export default styled(Header)`
         max-height: 60px;
         user-select: none;
     }
+
+    .header-btn {
+        background: #fff;
+        border: 0px;
+        box-shadow: none;
+        border-bottom: 0px;
+        border-radius: 0px;
+        padding: 0px 0px;
+        font-weight: 500;
+        margin-right: 40px;
+    }
+
+    .active-line,
+    .header-btn:active,
+    .header-btn:focus,
+    .header-btn:hover {
+        border: 0px;
+        border-bottom: 2px solid ${({ theme }) => theme.main.primaryColor};
+    }
 `;
 
 export const DrawerButton = styled(Button)`

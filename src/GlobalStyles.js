@@ -212,4 +212,14 @@ export default createGlobalStyle`
   .font-18 {
     font-size: 18px !important;
   }
+
+  .invoiceTable .ant-pagination-total-text {
+    width: 68%;
+  }
+
+  .invoiceTable .ant-pagination-item-link, 
+  .invoiceTable .ant-pagination-options .ant-select .ant-select-selector, 
+  .invoiceTable .ant-pagination-item {
+    border: 0px;
+  }
 `;
