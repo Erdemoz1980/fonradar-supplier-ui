@@ -41,6 +41,7 @@ function Header() {
             isNew: false,
         },
         { text: 'Başvurularım', url: urls.funds, icon: 'fund' },
+        { text: 'Temlik Ettiğim Faturalar', url: urls.invoiceAsign, icon: 'fund' },
     ];
 
     const getUserData = async () => {

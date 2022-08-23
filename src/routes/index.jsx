@@ -9,6 +9,7 @@ import FundDetails from '../pages/FundDetails';
 import GeneralInfo from '../pages/Account/GeneralInfo';
 import CompanyInfo from '../pages/Account/CompanyInfo';
 import InvoiceResult from '../pages/SupplierFinancing/InvoiceResult';
+import InvoiceAssigned from '../pages/InvoiceAssigned';
 
 function ProtectedRoute({ ...props }) {
     const { isLoggedIn } = useSelector(({ user }) => user);
@@ -38,6 +39,7 @@ function Routes() {
             <ProtectedRoute path={urls.generalInfo} exact component={GeneralInfo} />
             <ProtectedRoute path={urls.companyInfo} exact component={CompanyInfo} />
             <ProtectedRoute path={urls.createdInvoiceResult} exact component={InvoiceResult} />
+            <ProtectedRoute path={urls.invoiceAsign} exact component={InvoiceAssigned} />
         </Switch>
     );
 }

@@ -214,7 +214,7 @@ export default createGlobalStyle`
   }
 
   .invoiceTable .ant-pagination-total-text {
-    width: 68%;
+    // width: 68%;
   }
 
   .invoiceTable .ant-pagination-item-link, 

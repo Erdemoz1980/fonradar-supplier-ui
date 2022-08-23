@@ -21,7 +21,6 @@ function App() {
         <ThemeProvider>
             <ConfigProvider locale={tr_TR}>
                 <GlobalStyles />
-
                 <Layout>
                     <Header />
                     <Content>

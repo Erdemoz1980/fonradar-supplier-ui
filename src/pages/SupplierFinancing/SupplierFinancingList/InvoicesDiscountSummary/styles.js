@@ -9,9 +9,10 @@ export const FooterBox = styled(Row)`
     position: fixed;
     width: 100%;
     height: 76px;
-    background-color: aliceblue;
     left: 0;
     padding: 20px 30px;
+    box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.25);
+    background-color: #fff;
 `;
 
 export const InvoiceText = styled(Text)`

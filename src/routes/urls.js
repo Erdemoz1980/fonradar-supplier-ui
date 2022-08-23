@@ -5,6 +5,7 @@ const urls = {
     fundDetail: '/fonlar/:id',
     generalInfo: '/temel-bilgiler',
     companyInfo: '/firma-bilgiler',
+    invoiceAsign: '/temlik-faturalar',
     supplierFinancing: '/tedarikci-finansmani',
     help: '/yardım',
     createdInvoiceResult: '/yeni-fon/:id',
@@ -21,6 +22,7 @@ const breadcrumbItems = {
     [urls.help]: { name: 'Yardım', url: urls.help },
 
     [urls.funds]: { name: 'Başvurularım', url: urls.funds },
+    [urls.invoiceAsign]: { name: 'Temlik Ettiğim Faturalar', url: urls.invoiceAsign },
     [urls.fundDetail]: { name: 'Başvuru Detay', url: urls.fundDetail },
     [urls.supplierFinancing]: { name: 'Fatura İşlemleri', url: urls.supplierFinancing },
     [urls.generalInfo]: { name: 'Temel Bilgileri', url: urls.generalInfo },

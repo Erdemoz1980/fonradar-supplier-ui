@@ -54,10 +54,20 @@ const acceptInvoiceOffer = async (supplierId, disId, financeId, payload) => {
     }
 };
 
+const getInvoicesAssigned = async (invoiceId) => {
+    try {
+        const data = await apiV1.get(`supplier/${invoiceId}/invoice/assigned`);
+        return data;
+    } catch {
+        return [];
+    }
+};
+
 export {
     fetchDiscountInvoices,
     getDiscountBuyerInvoices,
     fetchDiscountInvoiceById,
     fetchInvoiceOffer,
     acceptInvoiceOffer,
+    getInvoicesAssigned,
 };

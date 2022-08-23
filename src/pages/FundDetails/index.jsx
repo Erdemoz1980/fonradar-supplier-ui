@@ -31,7 +31,6 @@ const FundDetail = () => {
         if (id) {
             const response = await fetchInvoiceOffer(id);
             setOffers(response.offers);
-            console.log(response, offers);
         }
     };
 
@@ -189,6 +188,27 @@ const FundDetail = () => {
                     )}
                 </Row>
             </Card>
+            {status && status.value === 'ONAYLADIM' && (
+                <div className="mt">
+                    <Text>Teklif(ler)</Text>
+                    <Row className="mt">
+                        <Col xs={24} lg={12} xl={6}>
+                            <Text style={{ display: 'block' }}>Finansal Kurum:</Text>
+                            <Text>{discountInvoice.financialInstitutionName || '-'}</Text>
+                        </Col>
+                        <Col xs={24} lg={12} xl={6}>
+                            <Text style={{ display: 'block' }}>Teklif Tutarı:</Text>
+                            <Text>{convertFloatDotSeperated(discountInvoice.offer)} TL</Text>
+                        </Col>
+                        <Col xs={24} lg={12} xl={6}>
+                            <Text style={{ display: 'block' }}>Koşul:</Text>
+                            <Text>
+                                {discountInvoice.offerCondition ? discountInvoice.offerCondition : '-'}
+                            </Text>
+                        </Col>
+                    </Row>
+                </div>
+            )}
             {status && status.value === 'CEVAP_GELDI' && (
                 <div className="mt">
                     <Text>Teklif(ler)</Text>

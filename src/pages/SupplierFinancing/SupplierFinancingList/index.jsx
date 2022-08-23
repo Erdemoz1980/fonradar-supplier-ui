@@ -209,7 +209,7 @@ const SupplierFinancingList = () => {
 
     const showTotal = (total) => (
         <Row>
-            <Col lg={12} style={{ width: '400px', color: '#727272', fontSize: 15 }}>
+            <Col lg={12} style={{ width: '600px', color: '#727272', fontSize: 15 }}>
                 <Text style={{ fontSize: 20, fontWeight: 'bold' }}>Yüklenen Faturalarım</Text>
             </Col>
             <Col lg={12} style={{ textAlign: 'right', color: '#727272', fontSize: 15 }}>
