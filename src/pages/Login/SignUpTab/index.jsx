@@ -27,8 +27,8 @@ function SignUpTab({ setActiveTabLogin }) {
     const [loading, setloading] = useState(false);
     const [provinceId, setProvinceId] = useState(0);
     const [isVisible, setIsVisible] = useState(false);
-    const [isCodeValid, setIsCodeValid] = useState(false);
-    const [activeStep, setActiveStep] = useState(0);
+    const [isCodeValid, setIsCodeValid] = useState(true);
+    const [activeStep, setActiveStep] = useState(2);
     const [legalDocs, setLegalDocs] = useState({
         TaxBoard: undefined,
         AuthorizedSignatures: undefined,
@@ -43,7 +43,7 @@ function SignUpTab({ setActiveTabLogin }) {
         }
         if (legalDocs.TaxBoard) {
             const formData = new FormData();
-            formData.append('', legalDocs.TaxBoard);
+            formData.append('File', legalDocs.TaxBoard);
             const documentTypeId = docTypes.find((doc) => doc.name === 'Vergi Levhası');
             if (documentTypeId) {
                 await uploadDoc({
@@ -58,7 +58,7 @@ function SignUpTab({ setActiveTabLogin }) {
         }
         if (legalDocs.AuthorizedSignatures) {
             const formData = new FormData();
-            formData.append('', legalDocs.AuthorizedSignatures);
+            formData.append('File', legalDocs.AuthorizedSignatures);
             const documentTypeId = docTypes.find((doc) => doc.name === 'İmza Sirküleri');
             if (documentTypeId) {
                 await uploadDoc({
@@ -73,7 +73,7 @@ function SignUpTab({ setActiveTabLogin }) {
         }
         if (legalDocs.ActivityCertificate) {
             const formData = new FormData();
-            formData.append('', legalDocs.ActivityCertificate);
+            formData.append('File', legalDocs.ActivityCertificate);
             const documentTypeId = docTypes.find((doc) => doc.name === 'Faaliyet Belgesi');
             if (documentTypeId) {
                 await uploadDoc({
