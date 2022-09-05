@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Row, Col, Tag, Table, Card, Button } from 'antd';
+import { Row, Col, Table, Button } from 'antd';
+import { CheckCircleOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
 import moment from 'moment';
 import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
@@ -7,6 +8,7 @@ import Text from '../../components/Text';
 import { chequeStatusMapByValue } from '../../constants';
 import { convertFloatDotSeperated } from '../../utils';
 import { setDiscountInvoice } from '../../store/reducers/fundSlice';
+import { LeftSideBox } from './styles';
 import { fetchDiscountInvoiceById, fetchInvoiceOffer, acceptInvoiceOffer } from '../../apiServices/fundApi';
 
 const FundDetail = () => {
@@ -18,7 +20,7 @@ const FundDetail = () => {
 
     const status = (discountInvoice?.status && chequeStatusMapByValue[discountInvoice?.status]) || {};
     const statusColor = status?.color || 'smoke';
-    const statusDesc = status?.desc || '';
+    // const statusDesc = status?.desc || '';
 
     const fetchFinancialbyId = async () => {
         if (id) {
@@ -97,7 +99,7 @@ const FundDetail = () => {
 
     return (
         <>
-            <Card style={{ borderLeftColor: statusColor }}>
+            {/* <Card style={{ borderLeftColor: statusColor }}>
                 <Tag
                     style={{ display: 'block', whiteSpace: 'normal' }}
                     className="p px-big"
@@ -109,85 +111,74 @@ const FundDetail = () => {
                             {statusDesc}
                         </Text>
                     </Text>
-                </Tag>
+                </Tag> */}
 
-                <Row className="mt" gutter={[10, 20]}>
-                    <Col xs={24}>
-                        <Col xs={24} lg={12} xl={6}>
-                            <Text className="status-title" type="h2" bold>
-                                Talep Detayı
-                            </Text>
-                        </Col>
-                        <Row className="mt" gutter={[10, 20]}>
-                            <Col xs={24} lg={12} xl={6}>
-                                <Text className="item-title" color={statusColor}>
-                                    Fon Radar Başvuru No:{' '}
+            <Row className="mt" gutter={[10, 20]}>
+                <Col span={6}>
+                    <LeftSideBox>
+                        <Text className="head-title">Başvuru Detayı</Text>
+                        <Row className="status-box">
+                            <div style={{ display: 'flex' }}>
+                                <CheckCircleOutlined style={{ fontSize: '24px', color: statusColor }} />
+                                <Text className="status-title" style={{ color: statusColor }}>
+                                    {status.text}
                                 </Text>
-                                <Text className="font-18" bold>
-                                    {discountInvoice?.number || '-'}
-                                </Text>
-                            </Col>
-
-                            <Col xs={24} lg={12} xl={6}>
-                                <Text className="item-title" color={statusColor}>
-                                    İşlem Tarihi:{' '}
-                                </Text>
-                                <Text className="font-18" bold>
-                                    {moment(discountInvoice?.date).format('DD/MM/YYYY') || '-'}
-                                </Text>
-                            </Col>
-
-                            <Col xs={24} lg={12} xl={6}>
-                                <Text className="item-title" color={statusColor}>
-                                    Toplam Fatura Tutarı:{' '}
-                                </Text>
-                                <Text className="font-18" bold>
-                                    {discountInvoice?.invoicesTotal &&
-                                        convertFloatDotSeperated(discountInvoice?.invoicesTotal)}{' '}
-                                    ₺
-                                </Text>
-                            </Col>
-
-                            <Col xs={24} lg={12} xl={6}>
-                                <Text className="item-title" color={statusColor}>
-                                    Toplam Fatura Adedi:{' '}
-                                </Text>
-                                <Text className="font-18" bold>
-                                    {discountInvoice?.invoicesCount || '-'}
-                                </Text>
-                            </Col>
-
-                            <Col xs={24} lg={12} xl={6}>
-                                <Text className="item-title" color={statusColor}>
-                                    Ortalama Vade:{' '}
-                                </Text>
-                                <Text className="font-18" bold>
-                                    {discountInvoice?.supplierAverageCreditDay} Gün
-                                </Text>
-                            </Col>
-
-                            <Col xs={24} lg={12} xl={6}>
-                                <Text className="item-title" color={statusColor}>
-                                    Alıcı:{' '}
-                                </Text>
-                                <Text className="font-18" bold>
-                                    {discountInvoice?.buyerTitle}
-                                </Text>
-                            </Col>
+                            </div>
+                            <ExclamationCircleOutlined style={{ fontSize: '20px', color: '#727272' }} />
                         </Row>
+                        <Row className="item-box">
+                            <div>
+                                <Row className="item-row">
+                                    <Text className="item-title">Fon radar Başvuru No</Text>
+                                    <Text className="item-value">{discountInvoice?.number || '-'}</Text>
+                                </Row>
+                                <Row className="item-row">
+                                    <Text className="item-title">Alıcı</Text>
+                                    <Text className="item-value">{discountInvoice?.buyerTitle}</Text>
+                                </Row>
+                                <Row className="item-row">
+                                    <Text className="item-title">İşlem Tarihi</Text>
+                                    <Text className="item-value">
+                                        {moment(discountInvoice?.date).format('DD-MM-YYYY') || '-'}
+                                    </Text>
+                                </Row>
+                                <Row className="item-row">
+                                    <Text className="item-title">Toplam Fatura Tutarı</Text>
+                                    <Text className="item-value">
+                                        {discountInvoice?.invoicesTotal &&
+                                            convertFloatDotSeperated(discountInvoice?.invoicesTotal)}{' '}
+                                        ₺
+                                    </Text>
+                                </Row>
+                                <Row className="item-row">
+                                    <Text className="item-title">Ortalama Vade</Text>
+                                    <Text className="item-value">
+                                        {discountInvoice?.supplierAverageCreditDay} Gün
+                                    </Text>
+                                </Row>
+                                <Row className="item-row">
+                                    <Text className="item-title">Fatura Adet</Text>
+                                    <Text className="item-value">
+                                        {' '}
+                                        {discountInvoice?.invoicesCount || '-'}
+                                    </Text>
+                                </Row>
+                            </div>
+                        </Row>
+                    </LeftSideBox>
+                </Col>
+                {discountInvoice?.invoices?.length > 0 && (
+                    <Col span={16} offset={1}>
+                        <Table
+                            pagination={false}
+                            rowKey="index"
+                            dataSource={discountInvoice?.invoices}
+                            columns={tableCols}
+                        />
                     </Col>
-                    {discountInvoice?.invoices?.length > 0 && (
-                        <Col span={24}>
-                            <Table
-                                pagination={false}
-                                rowKey="index"
-                                dataSource={discountInvoice?.invoices}
-                                columns={tableCols}
-                            />
-                        </Col>
-                    )}
-                </Row>
-            </Card>
+                )}
+            </Row>
+            {/* </Card> */}
             {status && status.value === 'ONAYLADIM' && (
                 <div className="mt">
                     <Text>Teklif(ler)</Text>

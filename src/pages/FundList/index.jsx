@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import moment from 'moment';
-import { Table } from 'antd';
+import { Col, Row, Table } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import { useTheme } from 'styled-components';
 import { useHistory } from 'react-router';
@@ -85,18 +85,22 @@ function FundList() {
 
     return (
         <>
-            <Table
-                className="limited-width"
-                rowKey="invoiceNo"
-                loading={loading}
-                dataSource={discountInvoices}
-                columns={tableCols}
-                pagination={false}
-                onRow={(fund) => ({
-                    onClick: () => onClickFund(fund),
-                })}
-                size="small"
-            />
+            <Row>
+                <Col xl={24}>
+                    <Table
+                        className="limited-width"
+                        rowKey="invoiceNo"
+                        loading={loading}
+                        dataSource={discountInvoices}
+                        columns={tableCols}
+                        pagination={false}
+                        onRow={(fund) => ({
+                            onClick: () => onClickFund(fund),
+                        })}
+                        size="small"
+                    />
+                </Col>
+            </Row>
         </>
     );
 }
