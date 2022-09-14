@@ -2,15 +2,15 @@ import React, { useState, useEffect } from 'react';
 import moment from 'moment';
 import { Col, Row, Table } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
-import { useHistory } from 'react-router';
+// import { useHistory } from 'react-router';
 import Text from '../../components/Text';
 import { getInvoicesAssigned } from '../../apiServices/fundApi';
 import { setDiscountInvoices } from '../../store/reducers/fundSlice';
 import { convertFloatDotSeperated } from '../../utils';
-import urls from '../../routes/urls';
+// import urls from '../../routes/urls';
 
 function InvoiceAssigned() {
-    const history = useHistory();
+    // const history = useHistory();
     const dispatch = useDispatch();
     const [loading, setLoading] = useState(false);
     const { user } = useSelector((state) => state.user);
@@ -36,9 +36,9 @@ function InvoiceAssigned() {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [user]);
 
-    const onClickFund = (fund) => {
-        history.push(urls.getfundDetail(fund.id));
-    };
+    // const onClickFund = (fund) => {
+    //     history.push(urls.getfundDetail(fund.id));
+    // };
 
     const tableCols = [
         {
@@ -110,9 +110,9 @@ function InvoiceAssigned() {
                             showTotal,
                             showSizeChanger: true,
                         }}
-                        onRow={(fund) => ({
-                            onClick: () => onClickFund(fund),
-                        })}
+                        // onRow={(fund) => ({
+                        //     onClick: () => onClickFund(fund),
+                        // })}
                     />
                 </Col>
             </Row>

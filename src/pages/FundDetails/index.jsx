@@ -152,9 +152,7 @@ const FundDetail = () => {
                                 </Row>
                                 <Row className="item-row">
                                     <Text className="item-title">Ortalama Vade</Text>
-                                    <Text className="item-value">
-                                        {discountInvoice?.supplierAverageCreditDay} Gün
-                                    </Text>
+                                    <Text className="item-value">{discountInvoice?.averageMaturity} Gün</Text>
                                 </Row>
                                 <Row className="item-row">
                                     <Text className="item-title">Fatura Adet</Text>
