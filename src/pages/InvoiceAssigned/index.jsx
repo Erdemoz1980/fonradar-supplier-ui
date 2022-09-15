@@ -84,7 +84,7 @@ function InvoiceAssigned() {
 
     const showTotal = (total) => (
         <Row>
-            <Col lg={12} style={{ width: '755px', color: '#727272', fontSize: 15 }}>
+            <Col lg={12} style={{ width: '725px', color: '#727272', fontSize: 15 }}>
                 <Text style={{ fontSize: 20, fontWeight: 'bold' }}>Temlik Ettiğim Faturalar</Text>
             </Col>
             <Col lg={12} style={{ textAlign: 'right', color: '#727272', fontSize: 15 }}>

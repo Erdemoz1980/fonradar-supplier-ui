@@ -7,6 +7,45 @@ export const Tabs = styled(TabsAntd)`
     }
 `;
 
+export const AuthTabs = styled.div`
+    .ant-tabs {
+        width: 400px;
+        margin: 0px auto;
+    }
+    .ant-tabs-nav-list {
+        background-color: #f4f4f4;
+        width: 400px;
+        margin: 0px auto;
+        padding: 4px;
+        border-radius: 12px;
+    }
+    .ant-tabs-top > .ant-tabs-nav::before {
+        border-bottom: 0px;
+    }
+    .ant-tabs-tab {
+        margin: 0px;
+        width: 200px;
+        justify-content: center;
+    }
+    .ant-tabs-tab-active {
+        width: 196px;
+        justify-content: center;
+        background-color: #ffffff;
+        border-radius: 12px;
+    }
+    .ant-tabs-ink-bar {
+        background: transparent;
+    }
+    .ant-tabs-tab {
+        font-weight: bold;
+        color: #484848;
+        font-weight: bold;
+    }
+    .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
+        color: #484848 !important;
+    }
+`;
+
 export const GoogleButton = styled.div`
     .google-btn {
         width: 100%;

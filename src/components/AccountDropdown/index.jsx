@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Popover, Divider } from 'antd';
 import { Link } from 'react-router-dom';
+import { useHistory } from 'react-router';
 import Icon, { CustomIcon } from '../Icon';
 import AccountDropdownStyled, { AccountButton } from './styles';
 import { logout } from '../../apiServices/userApi';
@@ -10,6 +11,7 @@ import urls from '../../routes/urls';
 import { setLoggedIn } from '../../store/reducers/userSlice';
 
 const AccountMenu = ({ setIsDropdownVisible }) => {
+    const history = useHistory();
     const dispatch = useDispatch();
 
     const closeDropdown = () => {
@@ -19,7 +21,7 @@ const AccountMenu = ({ setIsDropdownVisible }) => {
     const onClickLogout = () => {
         logout();
         dispatch(setLoggedIn(''));
-        window.location.reload();
+        history.push(urls.login);
     };
 
     return (

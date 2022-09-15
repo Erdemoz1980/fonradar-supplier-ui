@@ -27,8 +27,8 @@ function SignUpTab({ setActiveTabLogin }) {
     const [loading, setloading] = useState(false);
     const [provinceId, setProvinceId] = useState(0);
     const [isVisible, setIsVisible] = useState(false);
-    const [isCodeValid, setIsCodeValid] = useState(true);
-    const [activeStep, setActiveStep] = useState(2);
+    const [isCodeValid, setIsCodeValid] = useState(false);
+    const [activeStep, setActiveStep] = useState(0);
     const [legalDocs, setLegalDocs] = useState({
         TaxBoard: undefined,
         AuthorizedSignatures: undefined,
@@ -182,6 +182,9 @@ function SignUpTab({ setActiveTabLogin }) {
                 setIsVisible={setIsVisible}
                 gsmNumber={signUpForm.getFieldValue('gsmNumber')}
             />
+            <Text type="subtitle" color="primaryDark">
+                Üye Ol
+            </Text>
             <Form name="basic" form={signUpForm} onFinish={createUser} size="large">
                 <Steps direction="vertical" current={activeStep} onChange={handleSteps}>
                     <Step

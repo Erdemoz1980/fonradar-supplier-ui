@@ -5,6 +5,7 @@ import LoginTab from './LoginTab';
 import SignUpTab from './SignUpTab';
 import { oneColLayout } from '../../utils';
 import { loginTabs } from './constants';
+import { AuthTabs } from './styles';
 
 const { TabPane } = Tabs;
 
@@ -15,20 +16,23 @@ function Login() {
 
     return (
         <Row>
-            <Col {...oneColLayout}>
-                <Tabs
-                    defaultActiveKey="login"
-                    activeKey={activeTab}
-                    onChange={(tabKey) => setActiveTab(tabKey)}
-                    animated>
-                    <TabPane tab="Uye Girişi" key={loginTabs.login}>
-                        <LoginTab setActiveTabSignUp={() => setActiveTab(loginTabs.signUp)} />
-                    </TabPane>
+            <Col style={{ margin: '0px auto' }} {...oneColLayout}>
+                <AuthTabs>
+                    <Tabs
+                        defaultActiveKey="login"
+                        activeKey={activeTab}
+                        className="login-tab"
+                        onChange={(tabKey) => setActiveTab(tabKey)}
+                        animated>
+                        <TabPane tab="Giriş Yap" key={loginTabs.login}>
+                            <LoginTab setActiveTabSignUp={() => setActiveTab(loginTabs.signUp)} />
+                        </TabPane>
 
-                    <TabPane tab="Kayıt Ol" key={loginTabs.signUp}>
-                        <SignUpTab setActiveTabLogin={() => setActiveTab(loginTabs.login)} />
-                    </TabPane>
-                </Tabs>
+                        <TabPane tab="Üye Ol" key={loginTabs.signUp}>
+                            <SignUpTab setActiveTabLogin={() => setActiveTab(loginTabs.login)} />
+                        </TabPane>
+                    </Tabs>
+                </AuthTabs>
             </Col>
         </Row>
     );

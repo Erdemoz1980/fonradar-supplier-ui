@@ -33,7 +33,7 @@ const LoginTab = ({ setActiveTabSignUp }) => {
     return (
         <>
             <Text type="title" color="primaryDark">
-                Üye Girişi
+                Giriş Yap
             </Text>
             <Form
                 name="login"
