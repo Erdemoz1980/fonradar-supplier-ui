@@ -70,7 +70,7 @@ export const LeftSideBox = styled.div`
     }
     .item-box {
         width: 320px;
-        height: 389px;
+        height: max-content;
         flex-grow: 0;
         display: flex;
         flex-direction: column;
@@ -80,5 +80,75 @@ export const LeftSideBox = styled.div`
         padding: 16px;
         border: solid 1px #eef4ff;
         background-color: #fff;
+    }
+`;
+
+export const SuccessBox = styled.div`
+    display: grid;
+    justify-content: center;
+    gap: 20px;
+    text-align: center;
+    .tick-icon {
+        font-size: 48px;
+        color: #5ad363;
+    }
+    .download-icon {
+        font-weight: bold;
+        font-size: 20px;
+        margin-right: -10px;
+    }
+    .files-divider {
+        height: 24px;
+        border-left: 1.5px solid #e1e1e1;
+        width: 49%;
+        margin-left: auto;
+    }
+    .num-round {
+        width: 32px;
+        height: 32px;
+        flex-grow: 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding: 16px;
+        border-radius: 33px;
+        border: solid 1px #e1e1e1;
+        background-color: #fff;
+        margin: 0px auto;
+    }
+    .download-temlik {
+        width: 230px;
+        height: 45px;
+        flex-grow: 0;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        gap: 12px;
+        padding: 15px;
+        border-radius: 8px;
+        background-color: #f4f4f4;
+        border: 0px;
+        color: #131112;
+        font-weight: bold;
+        margin: 0px auto;
+    }
+    .add-temlik {
+        width: 250px;
+        height: 45px;
+        flex-grow: 0;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        gap: 12px;
+        padding: 15px;
+        border-radius: 8px;
+        background-color: #e6f1ff;
+        border: 0px;
+        color: #131112;
+        font-weight: bold;
+        margin: 0px auto;
     }
 `;

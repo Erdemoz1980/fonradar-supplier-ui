@@ -17,7 +17,7 @@ function Header() {
     const location = useLocation();
     const { xl, xxl } = useResponsive();
     const [isDrawerVisible, setIsDrawerVisible] = useState(false);
-    const { isLoggedIn } = useSelector(({ user }) => user);
+    const { isLoggedIn, user } = useSelector((state) => state.user);
 
     const path = location.pathname;
     const getButtonSize = () => {
@@ -52,9 +52,9 @@ function Header() {
     };
 
     useEffect(() => {
-        getUserData();
+        !user && isLoggedIn && getUserData();
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [isLoggedIn]);
 
     return (
         <StyledHeader className="light">

@@ -27,8 +27,8 @@ function SignUpTab({ setActiveTabLogin }) {
     const [loading, setloading] = useState(false);
     const [provinceId, setProvinceId] = useState(0);
     const [isVisible, setIsVisible] = useState(false);
-    const [isCodeValid, setIsCodeValid] = useState(false);
-    const [activeStep, setActiveStep] = useState(0);
+    const [isCodeValid, setIsCodeValid] = useState(true);
+    const [activeStep, setActiveStep] = useState(2);
     const [legalDocs, setLegalDocs] = useState({
         TaxBoard: undefined,
         AuthorizedSignatures: undefined,

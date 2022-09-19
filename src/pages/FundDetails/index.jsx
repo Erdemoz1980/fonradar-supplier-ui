@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Row, Col, Table, Button } from 'antd';
+import { Row, Col, Table, Button, Divider } from 'antd';
 import { CheckCircleOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
 import moment from 'moment';
 import { useParams } from 'react-router-dom';
@@ -10,6 +10,7 @@ import { convertFloatDotSeperated } from '../../utils';
 import { setDiscountInvoice } from '../../store/reducers/fundSlice';
 import { LeftSideBox } from './styles';
 import { fetchDiscountInvoiceById, fetchInvoiceOffer, acceptInvoiceOffer } from '../../apiServices/fundApi';
+// import SuccessMsg from './SuccessMsg';
 
 const FundDetail = () => {
     const dispatch = useDispatch();
@@ -127,7 +128,7 @@ const FundDetail = () => {
                             <ExclamationCircleOutlined style={{ fontSize: '20px', color: '#727272' }} />
                         </Row>
                         <Row className="item-box">
-                            <div>
+                            <Col>
                                 <Row className="item-row">
                                     <Text className="item-title">Fon radar Başvuru No</Text>
                                     <Text className="item-value">{discountInvoice?.number || '-'}</Text>
@@ -157,11 +158,68 @@ const FundDetail = () => {
                                 <Row className="item-row">
                                     <Text className="item-title">Fatura Adet</Text>
                                     <Text className="item-value">
-                                        {' '}
                                         {discountInvoice?.invoicesCount || '-'}
                                     </Text>
                                 </Row>
-                            </div>
+                                {status &&
+                                    (status.value === 'ONAYLADIM' || status.value === 'ISLEME_ALINDI') && (
+                                        <>
+                                            <Divider />
+                                            <Row className="item-row">
+                                                <Text className="item-title">Finans Kurum</Text>
+                                                <Text className="item-value">
+                                                    {discountInvoice?.financialInstitutionName || '-'}
+                                                </Text>
+                                            </Row>
+                                            <Row className="item-row">
+                                                <Text className="item-title">Teklif Tutarı</Text>
+                                                <Text className="item-value">
+                                                    {convertFloatDotSeperated(discountInvoice.offer)} TL
+                                                </Text>
+                                            </Row>
+                                            <Row className="item-row">
+                                                <Text className="item-title">Koşul</Text>
+                                                <Text className="item-value">
+                                                    {discountInvoice?.offerCondition || '-'}
+                                                </Text>
+                                            </Row>
+                                        </>
+                                    )}
+                                {status &&
+                                    status.value === 'CEVAP_GELDI' &&
+                                    offers &&
+                                    offers.map((ofer) => (
+                                        <>
+                                            <Divider />
+                                            <Row className="item-row">
+                                                <Text className="item-title">Finans Kurum</Text>
+                                                <Text className="item-value">
+                                                    {discountInvoice?.financialInstitutionName || '-'}
+                                                </Text>
+                                            </Row>
+                                            <Row className="item-row">
+                                                <Text className="item-title">Teklif Tutarı</Text>
+                                                <Text className="item-value">
+                                                    {convertFloatDotSeperated(discountInvoice.offer)} TL
+                                                </Text>
+                                            </Row>
+                                            <Row className="item-row">
+                                                <Text className="item-title">Koşul</Text>
+                                                <Text className="item-value">
+                                                    {discountInvoice?.offerCondition || '-'}
+                                                </Text>
+                                            </Row>
+                                            <Button
+                                                style={{ width: 190, marginTop: 20 }}
+                                                type="primary"
+                                                htmlType="submit"
+                                                onClick={() => acceptOffer(ofer)}
+                                                block>
+                                                Teklifi Kabul Et
+                                            </Button>
+                                        </>
+                                    ))}
+                            </Col>
                         </Row>
                     </LeftSideBox>
                 </Col>
@@ -173,63 +231,10 @@ const FundDetail = () => {
                             dataSource={discountInvoice?.invoices}
                             columns={tableCols}
                         />
+                        {/* <SuccessMsg invoiceData={discountInvoice} /> */}
                     </Col>
                 )}
             </Row>
-            {/* </Card> */}
-            {status && status.value === 'ONAYLADIM' && (
-                <div className="mt">
-                    <Text>Teklif(ler)</Text>
-                    <Row className="mt">
-                        <Col xs={24} lg={12} xl={6}>
-                            <Text style={{ display: 'block' }}>Finansal Kurum:</Text>
-                            <Text>{discountInvoice.financialInstitutionName || '-'}</Text>
-                        </Col>
-                        <Col xs={24} lg={12} xl={6}>
-                            <Text style={{ display: 'block' }}>Teklif Tutarı:</Text>
-                            <Text>{convertFloatDotSeperated(discountInvoice.offer)} TL</Text>
-                        </Col>
-                        <Col xs={24} lg={12} xl={6}>
-                            <Text style={{ display: 'block' }}>Koşul:</Text>
-                            <Text>
-                                {discountInvoice.offerCondition ? discountInvoice.offerCondition : '-'}
-                            </Text>
-                        </Col>
-                    </Row>
-                </div>
-            )}
-            {status && status.value === 'CEVAP_GELDI' && (
-                <div className="mt">
-                    <Text>Teklif(ler)</Text>
-                    {offers &&
-                        offers.map((ofer) => (
-                            <>
-                                <Row className="mt">
-                                    <Col xs={24} lg={12} xl={6}>
-                                        <Text style={{ display: 'block' }}>Finansal Kurum:</Text>
-                                        <Text>{ofer.financialInstitutionName || '-'}</Text>
-                                    </Col>
-                                    <Col xs={24} lg={12} xl={6}>
-                                        <Text style={{ display: 'block' }}>Teklif Tutarı:</Text>
-                                        <Text>{convertFloatDotSeperated(ofer.offer)} TL</Text>
-                                    </Col>
-                                    <Col xs={24} lg={12} xl={6}>
-                                        <Text style={{ display: 'block' }}>Koşul:</Text>
-                                        <Text>{ofer.offerCondition ? ofer.offerCondition : '-'}</Text>
-                                    </Col>
-                                </Row>
-                                <Button
-                                    style={{ width: 190, marginTop: 20 }}
-                                    type="primary"
-                                    htmlType="submit"
-                                    onClick={() => acceptOffer(ofer)}
-                                    block>
-                                    Teklifi Kabul Et
-                                </Button>
-                            </>
-                        ))}
-                </div>
-            )}
         </>
     );
 };
