@@ -160,7 +160,7 @@ const SupplierFinancingList = () => {
             const response = await fetchInvoices(user.taxNumber, isLoggedIn);
             if (response) {
                 setLoading(false);
-                dispatch(setInvoices(response.invoices));
+                dispatch(setInvoices(response.invoiceDtos));
             } else {
                 setLoading(false);
             }

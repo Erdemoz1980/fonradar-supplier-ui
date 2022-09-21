@@ -1,5 +1,5 @@
 import { notification } from 'antd';
-// import urls from '../routes/urls';
+import urls from '../routes/urls';
 import LocalStorageService from './LocalStorageService';
 
 class Interceptor {
@@ -58,10 +58,10 @@ class Interceptor {
                 } else if (error && error.data && error.data.message) {
                     notification.error({ message: error.data.message });
                 } else if (error && error.status === 401) {
-                    // LocalStorageService.removeAuthToken();
-                    // if (window.location.pathname !== urls.login) {
-                    //     window.location = urls.login;
-                    // }
+                    LocalStorageService.removeAuthToken();
+                    if (window.location.pathname !== urls.login) {
+                        window.location = urls.login;
+                    }
                 } else {
                     notification.error({ message: 'Beklenmedik bir hata oluştu!' });
                 }

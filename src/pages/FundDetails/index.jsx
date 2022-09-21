@@ -194,19 +194,19 @@ const FundDetail = () => {
                                             <Row className="item-row">
                                                 <Text className="item-title">Finans Kurum</Text>
                                                 <Text className="item-value">
-                                                    {discountInvoice?.financialInstitutionName || '-'}
+                                                    {ofer?.financialInstitutionName || '-'}
                                                 </Text>
                                             </Row>
                                             <Row className="item-row">
                                                 <Text className="item-title">Teklif Tutarı</Text>
                                                 <Text className="item-value">
-                                                    {convertFloatDotSeperated(discountInvoice.offer)} TL
+                                                    {convertFloatDotSeperated(ofer.offer)} TL
                                                 </Text>
                                             </Row>
                                             <Row className="item-row">
                                                 <Text className="item-title">Koşul</Text>
                                                 <Text className="item-value">
-                                                    {discountInvoice?.offerCondition || '-'}
+                                                    {ofer?.offerCondition || '-'}
                                                 </Text>
                                             </Row>
                                             <Button

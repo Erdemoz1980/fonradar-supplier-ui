@@ -1,12 +1,12 @@
 /* eslint-disable no-empty */
-import { endpoints, apiV1, apiBuyerV3 } from '../services/apis';
+import { endpoints, apiV1 } from '../services/apis';
 import LocalStorageService from '../services/LocalStorageService';
 
 const token = LocalStorageService.getAuthToken();
 
 const fetchInvoices = async (taxNumber, _token) => {
     try {
-        const data = await apiBuyerV3.get(`${endpoints.invoices}?taxId=${taxNumber}`, {
+        const data = await apiV1.get(`${endpoints.invoices}?taxNumber=${taxNumber}`, {
             headers: {
                 Authorization: `Bearer ${_token}`,
                 accept: 'application/json',
