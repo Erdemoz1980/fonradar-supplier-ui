@@ -7,9 +7,45 @@ export const Tabs = styled(TabsAntd)`
     }
 `;
 
-export const DrawerBox = styled.div`
-    .ant-drawer-title {
-        font-size: 20px !important;
+export const DrawerBody = styled.div`
+    .drawer-title {
+        margin: 16px 0px;
+        font-size: 17px;
+        font-weight: bold;
+        font-stretch: normal;
+        font-style: normal;
+        line-height: 1.43;
+        letter-spacing: normal;
+        text-align: left;
+        color: #131112;
+    }
+    .drawer-title1 {
+        margin: 16px 0px;
+        font-size: 15px;
+        font-weight: bold;
+        font-stretch: normal;
+        font-style: normal;
+        line-height: 1.43;
+        letter-spacing: normal;
+        text-align: left;
+    }
+    .sub-title {
+        margin: 0px 8px 16px 0px;
+        font-size: 15px;
+        font-weight: bold;
+        font-stretch: normal;
+        font-style: normal;
+        line-height: 1.43;
+        letter-spacing: normal;
+        text-align: left;
+        color: #131112;
+    }
+    .sub-value {
+        font-size: 15px;
+        color: #484848;
+    }
+    .mb-8 {
+        margin-bottom: 8px;
     }
 `;
 

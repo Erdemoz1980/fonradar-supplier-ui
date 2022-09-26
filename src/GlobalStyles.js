@@ -222,4 +222,8 @@ export default createGlobalStyle`
   .invoiceTable .ant-pagination-item {
     border: 0px;
   }
+
+  .signup-popup .ant-drawer-header-title {
+    flex-direction: row-reverse;
+  }
 `;

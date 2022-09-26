@@ -1,17 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { Form, Divider, Input, Steps, Drawer } from 'antd';
+import { Form, Divider, Input, Steps } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
+import { useHistory } from 'react-router';
 import Text from '../../../components/Text';
 import Button from '../../../components/Button';
 import UserStepForm from './UserStepForm';
 import LegalDocsForm from './LegalDocsForm';
 import GsmCodeVerificationModal from './GsmCodeVerificationModal';
 import { fetchProvinces } from '../../../apiServices/commonApi';
-import { getDocType, getCode, uploadDoc, signUp } from '../../../apiServices/userApi';
+import { getDocType, getCode, uploadDoc, signUp, login } from '../../../apiServices/userApi';
 import { setProvinces } from '../../../store/reducers/commonSlice';
-import { setDocType, setLoggedIn, setCreatedUser } from '../../../store/reducers/userSlice';
-import { DrawerBox } from '../styles';
+import { setDocType, setLoggedIn } from '../../../store/reducers/userSlice';
+import DocDrawer from './DocDrawer';
+import urls from '../../../routes/urls';
 
 const { Step } = Steps;
 
@@ -23,12 +25,13 @@ const getStepTitle = (title) => (
 
 function SignUpTab({ setActiveTabLogin }) {
     const dispatch = useDispatch();
+    const history = useHistory();
     const [signUpForm] = Form.useForm();
     const [codeLoading, setCodeLoading] = useState(false);
     const [loading, setloading] = useState(false);
     const [provinceId, setProvinceId] = useState(0);
     const [isVisible, setIsVisible] = useState(false);
-    const [isPopup, setIsPopup] = useState(true);
+    const [isPopup, setIsPopup] = useState(false);
     const [isCodeValid, setIsCodeValid] = useState(false);
     const [activeStep, setActiveStep] = useState(0);
     const [legalDocs, setLegalDocs] = useState({
@@ -114,10 +117,15 @@ function SignUpTab({ setActiveTabLogin }) {
                     province: provinceId,
                 });
                 if (response) {
-                    signUpForm.resetFields();
-                    setActiveTabLogin();
+                    const res = await login({
+                        email: formValues.email,
+                        password: formValues.password,
+                    });
+                    if (res) {
+                        dispatch(setLoggedIn(res.token));
+                        history.push(urls.supplierFinancing);
+                    }
                     setloading(false);
-                    dispatch(setCreatedUser(response));
                 } else {
                     setloading(false);
                 }
@@ -184,40 +192,7 @@ function SignUpTab({ setActiveTabLogin }) {
                 setIsVisible={setIsVisible}
                 gsmNumber={signUpForm.getFieldValue('gsmNumber')}
             />
-            <DrawerBox>
-                <Drawer
-                    title="Kullanıcı Sözleşmesi"
-                    placement="right"
-                    onClose={() => setIsPopup(false)}
-                    visible={isPopup}>
-                    <div>
-                        İşbu Üyelik Sözleşmesi; bir tarafta Fon Radar Bilişim Teknolojileri Sanayi ve Ticaret
-                        Anonim Şirketi (ŞİRKET) ile diğer tarafta KULLANICI TİCARİ İŞLETME arasında aşağıda
-                        yazılı şartlar dâhilinde akdedilmiştir.
-                    </div>
-                    <div>1. TARAF BİLGİLERİ </div>
-                    <div>
-                        <p>Ünvan: Fon Radar Bilişim Teknolojileri Sanayi ve Ticaret Anonim Şirketi</p>
-                        <p>Adres: Büyükdere Caddesi No:255 Nurol Plaza B 02 Sarıyer/İstanbul</p>
-                        <p>Telefon: (532) 236 64 30</p>
-                        <p>Vergi No: 3881591970</p>
-                        <p>E-posta: fonradar@hs06.kep.tr</p>
-                        <p>İnternet Adresi: www.fonradar.com</p>
-                        <p>MERSİS No: 0388159197000001</p>
-                        <p>Ticaret Sicil No: 205399-5</p>
-                    </div>
-                    <div>
-                        <p>SÖZLEŞMENİN KONUSU</p>
-                        <p>
-                            İşbu kullanıcı sözleşmesi, her türlü fikri mülkiyet hakları ŞİRKET’e ait bulunan
-                            FON RADAR platformunun (FON RADAR) kullanım şartlarını düzenlemektedir.
-                        </p>
-                    </div>
-                    <div>
-                        <p>SÖZLEŞMENİN HÜKÜMLERİ</p>
-                    </div>
-                </Drawer>
-            </DrawerBox>
+            {isPopup && <DocDrawer isPopup={isPopup} setIsPopup={setIsPopup} />}
             <Text type="subtitle" color="primaryDark">
                 Üye Ol
             </Text>

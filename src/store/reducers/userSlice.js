@@ -4,7 +4,10 @@ import LocalStorageService from '../../services/LocalStorageService';
 
 const initialState = {
     user: '',
-    isLoggedIn: LocalStorageService.getAuthToken(),
+    isLoggedIn:
+        LocalStorageService.getAuthToken() || LocalStorageService.getAuthToken() !== 'undefined'
+            ? LocalStorageService.getAuthToken()
+            : '',
     docTypes: '',
     createdUser: '',
 };
