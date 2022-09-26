@@ -7,6 +7,12 @@ export const Tabs = styled(TabsAntd)`
     }
 `;
 
+export const DrawerBox = styled.div`
+    .ant-drawer-title {
+        font-size: 20px !important;
+    }
+`;
+
 export const AuthTabs = styled.div`
     .ant-tabs {
         width: 400px;
