@@ -5,6 +5,7 @@ const urls = {
     fundDetail: '/fonlar/:id',
     generalInfo: '/temel-bilgiler',
     companyInfo: '/firma-bilgiler',
+    legalDocuments: '/legal-bilgiler',
     invoiceAsign: '/temlik-faturalar',
     supplierFinancing: '/tedarikci-finansmani',
     help: '/yardım',
@@ -27,6 +28,7 @@ const breadcrumbItems = {
     [urls.supplierFinancing]: { name: 'Fatura İşlemleri', url: urls.supplierFinancing },
     [urls.generalInfo]: { name: 'Temel Bilgileri', url: urls.generalInfo },
     [urls.companyInfo]: { name: 'Firma Bilgileri', url: urls.companyInfo },
+    [urls.legalDocuments]: { name: 'Firma Bilgileri', url: urls.legalDocuments },
 };
 
 // use breadcrumbItems to create breadcrumbs
@@ -40,4 +42,5 @@ export const breadcrumbs = {
     [urls.supplierFinancing]: breadcrumbItems[urls.supplierFinancing],
     [urls.generalInfo]: breadcrumbItems[urls.generalInfo],
     [urls.companyInfo]: breadcrumbItems[urls.companyInfo],
+    [urls.legalDocuments]: breadcrumbItems[urls.legalDocuments],
 };

@@ -226,4 +226,14 @@ export default createGlobalStyle`
   .signup-popup .ant-drawer-header-title {
     flex-direction: row-reverse;
   }
+
+  .legal-doc .ant-upload.ant-upload-select-picture-card {
+    width: max-content !important;
+    height: 46px !important;
+    padding: 0px 20px;
+  }
+
+  .invoiceTable .ant-pagination-total-text {
+    width: 70%;
+  }
 `;

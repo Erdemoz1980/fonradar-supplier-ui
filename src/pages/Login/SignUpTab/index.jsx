@@ -35,20 +35,26 @@ function SignUpTab({ setActiveTabLogin }) {
     const [isCodeValid, setIsCodeValid] = useState(false);
     const [activeStep, setActiveStep] = useState(0);
     const [legalDocs, setLegalDocs] = useState({
-        TaxBoard: undefined,
-        AuthorizedSignatures: undefined,
-        ActivityCertificate: undefined,
+        taxBoard: undefined,
+        authorizedSignatures: undefined,
+        activityCertificate: undefined,
+        serviceAggrement: undefined,
     });
 
     const { createdUser, docTypes } = useSelector(({ user }) => user);
 
     const uploadDocs = async () => {
-        if (!legalDocs.TaxBoard && !legalDocs.AuthorizedSignatures && !legalDocs.ActivityCertificate) {
+        if (
+            !legalDocs.taxBoard &&
+            !legalDocs.authorizedSignatures &&
+            !legalDocs.activityCertificate &&
+            !legalDocs.serviceAggrement
+        ) {
             dispatch(setLoggedIn(true));
         }
-        if (legalDocs.TaxBoard) {
+        if (legalDocs.taxBoard) {
             const formData = new FormData();
-            formData.append('File', legalDocs.TaxBoard);
+            formData.append('File', legalDocs.taxBoard);
             const documentTypeId = docTypes.find((doc) => doc.name === 'Vergi Levhası');
             if (documentTypeId) {
                 await uploadDoc({
@@ -57,13 +63,13 @@ function SignUpTab({ setActiveTabLogin }) {
                     documentTypeId: documentTypeId.id,
                 });
             }
-            if (!legalDocs.AuthorizedSignatures && !legalDocs.ActivityCertificate) {
+            if (!legalDocs.authorizedSignatures && !legalDocs.activityCertificate) {
                 dispatch(setLoggedIn(true));
             }
         }
-        if (legalDocs.AuthorizedSignatures) {
+        if (legalDocs.authorizedSignatures) {
             const formData = new FormData();
-            formData.append('File', legalDocs.AuthorizedSignatures);
+            formData.append('File', legalDocs.authorizedSignatures);
             const documentTypeId = docTypes.find((doc) => doc.name === 'İmza Sirküleri');
             if (documentTypeId) {
                 await uploadDoc({
@@ -72,14 +78,29 @@ function SignUpTab({ setActiveTabLogin }) {
                     documentTypeId: documentTypeId.id,
                 });
             }
-            if (!legalDocs.ActivityCertificate) {
+            if (!legalDocs.activityCertificate && !legalDocs.serviceAggrement) {
                 dispatch(setLoggedIn(true));
             }
         }
-        if (legalDocs.ActivityCertificate) {
+        if (legalDocs.activityCertificate) {
             const formData = new FormData();
-            formData.append('File', legalDocs.ActivityCertificate);
+            formData.append('File', legalDocs.activityCertificate);
             const documentTypeId = docTypes.find((doc) => doc.name === 'Faaliyet Belgesi');
+            if (documentTypeId) {
+                await uploadDoc({
+                    formData,
+                    supplierId: createdUser.supplierId,
+                    documentTypeId: documentTypeId.id,
+                });
+            }
+            if (legalDocs.serviceAggrement) {
+                dispatch(setLoggedIn(true));
+            }
+        }
+        if (legalDocs.serviceAggrement) {
+            const formData = new FormData();
+            formData.append('File', legalDocs.serviceAggrement);
+            const documentTypeId = docTypes.find((doc) => doc.name === 'İmzalı Hizmet Sözleşmesi');
             if (documentTypeId) {
                 await uploadDoc({
                     formData,

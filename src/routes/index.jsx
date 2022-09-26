@@ -38,6 +38,7 @@ function Routes() {
             <ProtectedRoute path={urls.funds} component={FundList} />
             <ProtectedRoute path={urls.generalInfo} exact component={GeneralInfo} />
             <ProtectedRoute path={urls.companyInfo} exact component={CompanyInfo} />
+            <ProtectedRoute path={urls.legalDocuments} exact component={CompanyInfo} />
             <ProtectedRoute path={urls.createdInvoiceResult} exact component={InvoiceResult} />
             <ProtectedRoute path={urls.invoiceAsign} exact component={InvoiceAssigned} />
         </Switch>
