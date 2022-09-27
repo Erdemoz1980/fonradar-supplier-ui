@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Form, Row, InputNumber, Select } from 'antd';
+import { Form, Row, InputNumber, Select, Input } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import { companyDp } from '../../../../utils';
 import { validateVkn } from '../../../../utils/validators';
@@ -35,7 +35,7 @@ function UserStepForm({ setProvinceId, form }) {
         <>
             <Row gutter={0}>
                 <Form.Item name="title" rules={[{ required: true }]}>
-                    <Select placeholder="Şirket Türü" style={{ width: '300px', marginRight: '20px' }}>
+                    <Select placeholder="Şirket Türü" style={{ width: '350px', marginRight: '20px' }}>
                         {companyDp.map((company) => (
                             <Option key={`bank-option-${company.name}`} value={company.name}>
                                 {company.name}
@@ -44,7 +44,17 @@ function UserStepForm({ setProvinceId, form }) {
                     </Select>
                 </Form.Item>
                 <Form.Item
-                    style={{ width: '300px' }}
+                    style={{ width: '350px' }}
+                    name="supplierTitle"
+                    rules={[
+                        {
+                            required: true,
+                        },
+                    ]}>
+                    <Input placeholder="Ünvan" />
+                </Form.Item>
+                <Form.Item
+                    style={{ width: '350px' }}
                     name="taxId"
                     rules={[
                         {
@@ -65,7 +75,7 @@ function UserStepForm({ setProvinceId, form }) {
                         },
                     ]}>
                     <Select
-                        style={{ width: '300px', marginRight: '20px' }}
+                        style={{ width: '350px', marginRight: '20px' }}
                         placeholder="İl"
                         onChange={onChangeProvince}
                         optionFilterProp="children"
@@ -87,7 +97,7 @@ function UserStepForm({ setProvinceId, form }) {
                             },
                         ]}>
                         <Select
-                            style={{ width: '300px' }}
+                            style={{ width: '350px' }}
                             placeholder="İlçe"
                             loading={loading}
                             optionFilterProp="children"
@@ -113,7 +123,7 @@ function UserStepForm({ setProvinceId, form }) {
                             },
                         ]}>
                         <Select
-                            style={{ width: '300px' }}
+                            style={{ width: '350px' }}
                             placeholder="Vergi Dairesi"
                             loading={loading}
                             optionFilterProp="children"

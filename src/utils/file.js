@@ -2,6 +2,7 @@ import { PDFDocument, StandardFonts, rgb } from 'pdf-lib';
 import moment from 'moment';
 import { fileTypes } from '../constants';
 import Temlikname from '../assests/temlikname.pdf';
+import PlatformuKullanım from '../assests/FonRadar_Platformu_Kullanım_Sozlesmesi.pdf';
 import { convertFloatDotSeperated } from './index';
 
 export const normFile = (e) => {
@@ -114,6 +115,42 @@ export const LoadPdfTemlik = async (invoiceData) => {
 
         const pdfDataUri = await pdfDoc.saveAsBase64({ dataUri: true });
         downloadURI(pdfDataUri, 'Temlik_Info');
+
+        // Serialize the PDFDocument to bytes (a Uint8Array)
+        const updatedPdf = await pdfDoc.save();
+        return toBase64(updatedPdf);
+    }
+};
+
+export const LoadPdfPlatform = async (text) => {
+    const existingPdfBytes = await fetch(PlatformuKullanım)
+        .then((res) => res.arrayBuffer())
+        .then((arrayBufferData) => arrayBufferData);
+    if (existingPdfBytes) {
+        const pdfDoc = await PDFDocument.load(existingPdfBytes, {
+            updateMetadata: false,
+        });
+
+        // Embed the Helvetica font
+        const timeRomanFont = await pdfDoc.embedFont(StandardFonts.TimesRoman);
+
+        // Get the first page of the document
+        const pages = pdfDoc.getPages();
+        const firstPage = pages[0];
+        firstPage.moveTo(135, 670.5);
+        firstPage.drawText(text, {
+            font: timeRomanFont,
+            size: 12,
+        });
+
+        firstPage.moveTo(443, 670.5);
+        firstPage.drawText(moment().format('DD-MM-YYYY'), {
+            size: 12,
+            font: timeRomanFont,
+        });
+
+        const pdfDataUri = await pdfDoc.saveAsBase64({ dataUri: true });
+        downloadURI(pdfDataUri, 'FonRadar_Platformu_Kullanım_Sozlesmesi');
 
         // Serialize the PDFDocument to bytes (a Uint8Array)
         const updatedPdf = await pdfDoc.save();

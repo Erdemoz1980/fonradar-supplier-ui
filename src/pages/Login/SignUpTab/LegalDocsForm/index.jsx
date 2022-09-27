@@ -4,8 +4,9 @@ import { VerticalAlignBottomOutlined } from '@ant-design/icons';
 import Text from '../../../../components/Text';
 import Icon from '../../../../components/Icon';
 import { ServiceBox } from '../../styles';
+import { LoadPdfPlatform } from '../../../../utils/file';
 
-function LegalDocsForm({ legalDocs, setLegalDocs }) {
+function LegalDocsForm({ legalDocs, setLegalDocs, supplierTitle }) {
     const handleDocumentUpload = (file, key) => {
         setLegalDocs({ ...legalDocs, [key]: file });
         return false;
@@ -14,6 +15,10 @@ function LegalDocsForm({ legalDocs, setLegalDocs }) {
     const handleDeleteUpload = (key) => {
         setLegalDocs({ ...legalDocs, [key]: undefined });
         return true;
+    };
+
+    const handlePlatformDownload = async () => {
+        supplierTitle && (await LoadPdfPlatform(supplierTitle));
     };
 
     return (
@@ -107,7 +112,7 @@ function LegalDocsForm({ legalDocs, setLegalDocs }) {
                     </Text>
                     <ServiceBox>
                         <div>
-                            <Button type="default" className="download-btn">
+                            <Button onClick={handlePlatformDownload} type="default" className="download-btn">
                                 <VerticalAlignBottomOutlined
                                     style={{ fontSize: 20, verticalAlign: 'text-top' }}
                                 />

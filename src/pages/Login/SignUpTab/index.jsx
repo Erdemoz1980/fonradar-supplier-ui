@@ -312,7 +312,11 @@ function SignUpTab({ setActiveTabLogin }) {
                         disabled={!isCodeValid}
                         description={
                             isCodeValid || activeStep === 2 ? (
-                                <LegalDocsForm setLegalDocs={setLegalDocs} legalDocs={legalDocs} />
+                                <LegalDocsForm
+                                    setLegalDocs={setLegalDocs}
+                                    legalDocs={legalDocs}
+                                    supplierTitle={signUpForm.getFieldValue('supplierTitle')}
+                                />
                             ) : (
                                 ''
                             )
