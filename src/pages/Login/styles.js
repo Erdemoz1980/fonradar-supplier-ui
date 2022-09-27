@@ -7,6 +7,22 @@ export const Tabs = styled(TabsAntd)`
     }
 `;
 
+export const ServiceBox = styled.div`
+    display: flex;
+    .download-btn {
+        font-weight: bold;
+        font-size: 15px;
+        width: 180px;
+        padding: 5px 0px;
+        height: 46px;
+        margin-right: 14px;
+        align-content: center;
+    }
+    .legal-doc {
+        width: 120px;
+    }
+`;
+
 export const DrawerBody = styled.div`
     .drawer-title {
         margin: 16px 0px;

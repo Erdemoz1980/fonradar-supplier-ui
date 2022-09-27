@@ -1,7 +1,9 @@
 import React from 'react';
-import { Form, Row, Upload } from 'antd';
+import { Button, Form, Row, Upload } from 'antd';
+import { VerticalAlignBottomOutlined } from '@ant-design/icons';
 import Text from '../../../../components/Text';
 import Icon from '../../../../components/Icon';
+import { ServiceBox } from '../../styles';
 
 function LegalDocsForm({ legalDocs, setLegalDocs }) {
     const handleDocumentUpload = (file, key) => {
@@ -103,22 +105,38 @@ function LegalDocsForm({ legalDocs, setLegalDocs }) {
                     <Text type="label" style={{ fontSize: 14 }}>
                         Hizmet sözleşmemizi indirin, okuyup imzaladıktan sonra bir kopyayı buraya yükleyin.
                     </Text>
-                    <Upload
-                        className="legal-doc"
-                        listType="picture-card"
-                        accept="application/pdf"
-                        multiple={false}
-                        onRemove={() => handleDeleteUpload('serviceAggrement')}
-                        beforeUpload={(file) => handleDocumentUpload(file, 'serviceAggrement')}>
-                        {!legalDocs.serviceAggrement && (
-                            <div style={{ display: 'flex', alignItems: 'center' }}>
-                                <Icon icon="plus" color="inherit" />
-                                <Text className="d-block" bold>
-                                    İmzalı Hizmet Sözleşmesi
-                                </Text>
-                            </div>
-                        )}
-                    </Upload>
+                    <ServiceBox>
+                        <div>
+                            <Button type="default" className="download-btn">
+                                <VerticalAlignBottomOutlined
+                                    style={{ fontSize: 20, verticalAlign: 'text-top' }}
+                                />
+                                Sözleşmeyi İndir
+                            </Button>
+                        </div>
+                        <div>
+                            <Upload
+                                className="legal-doc"
+                                listType="picture-card"
+                                accept="application/pdf"
+                                multiple={false}
+                                onRemove={() => handleDeleteUpload('serviceAggrement')}
+                                beforeUpload={(file) => handleDocumentUpload(file, 'serviceAggrement')}>
+                                {!legalDocs.serviceAggrement && (
+                                    <div
+                                        style={{
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                        }}>
+                                        <Icon icon="plus" color="inherit" />
+                                        <Text className="d-block" bold>
+                                            Yukle
+                                        </Text>
+                                    </div>
+                                )}
+                            </Upload>
+                        </div>
+                    </ServiceBox>
                 </Form.Item>
             </Row>
         </div>

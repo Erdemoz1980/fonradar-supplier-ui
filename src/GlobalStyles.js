@@ -231,6 +231,7 @@ export default createGlobalStyle`
     width: max-content !important;
     height: 46px !important;
     padding: 0px 20px;
+    background-color: #e6f1ff;
   }
 
   .invoiceTable .ant-pagination-total-text {
