@@ -3,14 +3,18 @@ import moment from 'moment';
 import { Col, Row } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router';
+import AliciTedarikci from '../../../assests/alici_tedarikci.png';
 import Table from '../../../components/Table';
 import Text from '../../../components/Text';
 import { convertFloatDotSeperated } from '../../../utils';
 import { fetchInvoices, uploadInvoices } from '../../../apiServices/supplierFinanceApi';
-import { setInvoices, setInvoiceResId } from '../../../store/reducers/supplierFinanceSlice';
+import {
+    // setInvoices,
+    setInvoiceResId,
+} from '../../../store/reducers/supplierFinanceSlice';
 import InvoicesDiscountSummary from './InvoicesDiscountSummary';
 import urls from '../../../routes/urls';
-import { FaturaButton } from './styles';
+import { FaturaButton, HelpBox } from './styles';
 import Icon from '../../../components/Icon';
 
 const SupplierFinancingList = () => {
@@ -160,7 +164,7 @@ const SupplierFinancingList = () => {
             const response = await fetchInvoices(user.taxNumber, isLoggedIn);
             if (response) {
                 setLoading(false);
-                dispatch(setInvoices(response.invoiceDtos));
+                // dispatch(setInvoices(response.invoiceDtos));
             } else {
                 setLoading(false);
             }
@@ -221,21 +225,62 @@ const SupplierFinancingList = () => {
     return (
         <>
             {!loading && invoices && invoices.length === 0 ? (
-                <Row style={{ width: '68%', margin: '40px auto 0px' }}>
-                    <Col style={{ margin: '0px auto', textAlign: 'center', display: 'grid' }}>
-                        <Text style={{ fontSize: 18, fontWeight: 800, marginBottom: 20 }}>
-                            Yüklenen faturalarınız bulunmamaktadır.
-                        </Text>
-                        <Text>Bu fatura türünü görmeniz için alıcının fatura yüklemesi gerekmektedir.</Text>
-                        <Text>
-                            Alıcı bu faturaları yükledikten sonra sistemimizde yüklenen faturalarınızı
-                            görebilirsiniz.
-                        </Text>
-                        <FaturaButton type="primary" loading={false}>
-                            <Icon icon="bell" size="lg" />
-                            Fatura Yüklenince Haber Ver
-                        </FaturaButton>
-                    </Col>
+                <Row>
+                    <Row style={{ width: '68%', margin: '40px auto 0px' }}>
+                        <Col style={{ margin: '0px auto', textAlign: 'center', display: 'grid' }}>
+                            <Text style={{ fontSize: 18, fontWeight: 800, marginBottom: 20 }}>
+                                Yüklenen faturalarınız bulunmamaktadır.
+                            </Text>
+                            <Text>
+                                Bu fatura türünü görmeniz için alıcının fatura yüklemesi gerekmektedir.
+                            </Text>
+                            <Text>
+                                Alıcı bu faturaları yükledikten sonra sistemimizde yüklenen faturalarınızı
+                                görebilirsiniz.
+                            </Text>
+                            <FaturaButton type="primary" loading={false}>
+                                <Icon icon="bell" size="lg" />
+                                Fatura Yüklenince Haber Ver
+                            </FaturaButton>
+                        </Col>
+                    </Row>
+                    <HelpBox>
+                        <Col className="info_box">
+                            <img src={AliciTedarikci} alt="alici_tedarikci" />
+                            <Text>
+                                Alıcı, Tedarikçi faturalarını sisteme yüklediğinde, Tedarikçi'ye otomatik
+                                bildirim iletilir.
+                            </Text>
+                        </Col>
+                        <Col className="info_box">
+                            <img src={AliciTedarikci} alt="alici_tedarikci" />
+                            <Text>
+                                Alıcı, Tedarikçi faturalarını sisteme yüklediğinde, Tedarikçi'ye otomatik
+                                bildirim iletilir.
+                            </Text>
+                        </Col>
+                        <Col className="info_box">
+                            <img src={AliciTedarikci} alt="alici_tedarikci" />
+                            <Text>
+                                Alıcı, Tedarikçi faturalarını sisteme yüklediğinde, Tedarikçi'ye otomatik
+                                bildirim iletilir.
+                            </Text>
+                        </Col>
+                        <Col className="info_box">
+                            <img src={AliciTedarikci} alt="alici_tedarikci" />
+                            <Text>
+                                Alıcı, Tedarikçi faturalarını sisteme yüklediğinde, Tedarikçi'ye otomatik
+                                bildirim iletilir.
+                            </Text>
+                        </Col>
+                        <Col className="info_box">
+                            <img src={AliciTedarikci} alt="alici_tedarikci" />
+                            <Text>
+                                Alıcı, Tedarikçi faturalarını sisteme yüklediğinde, Tedarikçi'ye otomatik
+                                bildirim iletilir.
+                            </Text>
+                        </Col>
+                    </HelpBox>
                 </Row>
             ) : (
                 <>

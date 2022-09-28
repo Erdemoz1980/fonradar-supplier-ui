@@ -7,6 +7,27 @@ export default styled(Card)`
     background: #f0f5ff;
 `;
 
+export const HelpBox = styled.div`
+    width: 95%;
+    margin: 40px auto 15px;
+    display: flex;
+    justify-content: space-between;
+    .info_box {
+        width: 225px;
+        height: 304px;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: center;
+        gap: 40px;
+        padding: 32px 24px;
+        border-radius: 24px;
+        border: solid 1px #e6f1ff;
+        background-color: #f8fbff;
+        text-align: center;
+    }
+`;
+
 export const FaturaButton = styled(Button)`
     width: 264px;
     height: 48px;

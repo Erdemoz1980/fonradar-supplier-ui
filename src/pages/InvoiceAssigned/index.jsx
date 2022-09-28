@@ -110,9 +110,6 @@ function InvoiceAssigned() {
                             showTotal,
                             showSizeChanger: true,
                         }}
-                        // onRow={(fund) => ({
-                        //     onClick: () => onClickFund(fund),
-                        // })}
                     />
                 </Col>
             </Row>
