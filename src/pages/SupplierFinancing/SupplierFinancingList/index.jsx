@@ -4,14 +4,15 @@ import { Col, Row } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router';
 import AliciTedarikci from '../../../assests/alici_tedarikci.png';
+import Finans from '../../../assests/finans.png';
+import Tedarikciler from '../../../assests/tedarikciler.png';
+import FaturaVadesi from '../../../assests/faturavadesi.png';
+import RoundTick from '../../../assests/round_tick.png';
 import Table from '../../../components/Table';
 import Text from '../../../components/Text';
 import { convertFloatDotSeperated } from '../../../utils';
 import { fetchInvoices, uploadInvoices } from '../../../apiServices/supplierFinanceApi';
-import {
-    // setInvoices,
-    setInvoiceResId,
-} from '../../../store/reducers/supplierFinanceSlice';
+import { setInvoices, setInvoiceResId } from '../../../store/reducers/supplierFinanceSlice';
 import InvoicesDiscountSummary from './InvoicesDiscountSummary';
 import urls from '../../../routes/urls';
 import { FaturaButton, HelpBox } from './styles';
@@ -164,7 +165,7 @@ const SupplierFinancingList = () => {
             const response = await fetchInvoices(user.taxNumber, isLoggedIn);
             if (response) {
                 setLoading(false);
-                // dispatch(setInvoices(response.invoiceDtos));
+                dispatch(setInvoices(response.invoiceDtos));
             } else {
                 setLoading(false);
             }
@@ -253,31 +254,25 @@ const SupplierFinancingList = () => {
                             </Text>
                         </Col>
                         <Col className="info_box">
-                            <img src={AliciTedarikci} alt="alici_tedarikci" />
+                            <img src={Tedarikciler} alt="Tedarikciler" />
                             <Text>
-                                Alıcı, Tedarikçi faturalarını sisteme yüklediğinde, Tedarikçi'ye otomatik
-                                bildirim iletilir.
+                                Tedarikçi, bu faturalardan uygun bulduklarını seçerek erken ödeme almak için
+                                teklif ister.
                             </Text>
                         </Col>
                         <Col className="info_box">
-                            <img src={AliciTedarikci} alt="alici_tedarikci" />
-                            <Text>
-                                Alıcı, Tedarikçi faturalarını sisteme yüklediğinde, Tedarikçi'ye otomatik
-                                bildirim iletilir.
-                            </Text>
+                            <img src={RoundTick} alt="roundTick" />
+                            <Text>İşlem tercihine göre, alıcılardan faturalar için onay alınabilir.</Text>
                         </Col>
                         <Col className="info_box">
-                            <img src={AliciTedarikci} alt="alici_tedarikci" />
-                            <Text>
-                                Alıcı, Tedarikçi faturalarını sisteme yüklediğinde, Tedarikçi'ye otomatik
-                                bildirim iletilir.
-                            </Text>
+                            <img src={Finans} alt="finans" />
+                            <Text>Finans kurumları, işletmelerin faturalarına teklif verir.</Text>
                         </Col>
                         <Col className="info_box">
-                            <img src={AliciTedarikci} alt="alici_tedarikci" />
+                            <img src={FaturaVadesi} alt="FaturaVadesi" />
                             <Text>
-                                Alıcı, Tedarikçi faturalarını sisteme yüklediğinde, Tedarikçi'ye otomatik
-                                bildirim iletilir.
+                                Fatura vadesi geldiğinde, Alıcı fatura ödemesini ilgili finans kurumuna
+                                gerçekleştirir.
                             </Text>
                         </Col>
                     </HelpBox>

@@ -8,7 +8,7 @@ export default styled(Card)`
 `;
 
 export const HelpBox = styled.div`
-    width: 95%;
+    width: 90%;
     margin: 40px auto 15px;
     display: flex;
     justify-content: space-between;
@@ -25,6 +25,7 @@ export const HelpBox = styled.div`
         border: solid 1px #e6f1ff;
         background-color: #f8fbff;
         text-align: center;
+        margin-right: 25px;
     }
 `;
 
