@@ -183,6 +183,9 @@ export default createGlobalStyle`
   .text-r{
     text-align: right;
   }
+  .text-l{
+    text-align: left;
+  }
 
   // ANTD
   .ant-input-number-handler-wrap {

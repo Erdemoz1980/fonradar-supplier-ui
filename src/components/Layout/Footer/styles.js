@@ -5,12 +5,23 @@ const { Footer } = Layout;
 
 export default styled(Footer)`
     background-color: ${({ theme }) => theme.footer.backgroundColor};
-    color: ${({ theme }) => theme.main.lightTextColor} !important;
-
+    color: ${({ theme }) => theme.main.spaceColor} !important;
     img {
         &.ref-logo {
-            height: 30px;
+            height: 24px;
             max-width: 100%;
         }
+    }
+    .txt {
+        font-size: 12px;
+    }
+    .fnt {
+        font-size: 14px;
+    }
+    .big-mr {
+        margin-right: 80px;
+    }
+    .mr-bt {
+        margin-bottom: 24px;
     }
 `;

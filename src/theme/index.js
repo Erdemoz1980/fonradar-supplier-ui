@@ -27,7 +27,7 @@ const secondaryLight = '#c8ffdb';
 const secondaryDark = '#0b732f';
 
 const spaceColor = '#fff';
-const darkSpaceColor = '#212934';
+const darkSpaceColor = '#001444';
 
 const createAnimation = (duration = 0.3) => `${duration}s cubic-bezier(.25,.8,.25,1)`;
 export const getThemedColor = (color, themeObj) => {

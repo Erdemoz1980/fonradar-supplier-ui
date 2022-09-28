@@ -5,7 +5,7 @@ import { ConfigProvider } from 'antd';
 import Layout from './components/Layout';
 import Content from './components/Layout/Content';
 import Header from './components/Layout/Header';
-// import Footer from './components/Layout/Footer';
+import Footer from './components/Layout/Footer';
 
 import GlobalStyles from './GlobalStyles';
 import ThemeProvider from './theme/ThemeProvider';
@@ -26,7 +26,7 @@ function App() {
                     <Content>
                         <Routes />
                     </Content>
-                    {/* <Footer /> */}
+                    <Footer />
                 </Layout>
             </ConfigProvider>
         </ThemeProvider>
