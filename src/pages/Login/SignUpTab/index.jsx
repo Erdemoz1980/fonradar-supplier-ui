@@ -34,6 +34,7 @@ function SignUpTab({ setActiveTabLogin }) {
     const [isPopup, setIsPopup] = useState(false);
     const [isCodeValid, setIsCodeValid] = useState(false);
     const [activeStep, setActiveStep] = useState(0);
+    const [supTitle, setSupTitle] = useState('');
     const [legalDocs, setLegalDocs] = useState({
         taxBoard: undefined,
         authorizedSignatures: undefined,
@@ -302,7 +303,11 @@ function SignUpTab({ setActiveTabLogin }) {
                         title={getStepTitle('Firma Bilgileri')}
                         description={
                             isCodeValid || activeStep === 1 ? (
-                                <UserStepForm form={signUpForm} setProvinceId={setProvinceId} />
+                                <UserStepForm
+                                    form={signUpForm}
+                                    setSupTitle={setSupTitle}
+                                    setProvinceId={setProvinceId}
+                                />
                             ) : (
                                 ''
                             )
@@ -315,7 +320,7 @@ function SignUpTab({ setActiveTabLogin }) {
                                 <LegalDocsForm
                                     setLegalDocs={setLegalDocs}
                                     legalDocs={legalDocs}
-                                    supplierTitle={signUpForm.getFieldValue('supplierTitle')}
+                                    supplierTitle={supTitle}
                                 />
                             ) : (
                                 ''

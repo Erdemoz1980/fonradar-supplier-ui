@@ -34,6 +34,8 @@ export const endpoints = {
 
     getDistrictsEndpoint: (provinceId) => `/provinces/${provinceId}/districts`,
     getTaxOfficesEndpoint: (provinceId) => `/provinces/${provinceId}/tax-administrations`,
+    getSupplierTitel: (taxId, provinceId, taxAdmin) =>
+        `/supplier/title?taxId=${taxId}&provinceId=${provinceId}&taxAdministration=${taxAdmin}`,
 
     // extra
     fund: '/funds',

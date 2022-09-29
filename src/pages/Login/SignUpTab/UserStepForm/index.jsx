@@ -3,12 +3,13 @@ import { Form, Row, InputNumber, Select, Input } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import { companyDp } from '../../../../utils';
 import { validateVkn } from '../../../../utils/validators';
+import { fetchSupplierTitle } from '../../../../apiServices/userApi';
 import { fetchTaxOffices } from '../../../../apiServices/commonApi';
 import { setDistricts, setTaxOffices } from '../../../../store/reducers/commonSlice';
 
 const { Option } = Select;
 
-function UserStepForm({ setProvinceId, form }) {
+function UserStepForm({ setProvinceId, form, setSupTitle }) {
     const dispatch = useDispatch();
     const [loading, setloading] = useState(false);
     const [showTaxOffice, setShowTaxOffice] = useState(false);
@@ -31,6 +32,29 @@ function UserStepForm({ setProvinceId, form }) {
         }
     };
 
+    const onChangeTitle = async () => {
+        const values = form.getFieldsValue();
+        if (values.taxId && values.province && values.taxAdministration) {
+            const _province =
+                provinces.length > 0 && provinces.find((province) => province.name === values.province);
+            const payload = {
+                taxId: values.taxId,
+                provinceId: _province.provinceId,
+                taxAdmin: values.taxAdministration,
+            };
+            const response = await fetchSupplierTitle(payload);
+            if (response) {
+                form.setFields([
+                    {
+                        name: 'title',
+                        value: response.title,
+                    },
+                ]);
+                setloading(false);
+            }
+        }
+    };
+
     return (
         <>
             <Row gutter={0}>
@@ -42,16 +66,6 @@ function UserStepForm({ setProvinceId, form }) {
                             </Option>
                         ))}
                     </Select>
-                </Form.Item>
-                <Form.Item
-                    style={{ width: '350px' }}
-                    name="supplierTitle"
-                    rules={[
-                        {
-                            required: true,
-                        },
-                    ]}>
-                    <Input placeholder="Ünvan" />
                 </Form.Item>
                 <Form.Item
                     style={{ width: '350px' }}
@@ -126,6 +140,7 @@ function UserStepForm({ setProvinceId, form }) {
                             style={{ width: '350px' }}
                             placeholder="Vergi Dairesi"
                             loading={loading}
+                            onChange={onChangeTitle}
                             optionFilterProp="children"
                             showSearch>
                             {taxOffices.length > 0 &&
@@ -135,6 +150,18 @@ function UserStepForm({ setProvinceId, form }) {
                                     </Option>
                                 ))}
                         </Select>
+                    </Form.Item>
+                )}
+                {showTaxOffice && (
+                    <Form.Item
+                        style={{ width: '350px' }}
+                        name="supplierTitle"
+                        rules={[
+                            {
+                                required: true,
+                            },
+                        ]}>
+                        <Input onChange={(e) => setSupTitle(e.target.value)} placeholder="Ünvan" />
                     </Form.Item>
                 )}
             </Row>
