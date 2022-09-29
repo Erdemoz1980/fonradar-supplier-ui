@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Row, Col, Table, Button, Divider } from 'antd';
-import { CheckCircleOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
+import { CheckCircleOutlined, ExclamationCircleOutlined, ReloadOutlined } from '@ant-design/icons';
+import Icon from '../../components/Icon/index';
 import moment from 'moment';
 import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
@@ -114,7 +115,14 @@ const FundDetail = () => {
                             <Text className="head-title">Başvuru Detayı</Text>
                             <Row className="status-box">
                                 <div style={{ display: 'flex' }}>
-                                    <CheckCircleOutlined style={{ fontSize: '24px', color: statusColor }} />
+                                        {status?.id === 1 && <HourGlass style={{fontSize:'24px', color:statusColor}} />}
+                                        {status?.id === 2 && <Icon style={{fontSize:'24px', color:statusColor}} icon={['far', 'envelope']} />}
+                                        {status?.id === 4 && <Icon style={{fontSize:'24px', color:statusColor}} icon={['far', 'thumbs-up']} />}
+                                        {status?.id === 5 && <ReloadOutlined style={{ fontSize: '24px', color: statusColor }} />}
+                                        {status?.id === 7 && <Icon style={{ fontSize: '24px', color: statusColor }} icon={['far', 'arrow-alt-circle-Up']} />}
+                                        {
+                                        //<CheckCircleOutlined style={{ fontSize: '24px', color: statusColor }} />
+                                        }
                                     <Text className="status-title" style={{ color: statusColor }}>
                                         {status.text}
                                     </Text>

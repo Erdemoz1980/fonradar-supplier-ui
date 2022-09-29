@@ -19,7 +19,12 @@ export const chequeStatuses = [
         text: 'Teklif Bekliyor',
         desc: 'basvurunuz yeni talep olarak alinmistir.',
     },
-    { id: 2, value: 'CEVAP_GELDI', color: '#1251a5', text: 'Cevap Geldi' },
+    {
+        id: 2,
+        value: 'CEVAP_GELDI',
+        color: '#1251a5',
+        text: 'Cevap Geldi'
+    },
     {
         id: 3,
         value: 'SURESI_DOLDU',
@@ -27,7 +32,12 @@ export const chequeStatuses = [
         text: 'Süresi Doldu',
         desc: 'Başvurunuzun süresi doldu. Yeni bir işlem yapabilirsiniz.',
     },
-    { id: 4, value: 'TEKLIFI_ONAYLADIM', text: 'Teklifi Onayladım', color: '#0ee373' },
+    {
+        id: 4,
+        value: 'TEKLIFI_ONAYLADIM',
+        text: 'Teklifi Onayladım',
+        color: '#0ee373'
+    },
     {
         id: 5,
         value: 'ISLEME_ALINDI',
@@ -43,12 +53,13 @@ export const chequeStatuses = [
       desc: 'Başvurunuz finansal kurumlar tarafından incelenmeye başlandı.',
     },
     {
-      id: 6,
+      id: 7,
       value: 'TEMLIKNAME_YUKLENDI',
       color: '#006e03',
       text: 'Temlikname Yükledim',
       desc: 'Temliknameniz yüklendi ve finans kurumuna iletildi. İmzalı ve kaşeli bir kopyayı da şubeye iletmeniz gerekmektedir.',
     },
+  
 ];
 export const chequeStatusMapById = mapArray(chequeStatuses, 'id');
 export const chequeStatusMapByValue = mapArray(chequeStatuses, 'value');
