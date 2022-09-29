@@ -104,6 +104,16 @@ const getDocType = async () => {
     } catch (e) {}
 };
 
+const fetchSupplierTitle = async (data) => {
+    try {
+        const response = await apiV1.get(
+            endpoints.getSupplierTitel(data.taxId, data.provinceId, data.taxAdmin),
+            { headers: { 'X-Platform': 'Web' } }
+        );
+        return response;
+    } catch (e) {}
+};
+
 const uploadDoc = async (payload) => {
     try {
         const { formData } = payload;
@@ -144,4 +154,5 @@ export {
     getDocType,
     uploadDoc,
     updateUser,
+    fetchSupplierTitle,
 };
