@@ -21,6 +21,7 @@ import {
     faEnvelope,
     faThumbsUp,
     faArrowAltCircleUp,
+    faAngry
 } from '@fortawesome/free-regular-svg-icons';
 
 import { library } from '@fortawesome/fontawesome-svg-core';
@@ -56,6 +57,7 @@ library.add(
     faEnvelope,
     faThumbsUp,
     faArrowAltCircleUp,
+    faAngry
 );
 const customIcons = {
     hand,

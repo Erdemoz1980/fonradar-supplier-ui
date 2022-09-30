@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { Row, Col, Table, Button, Divider } from 'antd';
-import { CheckCircleOutlined, ExclamationCircleOutlined, ReloadOutlined } from '@ant-design/icons';
-import Icon from '../../components/Icon/index';
+import { ExclamationCircleOutlined, ReloadOutlined, HourglassOutlined } from '@ant-design/icons';
 import moment from 'moment';
 import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
+import Icon from '../../components/Icon/index';
 import Text from '../../components/Text';
 import { chequeStatusMapByValue } from '../../constants';
 import { convertFloatDotSeperated } from '../../utils';
@@ -25,6 +25,7 @@ const FundDetail = () => {
     const status = (discountInvoice?.status && chequeStatusMapByValue[discountInvoice?.status]) || {};
     const statusColor = status?.color || 'smoke';
     // const statusDesc = status?.desc || '';
+  
 
     const fetchFinancialbyId = async () => {
         if (id) {
@@ -116,14 +117,15 @@ const FundDetail = () => {
                             <Text className="head-title">Başvuru Detayı</Text>
                             <Row className="status-box">
                                 <div style={{ display: 'flex' }}>
-                                        {status === 'TEKLIF_BEKLIYOR' && <HourGlass style={{fontSize:'24px', color:statusColor}} />}
-                                        {status === 'CEVAP_GELDI' && <Icon style={{fontSize:'24px', color:statusColor}} icon={['far', 'envelope']} />}
-                                        {status === 'TEKLIFI_ONAYLADIM' && <Icon style={{fontSize:'24px', color:statusColor}} icon={['far', 'thumbs-up']} />}
-                                        {status === 'ISLEME_ALINDI'&& <ReloadOutlined style={{ fontSize: '24px', color: statusColor }} />}
-                                        {status === 'TEMLIKNAME_YUKLENDI'&& <Icon style={{ fontSize: '24px', color: statusColor }} icon={['far', 'arrow-alt-circle-Up']} />}
-                                        {
-                                        //<CheckCircleOutlined style={{ fontSize: '24px', color: statusColor }} />
-                                        }
+                                        {status.value === 'TEKLIF_BEKLIYOR' && <HourglassOutlined style={{fontSize:'24px', color:statusColor}} />}
+                                        {status.value === 'CEVAP_GELDI' && <Icon style={{fontSize:'24px', color:statusColor}} icon={['far', 'envelope']} />}
+                                        {status.value === 'SURESI_DOLDU' && <Icon style={{fontSize:'24px', color:statusColor}} icon={['far', 'angry']} />}
+                                        {status.value === 'TEKLIFI_ONAYLADIM' && <Icon style={{fontSize:'24px', color:statusColor}} icon={['far', 'thumbs-up']} />}
+                                        {status.value === 'ISLEME_ALINDI'&& <ReloadOutlined style={{ fontSize: '24px', color: statusColor }} />}
+                                        {status.value === 'TEMLIKNAME_YUKLENDI'&& <Icon style={{ fontSize: '24px', color: statusColor }} icon={['far', 'arrow-alt-circle-Up']} />}
+                                        
+                                        
+                                        
                                     <Text className="status-title" style={{ color: statusColor }}>
                                         {status.text}
                                     </Text>
