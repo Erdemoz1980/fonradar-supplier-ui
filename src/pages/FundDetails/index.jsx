@@ -104,6 +104,7 @@ const FundDetail = () => {
         }
     };
 
+
     return (
         <>
             {successRes ? (
@@ -115,11 +116,11 @@ const FundDetail = () => {
                             <Text className="head-title">Başvuru Detayı</Text>
                             <Row className="status-box">
                                 <div style={{ display: 'flex' }}>
-                                        {status?.id === 1 && <HourGlass style={{fontSize:'24px', color:statusColor}} />}
-                                        {status?.id === 2 && <Icon style={{fontSize:'24px', color:statusColor}} icon={['far', 'envelope']} />}
-                                        {status?.id === 4 && <Icon style={{fontSize:'24px', color:statusColor}} icon={['far', 'thumbs-up']} />}
-                                        {status?.id === 5 && <ReloadOutlined style={{ fontSize: '24px', color: statusColor }} />}
-                                        {status?.id === 7 && <Icon style={{ fontSize: '24px', color: statusColor }} icon={['far', 'arrow-alt-circle-Up']} />}
+                                        {status === 'TEKLIF_BEKLIYOR' && <HourGlass style={{fontSize:'24px', color:statusColor}} />}
+                                        {status === 'CEVAP_GELDI' && <Icon style={{fontSize:'24px', color:statusColor}} icon={['far', 'envelope']} />}
+                                        {status === 'TEKLIFI_ONAYLADIM' && <Icon style={{fontSize:'24px', color:statusColor}} icon={['far', 'thumbs-up']} />}
+                                        {status === 'ISLEME_ALINDI'&& <ReloadOutlined style={{ fontSize: '24px', color: statusColor }} />}
+                                        {status === 'TEMLIKNAME_YUKLENDI'&& <Icon style={{ fontSize: '24px', color: statusColor }} icon={['far', 'arrow-alt-circle-Up']} />}
                                         {
                                         //<CheckCircleOutlined style={{ fontSize: '24px', color: statusColor }} />
                                         }
